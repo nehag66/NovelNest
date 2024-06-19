@@ -1,5 +1,16 @@
 # NovelNest
 A website to buy or sell old novels
 
-Here anyone will be able to buy an old novel/book they want to buy.
-Also, they will be able to sell a novel/book if they have some book(s) to sell.
+## Features
+
+- Browse novels by genre, author, and popularity.
+- Search for specific titles and authors.
+- Buy novels securely using integrated payment methods.
+- Sell your novels by creating listings with descriptions and photos.
+- Track orders and manage listings through a user-friendly dashboard.
+
+## Technologies Used
+
+- **Frontend**: HTML, SCSS, JavaScript, Angular
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
