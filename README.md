@@ -11,6 +11,6 @@ A website to buy or sell old novels
 
 ## Technologies Used
 
-- **Frontend**: HTML, SCSS, JavaScript, Angular
+- **Frontend**: HTML, SCSS, Angular Material, Bootstrap, JavaScript, Angular
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
