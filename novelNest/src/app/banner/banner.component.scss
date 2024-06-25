@@ -1,3 +1,64 @@
+// .image-container {
+// 	position: relative;
+// 	width: 100%;
+// 	height: 24rem;
+// 	overflow: hidden;
+// }
+
+// .image-container img {
+// 	position: absolute;
+// 	top: 0;
+// 	left: 0;
+// 	width: 100%;
+// 	height: 100%;
+// 	object-fit: cover; /* Ensures the image covers the entire container */
+// 	z-index: 1; /* Sets the stacking order */
+// }
+
+// .content {
+// 	position: relative;
+// 	z-index: 2; /* Brings the content in front of the image */
+// 	color: white; /* Optional: Change text color for better visibility */
+// 	padding: 20px;
+// 	text-align: center;
+// }
+
+// .buy-sell-btns {
+// 	height: 10rem;
+//     border-radius: 5px;
+//     padding: 7rem;
+//     display: flex;
+// }
+// .buy-sell-btns {
+// 	padding: 10px; /* Optional: Add some padding */
+// 	max-width: 300px; /* Adjust as needed */
+// 	max-height: 300px; /* Adjust as needed */
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// 	overflow: hidden; /* Ensure content doesn't overflow */
+//   }
+
+.big-buy-btn {
+	background-color: #e7e7ff;
+}
+
+.big-sell-btn {
+	background-color: #fff2c7;
+}
+
+// .big-buy-btn img {
+// 	height: 5rem;
+// 	object-fit: contain; /* Ensure the image fits within the container */
+// 	display: block; /* Ensure the image is a block element */
+// }
+
+// .big-sell-btn img {
+// 	height: 5rem;
+// 	object-fit: contain; /* Ensure the image fits within the container */
+// 	display: block; /* Ensure the image is a block element */
+// }
+
 .image-container {
 	position: relative;
 	width: 100%;
@@ -6,10 +67,40 @@
 }
 
 .image-container img {
-	position: absolute;
-	top: 0;
-	left: 0;
 	width: 100%;
-	height: 100%;
-	object-fit: cover; /* Ensures the image covers the entire container */
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+.content {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255 255 255 / 61%);
+    padding: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+	font-weight: 600;
+}
+
+.buy-sell-btns {
+	border-radius: 5px;
+	padding: 10px;
+	max-width: 200px; /* Adjust button container max-width as needed */
+	text-align: center;
+}
+
+.contained-buy-img,
+.contained-sell-img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain; /* Ensure the images fit within their containers */
+	display: block;
+}
+
+.big-btns-img {
+	height: 8rem;
 }
