@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MaterialModule } from '../../material.module';
 
 @Component({
 	selector: 'app-banner',
 	standalone: true,
-	imports: [MatButtonModule],
+	imports: [MaterialModule],
 	templateUrl: './banner.component.html',
 	styleUrl: './banner.component.scss',
 })

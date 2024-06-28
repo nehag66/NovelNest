@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from '../../material.module';
 
 @Component({
 	selector: 'app-carousel',
 	standalone: true,
-	imports: [MatIconModule, CommonModule],
+	imports: [CommonModule, MaterialModule],
 	templateUrl: './carousel.component.html',
 	styleUrl: './carousel.component.scss',
 })
