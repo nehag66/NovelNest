@@ -5,3 +5,17 @@
 .card-container {
 	margin-top: 32px;
 }
+
+.video-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh; /* Full viewport height to center vertically */
+	padding: 20px;
+}
+
+.video-container iframe {
+	width: 100%;
+	max-width: 560px; /* Maintain the original aspect ratio and size */
+	height: 315px; /* Maintain the original aspect ratio and size */
+}

@@ -1,5 +1,5 @@
 <div
-	class="d-flex flex-column align-items-center mb-5 sell-old-books-container"
+	class="d-flex flex-column align-items-center sell-old-books-container pb-4"
 >
 	<span class="d-flex justify-content-center mt-4"
 		><h4 class="border-bottom">
@@ -17,9 +17,19 @@
 	</span>
 	<div class="d-flex gap-4 card-container">
 		<div *ngFor="let card of cardDetails">
-			<app-card-layout
-				[cardDetails]="card"
-			/>
+			<app-card-layout [cardDetails]="card" />
 		</div>
 	</div>
+</div>
+<div class="video-container">
+	<iframe
+		width="1440"
+		height="543"
+		src="https://www.youtube.com/embed/hJHvdBlSxug"
+		title="How The Web Works - The Big Picture"
+		frameborder="0"
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		referrerpolicy="strict-origin-when-cross-origin"
+		allowfullscreen
+	></iframe>
 </div>

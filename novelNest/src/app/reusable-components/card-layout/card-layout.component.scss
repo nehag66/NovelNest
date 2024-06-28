@@ -3,59 +3,62 @@
 }
 .card-container {
 	position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid #eff2f5;
-    border-radius: .475rem;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #fff;
+	background-clip: border-box;
+	border: 1px solid #eff2f5;
+	border-radius: 0.475rem;
 }
 
 .ribbon-label {
-    border-bottom-right-radius: 0.475rem;
-    border-bottom-left-radius: 0.475rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px 10px;
-    position: absolute;
-    z-index: 1;
-    background-color: #0083ca;
-    box-shadow: 0 -1px 5px 0 rgba(0, 0, 0, 0.1);
-    color: #fff;
-    top: 111rem;
-    transform: translateX(5px) translateY(-50%);
+	border-bottom-right-radius: 0.475rem;
+	border-bottom-left-radius: 0.475rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 5px 10px;
+	position: absolute;
+	z-index: 1;
+	background-color: #0083ca;
+	box-shadow: 0 -1px 5px 0 rgba(0, 0, 0, 0.1);
+	color: #fff;
+	top: 111rem;
+	transform: translateX(5px) translateY(-50%);
 }
 
 :host ::ng-deep .mat-mdc-card-content {
 	padding-top: 38px !important;
 	text-align: center;
+    height: 21rem;
 }
 
 .step-circle-outline {
 	border: 1px solid #f1f1f1;
-    background-color: #fff;
-    padding: 4px 4px;
-    border-radius: 50%;
-    height: 80px;
-    width: 80px;
+	background-color: #fff;
+	padding: 4px 4px;
+	border-radius: 50%;
+	height: 80px;
+	width: 80px;
 }
 
 .step-circle {
 	width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: #eef9ff;
+	height: 70px;
+	border-radius: 50%;
+	background-color: #eef9ff;
 }
 
 .symbol {
 	display: inline-block;
-    flex-shrink: 0;
-    position: relative;
+	flex-shrink: 0;
+	position: relative;
 }
 
-.symbol.symbol-circle, .symbol.symbol-circle .symbol-label, .symbol.symbol-circle>img {
-    border-radius: 50%;
+.symbol.symbol-circle,
+.symbol.symbol-circle .symbol-label,
+.symbol.symbol-circle > img {
+	border-radius: 50%;
 }
