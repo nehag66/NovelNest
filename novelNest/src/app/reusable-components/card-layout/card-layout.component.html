@@ -1,15 +1,22 @@
-<div>
-	<div class="ribbon-label">Step {{cardNumber}}</div>
+<div class="card-outer-container">
+	<div class="ribbon-label">Step {{ cardDetails.cardNumber }}</div>
 	<mat-card appearance="outlined" class="card-container">
 		<mat-card-content class="d-flex flex-column align-items-center">
 			<div class="step-circle-outline mb-5">
 				<div class="step-circle">
 					<div class="symbol symbol-80px symbol-circle">
-						<img [src]="imgSrc" alt="post-ad" height=68 width=68 />
+						<img
+							[src]="cardDetails.imgSrc"
+							[alt]="cardDetails.altName"
+							height="68"
+							width="68"
+						/>
 					</div>
 				</div>
 			</div>
-			{{cardTitle}}
+			<div class="border-bottom">{{ cardDetails.cardTitle }}</div>
+			<hr />
+			<div>{{ cardDetails.cardDesc }}</div>
 		</mat-card-content>
 	</mat-card>
 </div>

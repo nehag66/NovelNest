@@ -1,15 +1,21 @@
 import { Component, Input } from '@angular/core';
 import { MaterialModule } from '../../material.module';
+import { CardDetails } from '../../main-page/sell-old-books/sell-old-books.component';
 
 @Component({
-  selector: 'app-card-layout',
-  standalone: true,
-  imports: [MaterialModule],
-  templateUrl: './card-layout.component.html',
-  styleUrl: './card-layout.component.scss'
+	selector: 'app-card-layout',
+	standalone: true,
+	imports: [MaterialModule],
+	templateUrl: './card-layout.component.html',
+	styleUrl: './card-layout.component.scss',
 })
 export class CardLayoutComponent {
-  @Input() cardTitle: string = 'sample card title';
-  @Input() cardNumber: number = 1;
-  @Input() imgSrc: string = 'img';
+	@Input() cardDetails: CardDetails = {
+		cardTitle: 'card title',
+		cardDesc:
+			'card desc',
+		cardNumber: 1,
+		imgSrc: 'dummy',
+		altName: 'altName',
+	};
 }
