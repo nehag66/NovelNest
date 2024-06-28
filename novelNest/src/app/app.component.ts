@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { CarouselComponent } from './main-page/carousel/carousel.component';
 import { DescriptionComponent } from "./main-page/description/description.component";
 import { AdBannerComponent } from "./main-page/ad-banner/ad-banner.component";
+import { SellOldBooksComponent } from "./main-page/sell-old-books/sell-old-books.component";
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,8 @@ import { AdBannerComponent } from "./main-page/ad-banner/ad-banner.component";
         CommonModule,
         CarouselComponent,
         DescriptionComponent,
-        AdBannerComponent
+        AdBannerComponent,
+        SellOldBooksComponent
     ]
 })
 export class AppComponent {}
