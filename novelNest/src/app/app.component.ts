@@ -8,6 +8,7 @@ import { CarouselComponent } from './main-page/carousel/carousel.component';
 import { DescriptionComponent } from "./main-page/description/description.component";
 import { AdBannerComponent } from "./main-page/ad-banner/ad-banner.component";
 import { SellOldBooksComponent } from "./main-page/sell-old-books/sell-old-books.component";
+import { SellUsedBooksComponent } from "./main-page/sell-used-books/sell-used-books.component";
 
 @Component({
     selector: 'app-root',
@@ -23,7 +24,8 @@ import { SellOldBooksComponent } from "./main-page/sell-old-books/sell-old-books
         CarouselComponent,
         DescriptionComponent,
         AdBannerComponent,
-        SellOldBooksComponent
+        SellOldBooksComponent,
+        SellUsedBooksComponent
     ]
 })
 export class AppComponent {}

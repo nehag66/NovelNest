@@ -18,5 +18,6 @@ export class CardLayoutComponent {
 		cardNumber: 1,
 		imgSrc: 'dummy',
 		altName: 'altName',
+		bgColor: 'white',
 	};
 }

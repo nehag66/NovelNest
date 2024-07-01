@@ -8,14 +8,15 @@
 
 .video-container {
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh; /* Full viewport height to center vertically */
-	padding: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background-color: #f5f8fa;
 }
 
 .video-container iframe {
 	width: 100%;
+	border-radius: 5px;
 	max-width: 560px; /* Maintain the original aspect ratio and size */
 	height: 315px; /* Maintain the original aspect ratio and size */
 }

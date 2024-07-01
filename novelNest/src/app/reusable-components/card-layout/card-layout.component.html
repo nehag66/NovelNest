@@ -1,22 +1,20 @@
 <div class="card-outer-container" *ngIf="cardDetails">
-	<div class="ribbon-label">Step {{ cardDetails.cardNumber }}</div>
-	<mat-card appearance="outlined" class="card-container">
-		<mat-card-content class="d-flex flex-column align-items-center">
-			<div class="step-circle-outline mb-5">
-				<div class="step-circle">
-					<div class="symbol symbol-80px symbol-circle">
-						<img
-							[src]="cardDetails.imgSrc"
-							[alt]="cardDetails.altName"
-							height="68"
-							width="68"
-						/>
-					</div>
+	<div class="container p-4" [style.background-color]="cardDetails.bgColor">
+		<div class="sticky-badge">Step {{ cardDetails.cardNumber }}</div>
+		<div class="step-circle-outline mb-5">
+			<div class="step-circle">
+				<div class="symbol symbol-80px symbol-circle">
+					<img
+						[src]="cardDetails.imgSrc"
+						[alt]="cardDetails.altName"
+						height="68"
+						width="68"
+					/>
 				</div>
 			</div>
-			<div class="border-bottom">{{ cardDetails.cardTitle }}</div>
-			<hr />
-			<div>{{ cardDetails.cardDesc }}</div>
-		</mat-card-content>
-	</mat-card>
+		</div>
+		<div class="fw-semibold">{{ cardDetails.cardTitle }}</div>
+		<hr />
+		<div>{{ cardDetails.cardDesc }}</div>
+	</div>
 </div>

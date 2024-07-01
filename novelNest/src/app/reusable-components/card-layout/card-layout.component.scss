@@ -1,38 +1,38 @@
 .card-outer-container {
 	max-width: 20rem;
 }
-.card-container {
+
+.container {
 	position: relative;
 	display: flex;
+	align-items: center;
 	flex-direction: column;
+	text-align: center;
 	min-width: 0;
 	word-wrap: break-word;
 	background-color: #fff;
 	background-clip: border-box;
 	border: 1px solid #eff2f5;
 	border-radius: 0.475rem;
+	height: 20rem;
 }
-
-.ribbon-label {
+.sticky-badge {
+	position: absolute;
 	border-bottom-right-radius: 0.475rem;
 	border-bottom-left-radius: 0.475rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 5px 10px;
-	position: absolute;
-	z-index: 1;
-	background-color: #0083ca;
-	box-shadow: 0 -1px 5px 0 rgba(0, 0, 0, 0.1);
-	color: #fff;
-	top: 111rem;
-	transform: translateX(5px) translateY(-50%);
+	top: -4px;
+    right: 10px;
+    display: inline-block;
+    background-color: #0083ca;
+    box-shadow: 0 -1px 5px 0 rgba(0, 0, 0, 0.1);
+    color: #fff;
+    padding: 8px 12px;
 }
 
 :host ::ng-deep .mat-mdc-card-content {
 	padding-top: 38px !important;
 	text-align: center;
-    height: 21rem;
+	height: 21rem;
 }
 
 .step-circle-outline {

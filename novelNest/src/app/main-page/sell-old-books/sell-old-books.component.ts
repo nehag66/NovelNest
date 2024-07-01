@@ -9,6 +9,7 @@ export interface CardDetails {
 	cardNumber: number;
 	imgSrc: string;
 	altName: string;
+	bgColor?: string;
 }
 
 @Component({
@@ -23,7 +24,7 @@ export class SellOldBooksComponent {
 	cardDetails: CardDetails[] = [
 		{
 			cardTitle: 'Post an ad for selling used books',
-			cardDesc: 'Post an ad on Clankart describing your book details to sell your old books online.',
+			cardDesc: 'Post an ad on Novel Nest describing your book details to sell your old books online.',
 			cardNumber: 1,
 			imgSrc: 'post-ad-img.png',
 			altName: 'post-ad',
