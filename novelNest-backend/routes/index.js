@@ -1,9 +1,17 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const categoriesController = require('../controllers/index');
+const Category = require('../models/index');
 
-module.exports = router;
+// router.get('/categories', async (req, res) => {
+//   try {
+//     const categories = await Category.find();
+//     res.json(categories);
+//   } catch (err) {
+//     res.status(500).send(err);
+//   }
+// });
+
+// module.exports = router;
