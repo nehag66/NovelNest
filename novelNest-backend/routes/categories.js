@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const Category = require("../models/index");
+const categoryController = require('../controllers/categories');
 
-/* GET categories listing. */
-router.get('/categories', function(req, res, next) {
-  res.send('respond with categories list');
-});
+router.get('/categories', categoryController.getCategories);
+router.post('/add-category', categoryController.postAddCategory);
 
 // router.get("/categories", async (req, res) => {
 // 	try {

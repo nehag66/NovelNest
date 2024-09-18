@@ -4,7 +4,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 
 const usersRoutes = require('./routes/users');
-const booksRoutes = require('./routes/books');
+const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
 
 app.use(cors());
@@ -13,11 +13,11 @@ app.get('/', (req, res) => {
 	res.send("Novel Nest Backend running");
 })
 app.use(usersRoutes);
-app.use(booksRoutes);
+app.use(novelsRoutes);
 app.use(categoriesRoutes);
 app.use((req, res, next) => {
 	res.status(404).send('<h1>Page Not Found!</h1>');
-})
+});
 
 const port = 8080;
 app.set("port", port);
