@@ -3,7 +3,7 @@ const app = express();
 
 const cors = require('cors');
 
-const mongoConnect = require('./util/database');
+const mongoConnect = require('./util/database').mongoConnect;
 
 const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
@@ -27,8 +27,7 @@ app.use((req, res, next) => {
 const port = 8080;
 app.set('port', port);
 
-mongoConnect((client) => {
-	console.log(client);
+mongoConnect(() => {
 	app.listen(port, () => {
 		console.log(`Server is running on port ${port}`);
 	});

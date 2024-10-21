@@ -10,6 +10,7 @@ import { AdBannerComponent } from './main-page/ad-banner/ad-banner.component';
 import { SellOldBooksComponent } from './main-page/sell-old-books/sell-old-books.component';
 import { SellUsedBooksComponent } from './main-page/sell-used-books/sell-used-books.component';
 import { PageNotFoundComponent } from './reusable-components/card-layout/page-not-found/page-not-found.component';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @Component({
 	selector: 'app-root',
@@ -20,14 +21,8 @@ import { PageNotFoundComponent } from './reusable-components/card-layout/page-no
 		RouterOutlet,
 		HeaderComponent,
 		MaterialModule,
-		BannerComponent,
 		CommonModule,
-		CarouselComponent,
-		DescriptionComponent,
-		AdBannerComponent,
-		SellOldBooksComponent,
-		SellUsedBooksComponent,
-		PageNotFoundComponent,
+		MainPageComponent,
 	],
 })
 export class AppComponent {}

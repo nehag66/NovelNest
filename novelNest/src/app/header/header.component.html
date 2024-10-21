@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center justify-content-center gap-3">
-	<div>
-		<img src="novel-nest-logo.png" alt="logo" height="120"/>
+	<div (click)="goToMainPage()" class="cursor-pointer">
+		<img src="novel-nest-logo.png" alt="logo" height="120" />
 	</div>
 	<input
 		class="search-input"
@@ -8,12 +8,25 @@
 		placeholder="Book Name / Author / Subject / Publisher"
 	/>
 	<button mat-flat-button class="primary">Search</button>
-	<button mat-flat-button>Sell Used Books</button>
-	<div class="d-flex flex-column align-items-center">
+	<button mat-flat-button (click)="goToSellUsedBooks()">Sell Used Books</button>
+	<div
+		[matMenuTriggerFor]="menu"
+		class="d-flex flex-column align-items-center cursor-pointer"
+	>
 		<mat-icon>person</mat-icon>
 		My Account
+		<mat-menu #menu="matMenu">
+			<button mat-menu-item (click)="openLoginSignup()">
+				Login /Sign Up
+			</button>
+			<button mat-menu-item>Browse Top Book Categories</button>
+			<button mat-menu-item>My Profile</button>
+			<button mat-menu-item>My Orders</button>
+			<button mat-menu-item>My Selling Orders</button>
+			<button mat-menu-item>Wishlist</button>
+		</mat-menu>
 	</div>
-	<div class="d-flex flex-column align-items-center">
+	<div class="d-flex flex-column align-items-center cursor-pointer" (click)="goToCart()">
 		<mat-icon>shopping_cart</mat-icon>
 		Cart
 	</div>

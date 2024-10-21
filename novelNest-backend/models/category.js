@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const getDb = require('../util/database').getDb;
 
 const categorySchema = new mongoose.Schema({
 	categoryName: {
