@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MaterialModule } from '../../material.module';
-import { CardLayoutComponent } from "../../reusable-components/card-layout/card-layout.component";
 import { CommonModule } from '@angular/common';
+import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
+import { MaterialModule } from 'app/material.module';
 
 export interface CardDetails {
 	cardTitle: string;

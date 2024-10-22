@@ -7,17 +7,31 @@
 		<br />
 		Selling used books online for cash made easy with us!
 		<div class="d-flex justify-content-center gap-4 mt-3">
-			<div class="buy-sell-btns big-buy-btn">
-                <div class="big-btns-img">
-                    <img src="buy-books.png" alt="buy-books" class="contained-buy-img"/>
-                </div>
-                <button mat-flat-button>Buy Used Books</button>
+			<div
+				class="buy-sell-btns big-buy-btn cursor-pointer"
+				(click)="goToBuyBooks()"
+			>
+				<div class="big-btns-img">
+					<img
+						src="buy-books.png"
+						alt="buy-books"
+						class="contained-buy-img"
+					/>
+				</div>
+				<button mat-flat-button>Buy Used Books</button>
 			</div>
-			<div class="buy-sell-btns big-sell-btn">
-                <div class="big-btns-img">
-                    <img src="sell-books.png" alt="sell-books" class="contained-sell-img"/>
-                </div>
-                <button mat-flat-button>Sell Old Books</button>
+			<div
+				class="buy-sell-btns big-sell-btn cursor-pointer"
+				(click)="goToSellUsedBooks()"
+			>
+				<div class="big-btns-img">
+					<img
+						src="sell-books.png"
+						alt="sell-books"
+						class="contained-sell-img"
+					/>
+				</div>
+				<button mat-flat-button>Sell Old Books</button>
 			</div>
 		</div>
 	</div>

@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { MaterialModule } from '../material.module';
 import { MatDialog } from '@angular/material/dialog';
-import { LoginSignupDialogComponent } from '../login/login-signup-dialog/login-signup-dialog.component';
 import { Router } from '@angular/router';
-import { CLIENT_ROUTES } from '../app.routes';
+import { CLIENT_ROUTES } from 'app/app.routes';
+import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
+import { MaterialModule } from 'app/material.module';
 
 @Component({
 	selector: 'app-header',

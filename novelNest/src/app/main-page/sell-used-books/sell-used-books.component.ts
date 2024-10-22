@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { CardLayoutComponent } from "../../reusable-components/card-layout/card-layout.component";
 import { CommonModule } from '@angular/common';
 import { CardDetails } from '../sell-old-books/sell-old-books.component';
+import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
 
 @Component({
     selector: 'app-sell-used-books',

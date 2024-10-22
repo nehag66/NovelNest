@@ -3,7 +3,7 @@ const novels = [];
 exports.getNovels = (req, res, next) => {
 	// res.send('respond with books list');
 	res.status(200).json({
-		novels: ['Firefly Lane', 'Fly Away', 'Twisted Love', 'Twisted Fate'],
+		novels: ['Firefly Lane', 'Fly Away', 'Twisted Love', 'Twisted Fate', 'Twisted Hate'],
 		// novels: novels,
 	});
 };

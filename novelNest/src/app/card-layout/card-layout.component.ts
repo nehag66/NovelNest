@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '../../material.module';
-import { CardDetails } from '../../main-page/sell-old-books/sell-old-books.component';
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from 'app/material.module';
+import { CardDetails } from 'app/main-page/sell-old-books/sell-old-books.component';
 
 @Component({
 	selector: 'app-card-layout',
@@ -13,8 +13,7 @@ import { CommonModule } from '@angular/common';
 export class CardLayoutComponent {
 	@Input() cardDetails: CardDetails = {
 		cardTitle: 'card title',
-		cardDesc:
-			'card desc',
+		cardDesc: 'card desc',
 		cardNumber: 1,
 		imgSrc: 'dummy',
 		altName: 'altName',
