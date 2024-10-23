@@ -1,1 +1,27 @@
-<p>my-cart works!</p>
+<div class="py-4 container px-sm-5 d-flex flex-column gap-3">
+	<div class="card p-3">
+		<div class="">
+			<div class="">
+				<div class="">My Cart ({{ cartItems.length }})</div>
+			</div>
+		</div>
+	</div>
+	<div class="card p-3">
+		<div *ngIf="!isLoggedIn" class="d-flex flex-column align-items-center">
+			<mat-icon class="custom-icon-size">lock_person</mat-icon>
+			<div class="d-flex">
+				<span class="pe-2">Please</span>
+				<a href="#" (click)="openLoginDialog($event)">Login / Signup</a>
+				<span class="ps-2">First</span>
+			</div>
+		</div>
+		<div
+			*ngIf="isLoggedIn && cartItems.length === 0"
+			class="d-flex flex-column align-items-center"
+		>
+			<mat-icon class="custom-icon-size">shopping_cart</mat-icon>
+			The cart is empty.
+			<button mat-button (click)="goToBuyBooks()">Start buying now</button>
+		</div>
+	</div>
+</div>
