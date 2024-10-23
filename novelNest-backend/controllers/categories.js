@@ -1,3 +1,4 @@
+const Category = require('../models/category');
 const categories = [];
 
 exports.getCategories = (req, res, next) => {
@@ -5,7 +6,7 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.postAddCategory = (req, res, next) => {
-	categories.push({
-		title: req.body.title,
+	Category.push({
+		categoryName: req.body.title,
 	});
 };

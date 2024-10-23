@@ -8,7 +8,9 @@
 		placeholder="Book Name / Author / Subject / Publisher"
 	/>
 	<button mat-flat-button class="primary">Search</button>
-	<button mat-flat-button (click)="goToSellUsedBooks()">Sell Used Books</button>
+	<button mat-flat-button (click)="goToSellUsedBooks()">
+		Sell Used Books
+	</button>
 	<div
 		[matMenuTriggerFor]="menu"
 		class="d-flex flex-column align-items-center cursor-pointer"
@@ -17,16 +19,25 @@
 		My Account
 		<mat-menu #menu="matMenu">
 			<button mat-menu-item (click)="openLoginSignup()">
-				Login /Sign Up
+				<mat-icon>lock</mat-icon>Login /Sign Up
 			</button>
-			<button mat-menu-item>Browse Top Book Categories</button>
-			<button mat-menu-item>My Profile</button>
-			<button mat-menu-item>My Orders</button>
-			<button mat-menu-item>My Selling Orders</button>
-			<button mat-menu-item>Wishlist</button>
+			<button mat-menu-item (click)="goToBuyBooks()">
+				<mat-icon>menu_book</mat-icon>Browse Top Book Categories
+			</button>
+			<button mat-menu-item><mat-icon>person</mat-icon>My Profile</button>
+			<button mat-menu-item>
+				<mat-icon>inventory_2</mat-icon>My Orders
+			</button>
+			<button mat-menu-item>
+				<mat-icon>savings</mat-icon>My Selling Orders
+			</button>
+			<button mat-menu-item><mat-icon>favorite</mat-icon>Wishlist</button>
 		</mat-menu>
 	</div>
-	<div class="d-flex flex-column align-items-center cursor-pointer" (click)="goToCart()">
+	<div
+		class="d-flex flex-column align-items-center cursor-pointer"
+		(click)="goToCart()"
+	>
 		<mat-icon>shopping_cart</mat-icon>
 		Cart
 	</div>

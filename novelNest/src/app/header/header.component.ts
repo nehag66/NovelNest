@@ -34,6 +34,10 @@ export class HeaderComponent {
 		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
 	}
 
+	goToBuyBooks() {
+		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
+	}
+
 	goToMainPage() {
 		this._router.navigate([CLIENT_ROUTES.MAIN_PAGE]);
 	}

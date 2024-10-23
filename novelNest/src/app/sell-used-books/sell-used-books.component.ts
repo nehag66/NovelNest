@@ -14,5 +14,8 @@ export class SellUsedBooksComponent implements OnInit {
 		this._apiService.get('novels').subscribe((response) => {
 			console.log(response);
 		});
+		this._apiService.get('categories').subscribe((response) => {
+			console.log(response);
+		});
 	}
 }
