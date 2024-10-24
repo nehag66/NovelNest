@@ -1,1 +1,77 @@
-<p>sell-used-books works!</p>
+<div class="py-4 container px-sm-5 d-flex flex-column">
+	<div class="card p-3">
+		<div class="">
+			Submit a free classified ad to <b>sell your books for cash</b>
+		</div>
+	</div>
+	<div class="card p-3">
+		<div *ngIf="!isLoggedIn" class="d-flex flex-column">
+			Book Details:
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Ad Title </span>
+				<input placeholder="Enter your ad title" class="w-100" />
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Book Details </span>
+				<mat-radio-group
+					aria-label="Select an option"
+					class="d-flex flex-column"
+				>
+					<mat-radio-button value="1"
+						>Enter Book details manually</mat-radio-button
+					>
+					<mat-radio-button value="2"
+						>Automatically; by just typing the ISBN
+						number</mat-radio-button
+					>
+				</mat-radio-group>
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">ISBN </span>
+				<div class="d-flex flex-column">
+					<input
+						placeholder="Enter 13 digit ISBN number"
+						class="w-100"
+					/>
+					<button mat-flat-button>Get Book Details</button>
+				</div>
+			</div>
+
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Book Type </span>
+				<div
+					[matMenuTriggerFor]="menu"
+					class="d-flex flex-column align-items-center cursor-pointer"
+				>
+					<span class="d-flex align-items-center"
+						>Please select a book type<mat-icon
+							>keyboard_arrow_down</mat-icon
+						></span
+					>
+					<mat-menu #menu="matMenu">
+						<button
+							mat-menu-item
+							*ngFor="let category of categories"
+						>
+							{{ category }}
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Book Condition (used) </span>
+				<mat-radio-group
+					aria-label="Select an option"
+				>
+					<mat-radio-button value="1">Excellent</mat-radio-button>
+					<mat-radio-button value="2">Good</mat-radio-button>
+					<mat-radio-button value="3">Fair</mat-radio-button>
+				</mat-radio-group>
+			</div>
+		</div>
+		<div
+			*ngIf="isLoggedIn"
+			class="d-flex flex-column align-items-center"
+		></div>
+	</div>
+</div>
