@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MaterialModule } from '../../material.module';
+import { Router } from '@angular/router';
+import { CLIENT_ROUTES } from 'app/app.routes';
 
 @Component({
 	selector: 'app-carousel',
@@ -10,6 +12,7 @@ import { MaterialModule } from '../../material.module';
 	styleUrl: './carousel.component.scss',
 })
 export class CarouselComponent {
+	private readonly _router = inject(Router);
 	currentSlide = 0;
 	slides = [
 		{
@@ -41,5 +44,8 @@ export class CarouselComponent {
 	previousSlide() {
 		this.currentSlide =
 			(this.currentSlide - 1 + this.slides.length) % this.slides.length;
+	}
+	goToBuyBooks() {
+		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
 	}
 }
