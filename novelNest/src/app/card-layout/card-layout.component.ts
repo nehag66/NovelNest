@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'app/material.module';
-import { CardDetails } from 'app/main-page/sell-old-books/sell-old-books.component';
+import { CardDetails } from 'app/models/card';
 
 @Component({
 	selector: 'app-card-layout',

@@ -2,15 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
 import { MaterialModule } from 'app/material.module';
-
-export interface CardDetails {
-	cardTitle: string;
-	cardDesc: string;
-	cardNumber: number;
-	imgSrc: string;
-	altName: string;
-	bgColor?: string;
-}
+import { CardDetails } from 'app/models/card';
 
 @Component({
     selector: 'app-sell-old-books',

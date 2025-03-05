@@ -60,13 +60,72 @@
 			</div>
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Book Condition (used) </span>
-				<mat-radio-group
-					aria-label="Select an option"
-				>
+				<mat-radio-group aria-label="Select an option">
 					<mat-radio-button value="1">Excellent</mat-radio-button>
 					<mat-radio-button value="2">Good</mat-radio-button>
 					<mat-radio-button value="3">Fair</mat-radio-button>
 				</mat-radio-group>
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Upload Photos </span>
+				<mat-form-field appearance="outline" class="full-width">
+					<input
+						type="file"
+						#fileInput
+						(change)="onFilesSelected($event)"
+						style="display: none"
+						multiple
+					/>
+					<input
+						matInput
+						placeholder="Choose files"
+						[value]="fileNames"
+						readonly
+						(click)="fileInput.click()"
+					/>
+					<mat-icon matSuffix>attach_file</mat-icon>
+				</mat-form-field>
+
+				<button
+					mat-raised-button
+					color="accent"
+					(click)="onUpload()"
+					[disabled]="!selectedFiles.length"
+				>
+					Upload
+				</button>
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Quantity Available(Stock) </span>
+				<div
+					[matMenuTriggerFor]="menu"
+					class="d-flex flex-column align-items-center cursor-pointer"
+				>
+					<span class="d-flex align-items-center"
+						>Qty<mat-icon
+							>keyboard_arrow_down</mat-icon
+						></span
+					>
+					<mat-menu #menu="matMenu">
+						<button
+							mat-menu-item
+							*ngFor="let category of categories"
+						>
+							{{ category }}
+						</button>
+					</mat-menu>
+				</div>
+			</div>
+			<hr/>
+			<mat-label>Pricing Details:</mat-label>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Your Price(&#8377;) </span>
+				<div class="d-flex flex-column">
+					<input
+						placeholder="Enter your ad price"
+						class="w-100"
+					/>
+				</div>
 			</div>
 		</div>
 		<div

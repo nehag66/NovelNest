@@ -1,14 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MaterialModule } from 'app/material.module';
+import { Novels } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
-
-interface Novels {
-	name: string;
-	category: string;
-	quantity: number;
-	price: number;
-}
 
 @Component({
 	selector: 'buy-books',
