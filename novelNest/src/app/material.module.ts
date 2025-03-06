@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
 	exports: [
@@ -18,6 +20,8 @@ import { MatRadioModule } from '@angular/material/radio';
 		MatMenuModule,
 		MatTabsModule,
 		MatRadioModule,
+		MatCheckboxModule,
+		MatSelectModule,
 	],
 })
 export class MaterialModule {}

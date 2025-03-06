@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
+import { SecondHandBooksComponent } from './second-hand-books/second-hand-books.component';
 import { SellOldBooksComponent } from './sell-old-books/sell-old-books.component';
 import { AdBannerComponent } from './ad-banner/ad-banner.component';
 import { DescriptionComponent } from './description/description.component';
@@ -9,7 +9,7 @@ import { BannerComponent } from './banner/banner.component';
 	selector: 'main-page',
 	standalone: true,
 	imports: [
-		SellUsedBooksComponent,
+		SecondHandBooksComponent,
 		SellOldBooksComponent,
 		AdBannerComponent,
 		DescriptionComponent,

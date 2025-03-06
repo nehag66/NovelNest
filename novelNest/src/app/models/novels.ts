@@ -1,6 +1,10 @@
 export interface Novels {
-	name: string;
+	title: string;
 	category: string;
 	quantity: number;
 	price: number;
+}
+
+export interface Categories {
+	name: string;
 }

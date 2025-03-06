@@ -17,8 +17,7 @@ import { MainPageComponent } from './main-page/main-page.component';
     HeaderComponent,
     MaterialModule,
     CommonModule,
-    MainPageComponent,
-    HttpClientModule,
+    HttpClientModule
 ],
 	providers: [ApiService],
 })

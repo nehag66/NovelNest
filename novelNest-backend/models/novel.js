@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Category = require('./category');
 
 const novelSchema = new mongoose.Schema({
 	title: {
@@ -7,15 +6,19 @@ const novelSchema = new mongoose.Schema({
 		required: true,
 	},
 	category: {
-		type: Category,
+		type: String,
 		required: true,
 	},
-	qty: {
+	quantity: {
+		type: Number,
+		required: true,
+	},
+	price: {
 		type: Number,
 		required: true,
 	},
 });
 
-const Novels = mongoose.model('Novels', novelSchema);
+const Novels = mongoose.model('Novel', novelSchema);
 
 module.exports = Novels;

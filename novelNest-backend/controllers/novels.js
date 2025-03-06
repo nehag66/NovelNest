@@ -1,61 +1,37 @@
-const novels = [
-	{
-		name: 'Powerless',
-		category: 'Romance',
-		quantity: 3,
-		price: 300,
-	},
-	{
-		name: 'Reckless',
-		category: 'Romance',
-		quantity: 2,
-		price: 200,
-	},
-	{
-		name: 'Fearless',
-		category: 'Romance',
-		quantity: 5,
-		price: 250,
-	},
-	{
-		name: 'Archer\'s Voice',
-		category: 'Romance',
-		quantity: 4,
-		price: 300,
-	},
-	{
-		name: 'The Fine Print',
-		category: 'Romance',
-		quantity: 9,
-		price: 320,
-	},
-	{
-		name: 'Terms and Conditions',
-		category: 'Romance',
-		quantity: 7,
-		price: 420,
-	},
-	{
-		name: 'The Final Offer',
-		category: 'Romance',
-		quantity: 10,
-		price: 360,
-	},
-];
+const Novel = require('../models/novel');
 
 exports.getNovels = (req, res, next) => {
-	// res.send('respond with books list');
-	res.status(200).json({
-		message: "Novels Fetched Successfully.",
-		novels: novels,
-	});
+	Novel.find()
+		.then((novels) => {
+			res.status(200).json({
+				message: 'Novels Fetched Successfully.',
+				novels: novels,
+			});
+		})
+		.catch((err) => {
+			console.error('Error fetching novels:', err);
+			res.status(500).json({ message: 'Fetching novels failed.' });
+		});
 };
 
 exports.postAddNovel = (req, res, next) => {
-	novels.push({
+	const novel = new Novel({
 		title: req.body.title,
 		category: req.body.category,
 		quantity: req.body.quantity,
 		price: req.body.price,
+	});
+	novel.save().then((res) => console.log(res));
+	console.log(novel);
+	res.status(201).json({
+		message: 'Novel added successfully',
+		novels: novel,
+	});
+};
+
+exports.deleteNovel = (req, res, next) => {
+	console.log(req.params.id);
+	res.status(200).json({
+		message: 'Novel deleted successfully!',
 	});
 };

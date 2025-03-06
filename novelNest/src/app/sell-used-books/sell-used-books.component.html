@@ -53,7 +53,7 @@
 							mat-menu-item
 							*ngFor="let category of categories"
 						>
-							{{ category }}
+							{{ category.name }}
 						</button>
 					</mat-menu>
 				</div>
@@ -98,35 +98,53 @@
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Quantity Available(Stock) </span>
 				<div
-					[matMenuTriggerFor]="menu"
-					class="d-flex flex-column align-items-center cursor-pointer"
+					class="d-flex align-items-center cursor-pointer"
 				>
 					<span class="d-flex align-items-center"
-						>Qty<mat-icon
-							>keyboard_arrow_down</mat-icon
-						></span
+						>Qty</span
 					>
-					<mat-menu #menu="matMenu">
-						<button
-							mat-menu-item
-							*ngFor="let category of categories"
-						>
-							{{ category }}
-						</button>
-					</mat-menu>
+					<mat-select [(ngModel)]="selectedQuantity">
+						<mat-option *ngFor="let qty of quantities" [value]="qty">
+						  {{ qty }}
+						</mat-option>
+					  </mat-select>
 				</div>
 			</div>
-			<hr/>
+			<hr />
 			<mat-label>Pricing Details:</mat-label>
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Your Price(&#8377;) </span>
 				<div class="d-flex flex-column">
-					<input
-						placeholder="Enter your ad price"
-						class="w-100"
-					/>
+					<input placeholder="Enter your ad price" class="w-100" />
 				</div>
 			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Your shipping charges to buyer </span>
+				<div class="d-flex align-items-center">
+					<input class="w-100" /> or
+					<mat-checkbox>Free Shipping</mat-checkbox>
+				</div>
+			</div>
+			<div class="form-group d-flex align-items-baseline">
+				<span class="pe-4">Preferred payment mode </span>
+				<div class="d-flex flex-column">
+					<div>
+						After your book is sold, in what mode would you like to
+						receive the payment?
+					</div>
+					<div>
+						<mat-radio-group aria-label="Select an option">
+							<mat-radio-button value="1"
+								>UPI Number</mat-radio-button
+							>
+							<mat-radio-button value="2"
+								>Bank Account</mat-radio-button
+							>
+						</mat-radio-group>
+					</div>
+				</div>
+			</div>
+			<button mat-flat-button (click)="postAd('Powerful', 2, 'Romance', 150)">Post Ad</button>
 		</div>
 		<div
 			*ngIf="isLoggedIn"

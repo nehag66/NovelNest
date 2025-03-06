@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardDetails } from '../sell-old-books/sell-old-books.component';
 import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
+import { CardDetails } from 'app/models/card';
 
 @Component({
-    selector: 'app-sell-used-books',
+    selector: 'app-second-hand-books',
     standalone: true,
-    templateUrl: './sell-used-books.component.html',
-    styleUrl: './sell-used-books.component.scss',
+    templateUrl: './second-hand-books.component.html',
+    styleUrl: './second-hand-books.component.scss',
     imports: [CardLayoutComponent, CommonModule]
 })
-export class SellUsedBooksComponent {
+export class SecondHandBooksComponent {
 
 	cardDetails: CardDetails[] = [
 		{

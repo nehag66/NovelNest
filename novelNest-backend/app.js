@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
-const mongoConnect = require('./util/database').mongoConnect;
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
@@ -11,10 +13,27 @@ const categoriesRoutes = require('./routes/categories');
 // const errorController = require('./controllers/error');
 
 app.use(cors());
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+
 app.get('/', (req, res) => {
 	console.log('log: Novel Nest Backend running');
 	res.send('Novel Nest Backend running');
 });
+
+mongoose.connect(process.env.MONGODB_URI, {
+	dbName: 'OldNovelsDB',
+})
+.then(() => {
+	app.listen(port, () => {
+		console.log(`✅ Server running on port ${port}`);
+	});
+	console.log('✅ Mongoose connected to MongoDB');
+})
+.catch(err => {
+	console.error('❌ Mongoose connection error:', err);
+});
+
 app.use(usersRoutes);
 app.use(novelsRoutes);
 app.use(categoriesRoutes);
@@ -26,11 +45,5 @@ app.use((req, res, next) => {
 
 const port = 8080;
 app.set('port', port);
-
-mongoConnect(() => {
-	app.listen(port, () => {
-		console.log(`Server is running on port ${port}`);
-	});
-});
 
 module.exports = app;

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MaterialModule } from 'app/material.module';
+import { Categories, Novels } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -12,7 +13,7 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class SellUsedBooksComponent implements OnInit {
 	private readonly _apiService = inject(ApiService);
-	categories: string[] = [];
+	categories: Categories[] = [];
 	isLoggedIn = false;
 	selectedFiles: File[] = [];
 	previews: {
@@ -21,10 +22,14 @@ export class SellUsedBooksComponent implements OnInit {
 		isImage: boolean;
 	}[] = [];
 	fileNames: string = 'No files chosen';
+	quantities = Array.from({ length: 10 }, (_, i) => i + 1);
+	selectedQuantity = 1;
 	ngOnInit() {
-		this._apiService.get('categories').subscribe((response: any) => {
-			this.categories = response.categories;
-		});
+		this._apiService
+			.get('categories')
+			.subscribe(
+				(response: any) => (this.categories = response.categories),
+			);
 	}
 
 	onFilesSelected(event: Event): void {
@@ -57,5 +62,19 @@ export class SellUsedBooksComponent implements OnInit {
 		// Here, you would typically send the files to your server
 		console.log('Files ready for upload:', this.selectedFiles);
 		alert(`${this.selectedFiles.length} file(s) uploaded successfully!`);
+	}
+
+	postAd(title: string, quantity: number, category: string, price: number) {
+		const novel = {
+			title: title,
+			quantity: quantity,
+			category: category,
+			price: price,
+		};
+		this._apiService
+			.post<{ message: string, novels: Novels[] }>('novels', novel)
+			.subscribe((res) => {
+				console.log(res.message);
+			});
 	}
 }

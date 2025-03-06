@@ -1,15 +1,21 @@
 const Category = require('../models/category');
-const categories = ['fantasy', 'romance', 'sci-fi'];
 
 exports.getCategories = (req, res, next) => {
-	res.status(200).json({
-		message: "All Categories Fetched Successfully.",
-		categories: categories,
-	});
+	Category.find()
+		.then((categories) => {
+			res.status(200).json({
+				message: 'Categories Fetched Successfully.',
+				categories: categories,
+			});
+		})
+		.catch((err) => {
+			console.error('Error fetching categories:', err);
+			res.status(500).json({ message: 'Fetching categories failed.' });
+		});
 };
 
 exports.postAddCategory = (req, res, next) => {
 	Category.push({
-		categoryName: req.body.title,
+		name: req.body.title,
 	});
 };

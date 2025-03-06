@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
-const getDb = require('../util/database').getDb;
 
 const categorySchema = new mongoose.Schema({
-	categoryName: {
+	name: {
 		type: String,
 		required: true,
 	},
 });
 
-const Category = mongoose.model('Categories', categorySchema);
+const Categories = mongoose.model('Category', categorySchema);
 
-module.exports = Category;
+module.exports = Categories;
