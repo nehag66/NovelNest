@@ -5,13 +5,22 @@
 		</div>
 	</div>
 	<div class="card p-3">
-		<div *ngIf="!isLoggedIn" class="d-flex flex-column">
+		<div
+			*ngIf="!isLoggedIn"
+			class="d-flex flex-column"
+			[formGroup]="novelForm"
+		>
 			Book Details:
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Ad Title </span>
-				<input placeholder="Enter your ad title" class="w-100" />
+				<input
+					placeholder="Enter your ad title"
+					formControlName="title"
+					type="text"
+					class="w-100"
+				/>
 			</div>
-			<div class="form-group d-flex align-items-baseline">
+			<!-- <div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Book Details </span>
 				<mat-radio-group
 					aria-label="Select an option"
@@ -35,30 +44,43 @@
 					/>
 					<button mat-flat-button>Get Book Details</button>
 				</div>
+			</div> -->
+
+			<div>
+				<label>Category</label>
+				<button mat-button [matMenuTriggerFor]="categoryMenu">
+					{{ novelForm.get('category')?.value || 'Select Category' }}
+				</button>
+				<mat-menu #categoryMenu="matMenu">
+					<button
+						mat-menu-item
+						*ngFor="let category of categories"
+						(click)="selectCategory(category.name)"
+					>
+						{{ category.name }}
+					</button>
+				</mat-menu>
+				<div
+					*ngIf="
+						novelForm.get('category')?.invalid &&
+						novelForm.get('category')?.touched
+					"
+				>
+					Category is required.
+				</div>
 			</div>
 
 			<div class="form-group d-flex align-items-baseline">
-				<span class="pe-4">Book Type </span>
-				<div
-					[matMenuTriggerFor]="menu"
-					class="d-flex flex-column align-items-center cursor-pointer"
-				>
-					<span class="d-flex align-items-center"
-						>Please select a book type<mat-icon
-							>keyboard_arrow_down</mat-icon
-						></span
-					>
-					<mat-menu #menu="matMenu">
-						<button
-							mat-menu-item
-							*ngFor="let category of categories"
-						>
-							{{ category.name }}
-						</button>
-					</mat-menu>
-				</div>
+				<span class="pe-4">Author </span>
+				<input
+					placeholder="Enter the author"
+					formControlName="author"
+					type="text"
+					class="w-100"
+				/>
 			</div>
-			<div class="form-group d-flex align-items-baseline">
+
+			<!-- <div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Book Condition (used) </span>
 				<mat-radio-group aria-label="Select an option">
 					<mat-radio-button value="1">Excellent</mat-radio-button>
@@ -94,20 +116,19 @@
 				>
 					Upload
 				</button>
-			</div>
+			</div> -->
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Quantity Available(Stock) </span>
-				<div
-					class="d-flex align-items-center cursor-pointer"
-				>
-					<span class="d-flex align-items-center"
-						>Qty</span
-					>
-					<mat-select [(ngModel)]="selectedQuantity">
-						<mat-option *ngFor="let qty of quantities" [value]="qty">
-						  {{ qty }}
+				<div class="d-flex align-items-center cursor-pointer">
+					<span class="d-flex align-items-center">Qty</span>
+					<mat-select formControlName="quantity" type="number">
+						<mat-option
+							*ngFor="let qty of quantities"
+							[value]="qty"
+						>
+							{{ qty }}
 						</mat-option>
-					  </mat-select>
+					</mat-select>
 				</div>
 			</div>
 			<hr />
@@ -115,10 +136,15 @@
 			<div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Your Price(&#8377;) </span>
 				<div class="d-flex flex-column">
-					<input placeholder="Enter your ad price" class="w-100" />
+					<input
+						placeholder="Enter your ad price"
+						formControlName="price"
+						type="number"
+						class="w-100"
+					/>
 				</div>
 			</div>
-			<div class="form-group d-flex align-items-baseline">
+			<!-- <div class="form-group d-flex align-items-baseline">
 				<span class="pe-4">Your shipping charges to buyer </span>
 				<div class="d-flex align-items-center">
 					<input class="w-100" /> or
@@ -143,8 +169,8 @@
 						</mat-radio-group>
 					</div>
 				</div>
-			</div>
-			<button mat-flat-button (click)="postAd('Powerful', 2, 'Romance', 150)">Post Ad</button>
+			</div> -->
+			<button mat-flat-button (click)="postAd()">Post Ad</button>
 		</div>
 		<div
 			*ngIf="isLoggedIn"

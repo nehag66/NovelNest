@@ -1,15 +1,18 @@
 <div class="py-4 container">
-	<div class="d-flex align-items-center gap-3 justify-content-around">
-		<div *ngFor="let novel of novels" class="border p-2 d-flex flex-column">
-			<h3>{{ novel.title }}</h3>
-			<div class="d-flex flex-column gap-2">
-				<span>Category: {{ novel.category }}</span>
-				<span>Quantity: {{ novel.quantity }}</span>
-				<span>Price: {{ novel.price }}</span>
+	<div class="d-flex flex-wrap gap-3 justify-content-center">
+		<div *ngFor="let novel of novels" class="border p-4 d-flex flex-column">
+			<div>
+				<h3>{{ novel.title }}</h3>
+				<div class="d-flex flex-column gap-2">
+					<span *ngIf="novel.author">Author: {{ novel.author }}</span>
+					<span>Category: {{ novel.category }}</span>
+					<span>Quantity: {{ novel.quantity }}</span>
+					<span>Price: {{ novel.price }}</span>
+				</div>
 			</div>
-			<div class="d-flex">
-				<button mat-button>Add to Cart</button>
-				<button mat-button>Buy Now</button>
+			<div class="d-flex gap-2">
+				<button mat-flat-button>Add to Cart</button>
+				<button mat-flat-button>Buy Now</button>
 			</div>
 		</div>
 	</div>

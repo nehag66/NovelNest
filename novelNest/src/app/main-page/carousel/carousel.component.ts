@@ -16,23 +16,23 @@ export class CarouselComponent {
 	currentSlide = 0;
 	slides = [
 		{
-			// image: 'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
+			image: 'carousel 1.jpg',
 			caption: 'Slide 1',
 		},
 		{
-			// image: 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
+			image: 'carousel 2.jpg',
 			caption: 'Slide 2',
 		},
 		{
-			// image: 'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I',
+			image: 'carousel 3.jpg',
 			caption: 'Slide 3',
 		},
 		{
-			// image: 'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
+			image: 'carousel 4.jpg',
 			caption: 'Slide 4',
 		},
 		{
-			image: 'https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68',
+			image: 'carousel 5.jpg',
 			caption: 'Slide 5',
 		},
 	];

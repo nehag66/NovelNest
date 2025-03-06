@@ -20,6 +20,7 @@ exports.postAddNovel = (req, res, next) => {
 		category: req.body.category,
 		quantity: req.body.quantity,
 		price: req.body.price,
+		author: req.body.author
 	});
 	novel.save().then((res) => console.log(res));
 	console.log(novel);

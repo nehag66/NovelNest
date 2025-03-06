@@ -17,6 +17,9 @@ const novelSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	author: {
+		type: String,
+	}
 });
 
 const Novels = mongoose.model('Novel', novelSchema);

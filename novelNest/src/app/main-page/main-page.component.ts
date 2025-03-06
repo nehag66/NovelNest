@@ -4,6 +4,7 @@ import { SellOldBooksComponent } from './sell-old-books/sell-old-books.component
 import { AdBannerComponent } from './ad-banner/ad-banner.component';
 import { DescriptionComponent } from './description/description.component';
 import { BannerComponent } from './banner/banner.component';
+import { CarouselComponent } from './carousel/carousel.component';
 
 @Component({
 	selector: 'main-page',
@@ -14,6 +15,7 @@ import { BannerComponent } from './banner/banner.component';
 		AdBannerComponent,
 		DescriptionComponent,
 		BannerComponent,
+		CarouselComponent,
 	],
 	templateUrl: './main-page.component.html',
 	styleUrl: './main-page.component.scss',

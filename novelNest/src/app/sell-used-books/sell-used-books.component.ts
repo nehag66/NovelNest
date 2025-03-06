@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialModule } from 'app/material.module';
 import { Categories, Novels } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
@@ -23,13 +24,29 @@ export class SellUsedBooksComponent implements OnInit {
 	}[] = [];
 	fileNames: string = 'No files chosen';
 	quantities = Array.from({ length: 10 }, (_, i) => i + 1);
-	selectedQuantity = 1;
+
+	novelForm: FormGroup;
+
+	constructor(private fb: FormBuilder) {
+		this.novelForm = this.fb.group({
+			title: ['', Validators.required],
+			category: ['', Validators.required],
+			price: ['', [Validators.required, Validators.min(1)]],
+			quantity: ['', [Validators.required, Validators.min(1)]],
+			author: [''],
+		});
+	}
+
 	ngOnInit() {
 		this._apiService
 			.get('categories')
 			.subscribe(
 				(response: any) => (this.categories = response.categories),
 			);
+	}
+
+	selectCategory(category: string) {
+		this.novelForm.get('category')?.setValue(category);
 	}
 
 	onFilesSelected(event: Event): void {
@@ -64,17 +81,23 @@ export class SellUsedBooksComponent implements OnInit {
 		alert(`${this.selectedFiles.length} file(s) uploaded successfully!`);
 	}
 
-	postAd(title: string, quantity: number, category: string, price: number) {
-		const novel = {
-			title: title,
-			quantity: quantity,
-			category: category,
-			price: price,
-		};
-		this._apiService
-			.post<{ message: string, novels: Novels[] }>('novels', novel)
-			.subscribe((res) => {
-				console.log(res.message);
-			});
+	postAd() {
+		if (this.novelForm.valid) {
+			this._apiService
+				.post<{
+					message: string;
+					novels: Novels[];
+				}>('novels', this.novelForm.value)
+				.subscribe({
+					next: (res: any) => {
+						console.log(res.message);
+						this.novelForm.reset();
+					},
+					error: (err) => {
+						console.error('Failed to add novel:', err);
+						alert('Failed to add novel. Please try again.');
+					},
+				});
+		}
 	}
 }

@@ -3,6 +3,7 @@ export interface Novels {
 	category: string;
 	quantity: number;
 	price: number;
+	author: string;
 }
 
 export interface Categories {

@@ -2,3 +2,6 @@
 	width: 20rem;
 	height: 3rem;
 }
+.demo-section + .demo-section {
+	margin-top: 16px;
+}
