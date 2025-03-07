@@ -1,23 +1,22 @@
 <div class="py-4 container px-sm-5 d-flex flex-column">
-	<div class="card p-3">
+	<div class="card p-3 mb-2">
 		<div class="">
 			Submit a free classified ad to <b>sell your books for cash</b>
 		</div>
 	</div>
-	<div class="card p-3">
+	<div class="card form-card book-details-container">
 		<div
 			*ngIf="!isLoggedIn"
-			class="d-flex flex-column"
+			class="d-flex flex-column gap-1"
 			[formGroup]="novelForm"
 		>
-			Book Details:
-			<div class="form-group d-flex align-items-baseline">
+			<h5>Book Details:</h5>
+			<div class="form-group d-flex align-items-baseline my-2">
 				<span class="pe-4">Ad Title </span>
 				<input
 					placeholder="Enter your ad title"
 					formControlName="title"
 					type="text"
-					class="w-100"
 				/>
 			</div>
 			<!-- <div class="form-group d-flex align-items-baseline">
@@ -46,9 +45,9 @@
 				</div>
 			</div> -->
 
-			<div>
-				<label>Category</label>
-				<button mat-button [matMenuTriggerFor]="categoryMenu">
+			<div class="my-2">
+				<label class="pe-3">Category</label>
+				<button mat-button [matMenuTriggerFor]="categoryMenu" class="rect-button">
 					{{ novelForm.get('category')?.value || 'Select Category' }}
 				</button>
 				<mat-menu #categoryMenu="matMenu">
@@ -70,13 +69,12 @@
 				</div>
 			</div>
 
-			<div class="form-group d-flex align-items-baseline">
+			<div class="form-group d-flex align-items-baseline my-2">
 				<span class="pe-4">Author </span>
 				<input
 					placeholder="Enter the author"
 					formControlName="author"
 					type="text"
-					class="w-100"
 				/>
 			</div>
 
@@ -117,30 +115,31 @@
 					Upload
 				</button>
 			</div> -->
-			<div class="form-group d-flex align-items-baseline">
+			<div class="form-group d-flex align-items-baseline mt-2">
 				<span class="pe-4">Quantity Available(Stock) </span>
 				<div class="d-flex align-items-center cursor-pointer">
-					<span class="d-flex align-items-center">Qty</span>
-					<mat-select formControlName="quantity" type="number">
-						<mat-option
-							*ngFor="let qty of quantities"
-							[value]="qty"
-						>
-							{{ qty }}
-						</mat-option>
-					</mat-select>
+					<mat-form-field appearance="outline" class="quantity-field">
+						<mat-select formControlName="quantity" type="number">
+							<mat-option
+								*ngFor="let qty of quantities"
+								[value]="qty"
+							>
+								{{ qty }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 				</div>
 			</div>
+
 			<hr />
-			<mat-label>Pricing Details:</mat-label>
-			<div class="form-group d-flex align-items-baseline">
+			<h5>Pricing Details:</h5>
+			<div class="form-group d-flex align-items-baseline my-2">
 				<span class="pe-4">Your Price(&#8377;) </span>
 				<div class="d-flex flex-column">
 					<input
 						placeholder="Enter your ad price"
 						formControlName="price"
 						type="number"
-						class="w-100"
 					/>
 				</div>
 			</div>
@@ -170,7 +169,9 @@
 					</div>
 				</div>
 			</div> -->
-			<button mat-flat-button (click)="postAd()">Post Ad</button>
+			<button mat-flat-button class="post-ad-btn" (click)="postAd()">
+				Post Ad
+			</button>
 		</div>
 		<div
 			*ngIf="isLoggedIn"

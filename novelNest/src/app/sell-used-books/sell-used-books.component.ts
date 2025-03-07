@@ -23,7 +23,7 @@ export class SellUsedBooksComponent implements OnInit {
 		isImage: boolean;
 	}[] = [];
 	fileNames: string = 'No files chosen';
-	quantities = Array.from({ length: 10 }, (_, i) => i + 1);
+	quantities = Array.from({ length: 25 }, (_, i) => i + 1);
 
 	novelForm: FormGroup;
 

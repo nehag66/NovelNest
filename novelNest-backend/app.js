@@ -10,6 +10,7 @@ require('dotenv').config();
 const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
+const cardsRoutes = require('./routes/cards');
 // const errorController = require('./controllers/error');
 
 app.use(cors());
@@ -37,6 +38,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use(usersRoutes);
 app.use(novelsRoutes);
 app.use(categoriesRoutes);
+app.use(cardsRoutes);
 // app.use(errorController.get404);
 
 app.use((req, res, next) => {
