@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { ApiService } from 'services/api.service';
-import { MainPageComponent } from './main-page/main-page.component';
+import { FooterComponent } from "./footer/footer.component";
 
 @Component({
 	selector: 'app-root',
@@ -17,7 +17,8 @@ import { MainPageComponent } from './main-page/main-page.component';
     HeaderComponent,
     MaterialModule,
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    FooterComponent
 ],
 	providers: [ApiService],
 })
