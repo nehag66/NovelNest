@@ -3,11 +3,14 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
 import { BuyBooksComponent } from './buy-books/buy-books.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
+import { NovelDetailsComponent } from './buy-books/novel-details/novel-details.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
 	SELL_USED_BOOKS: 'post-ad',
 	BUY_BOOKS: 'books',
+	NOVEL: 'novels',
+	NOVEL_DETAILS: 'novels/:id',
 	MAIN_PAGE: '',
 };
 
@@ -26,6 +29,11 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.BUY_BOOKS,
 		component: BuyBooksComponent,
 		title: 'Buy New, Old and second hand books',
+	},
+	{
+		path: CLIENT_ROUTES.NOVEL_DETAILS,
+		component: NovelDetailsComponent,
+		title: 'Novel Details',
 	},
 	{
 		path: CLIENT_ROUTES.MAIN_PAGE,

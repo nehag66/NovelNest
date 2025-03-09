@@ -1,4 +1,5 @@
-export interface Novels {
+export interface Novel {
+	id: string;
 	title: string;
 	category: string;
 	quantity: number;

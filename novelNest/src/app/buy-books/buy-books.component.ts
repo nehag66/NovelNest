@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Novels } from 'app/models/novels';
+import { Novel } from 'app/models/novels';
 import { map } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
@@ -16,11 +16,11 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class BuyBooksComponent implements OnInit {
 	private readonly _apiService = inject(ApiService);
-	novels: Novels[] = [];
+	novels: Novel[] = [];
 	constructor(private _router: Router) {}
 	ngOnInit() {
 		this._apiService
-			.get<{ message: string; novels: Novels[] }>('novels')
+			.get<{ message: string; novels: Novel[] }>('novels')
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: any) => {

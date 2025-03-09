@@ -1,1 +1,15 @@
-<p>novel-details works!</p>
+<div class="py-4 container" *ngIf="novelDetails">
+	<div class="d-flex flex-wrap gap-3 justify-content-center">
+		<div class="border p-4 d-flex flex-column">
+			<div>
+				<h3>{{ novelDetails.title }}</h3>
+				<div class="d-flex flex-column gap-2">
+					<span *ngIf="novelDetails.author">Author: {{ novelDetails.author }}</span>
+					<span>Category: {{ novelDetails.category }}</span>
+					<span>Quantity: {{ novelDetails.quantity }}</span>
+					<span>Price: &#8377;{{ novelDetails.price }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

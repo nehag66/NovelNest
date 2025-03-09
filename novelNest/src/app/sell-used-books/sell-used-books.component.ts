@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialModule } from 'app/material.module';
-import { Categories, Novels } from 'app/models/novels';
+import { Categories, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -86,7 +86,7 @@ export class SellUsedBooksComponent implements OnInit {
 			this._apiService
 				.post<{
 					message: string;
-					novels: Novels[];
+					novels: Novel[];
 				}>('novels', this.novelForm.value)
 				.subscribe({
 					next: (res: any) => {
