@@ -1,7 +1,7 @@
 <div class="py-4 container">
 	<div class="d-flex flex-wrap gap-3 justify-content-center">
 		<div *ngFor="let novel of novels" class="border p-4 d-flex flex-column">
-			<div>
+			<div (click)="goToNovelDetails(novel.id)">
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novel.author">Author: {{ novel.author }}</span>
@@ -11,8 +11,8 @@
 				</div>
 			</div>
 			<div class="d-flex gap-2">
-				<button mat-flat-button>Add to Cart</button>
-				<button mat-flat-button>Buy Now</button>
+				<button mat-flat-button (click)="addToCart()">Add to Cart</button>
+				<button mat-flat-button (click)="buyNow()">Buy Now</button>
 			</div>
 		</div>
 	</div>
