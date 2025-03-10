@@ -5,6 +5,7 @@ import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
 import { map } from 'rxjs';
 import { ApiService } from 'services/api.service';
+import { CartService } from 'services/cart.service';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
@@ -15,9 +16,13 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
-	private readonly _apiService = inject(ApiService);
 	novels: Novel[] = [];
-	constructor(private _router: Router) {}
+	constructor(
+		private _router: Router,
+		private _apiService: ApiService,
+		private _cartService: CartService,
+	) {}
+
 	ngOnInit() {
 		this._apiService
 			.get<{ message: string; novels: Novel[] }>('novels')
@@ -44,6 +49,8 @@ export class BuyBooksComponent implements OnInit {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
 	}
 
-	addToCart() {}
+	addToCart(novel: Novel) {
+		this._cartService.addToCart(novel);
+	}
 	buyNow() {}
 }

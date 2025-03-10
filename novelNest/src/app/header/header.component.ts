@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
+import { CartService } from 'services/cart.service';
 
 @Component({
 	selector: 'app-header',
@@ -13,8 +14,18 @@ import { MaterialModule } from 'app/material.module';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-	private readonly _dialog = inject(MatDialog);
-	private readonly _router = inject(Router);
+	cartCount = 0;
+
+	constructor(
+		private _dialog: MatDialog,
+		private _router: Router,
+		private _cartService: CartService,
+	) {
+		this._cartService.cartCount$.subscribe((count) => {
+			this.cartCount = count;
+		});
+	}
+
 	openLoginSignup() {
 		const dialogRef = this._dialog.open(LoginSignupDialogComponent, {
 			width: '400px',

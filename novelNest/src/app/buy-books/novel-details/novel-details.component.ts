@@ -1,29 +1,43 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 
 @Component({
 	selector: 'novel-details',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, MaterialModule],
 	templateUrl: './novel-details.component.html',
 	styleUrl: './novel-details.component.scss',
 })
 export class NovelDetailsComponent implements OnInit {
+	novelDetails: Novel = {
+		id: '',
+		title: '',
+		category: '',
+		quantity: 0,
+		price: 0,
+		author: '',
+	};
 
-	novelDetails: any;
-
-	constructor(private _activatedRoute: ActivatedRoute, private _apiService: ApiService) {}
+	constructor(
+		private _activatedRoute: ActivatedRoute,
+		private _apiService: ApiService,
+	) {}
 
 	ngOnInit() {
 		this._activatedRoute.paramMap.subscribe((params) => {
 			const novelId = params.get('id');
-			this._apiService.get<{ message: string; novel: Novel }>(`novels/${novelId}`)
-			.subscribe((res) => {
-				this.novelDetails = res.novel;
-			})
+			this._apiService
+				.get<{ message: string; novel: Novel }>(`novels/${novelId}`)
+				.subscribe((res) => {
+					this.novelDetails = res.novel;
+				});
 		});
 	}
+
+	addToCart() {}
+	buyNow() {}
 }

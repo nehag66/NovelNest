@@ -14,10 +14,13 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './my-cart.component.scss',
 })
 export class MyCartComponent {
-	private readonly _dialog = inject(MatDialog);
-	private readonly _router = inject(Router);
 	cartItems = [];
 	isLoggedIn = false;
+
+	constructor(
+		private _dialog: MatDialog,
+		private _router: Router,
+	) {}
 
 	openLoginDialog(e: Event) {
 		e.preventDefault();
