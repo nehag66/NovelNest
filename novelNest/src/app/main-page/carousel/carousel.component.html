@@ -1,19 +1,15 @@
 <div class="carousel-container">
-	<button mat-icon-button (click)="previousSlide()" class="carousel-btn">
-		<mat-icon>chevron_left</mat-icon>
-	</button>
-
-	<div
-		class="carousel-slide"
-		*ngFor="let slide of slides; let i = index"
-		[hidden]="i !== currentSlide"
-	>
-		<img [src]="slide.image" alt="Slide {{ i + 1 }}" />
+	<div class="carousel" #carousel>
+		<div class="book-card" *ngFor="let book of novels">
+			<h4>{{ book.title }}</h4>
+			<p>
+				<strong>{{ book.price }}</strong>
+			</p>
+			<button>Buy Now</button>
+		</div>
 	</div>
-
-	<button mat-icon-button (click)="nextSlide()" class="carousel-btn">
-		<mat-icon>chevron_right</mat-icon>
-	</button>
+	<button class="prev" (click)="scroll(-200)">❮</button>
+	<button class="next" (click)="scroll(200)">❯</button>
 </div>
 <div class="text-center mt-3">
 	<button mat-flat-button (click)="goToBuyBooks()">
