@@ -5,7 +5,7 @@
 			<p>
 				<strong>{{ novel.price }}</strong>
 			</p>
-			<button mat-flat-button>Buy Now</button>
+			<button mat-flat-button (click)="buyNow()">Buy Now</button>
 		</div>
 	</div>
 	<button class="prev" (click)="scroll(-200)">❮</button>

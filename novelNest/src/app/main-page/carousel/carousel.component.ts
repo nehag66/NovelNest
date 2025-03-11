@@ -57,6 +57,8 @@ export class CarouselComponent implements OnInit, OnDestroy {
 		if (this.intervalId) clearInterval(this.intervalId);
 	}
 
+	buyNow() {}
+
 	ngOnDestroy() {
 		this.stopAutoScroll();
 	}

@@ -16,7 +16,8 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
-	novels: Novel[] = [];
+	novels: any[]= [];
+	cart = [];
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
@@ -46,12 +47,36 @@ export class BuyBooksComponent implements OnInit {
 			});
 	}
 
+	mergeCartItems() {
+		return this.cart.reduce((acc: any, item: any) => {
+		  const existingItem = acc.find((product: any) => product.id === item.id);
+		  if (existingItem) {
+			existingItem.quantity += item.quantity; // Add quantity
+		  } else {
+			acc.push({ ...item });
+		  }
+		  return acc;
+		}, []);
+	  }
+
+	  updateNovelsWithCart() {
+		const mergedCart = this.mergeCartItems(); // Merge duplicates first
+		return this.novels.map((novel: any) => {
+		  const cartItem = mergedCart.find((item: any) => item.id === novel._id);
+		  return {
+			...novel,
+			cartQuantity: cartItem ? cartItem.quantity : 0, // Attach quantity
+		  };
+		});
+	  }
+
 	goToNovelDetails(novelId: string) {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
 	}
 
 	addToCart(novel: Novel) {
 		this._cartService.addToCart(novel);
+		this.novels = this.updateNovelsWithCart();
 	}
 	buyNow() {}
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { CartService } from 'services/cart.service';
 
 @Component({
 	selector: 'novel-details',
@@ -26,6 +27,7 @@ export class NovelDetailsComponent implements OnInit {
 	constructor(
 		private _activatedRoute: ActivatedRoute,
 		private _apiService: ApiService,
+		private _cartService: CartService,
 	) {}
 
 	ngOnInit() {
@@ -39,6 +41,8 @@ export class NovelDetailsComponent implements OnInit {
 		});
 	}
 
-	addToCart() {}
+	addToCart() {
+		this._cartService.addToCart(this.novelDetails);
+	}
 	buyNow() {}
 }

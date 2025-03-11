@@ -6,6 +6,7 @@ export interface Novel {
 	totalQuantity: number;
 	price: number;
 	author: string;
+	cartQuantity?: number; // check if this is needed or not
 }
 
 export interface Categories {

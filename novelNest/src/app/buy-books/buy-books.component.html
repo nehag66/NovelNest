@@ -2,6 +2,9 @@
 	<div class="d-flex flex-wrap gap-3 justify-content-center">
 		<div *ngFor="let novel of novels" class="border p-4 d-flex flex-column">
 			<div (click)="goToNovelDetails(novel.id)" class="cursor-pointer">
+				<p *ngIf="novel.cartQuantity > 0">
+					🛒 In Cart: <strong>{{ novel.cartQuantity }}</strong> copies
+				  </p>
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novel.author">Author: {{ novel.author }}</span>
