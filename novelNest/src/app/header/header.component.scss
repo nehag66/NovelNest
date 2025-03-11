@@ -3,7 +3,7 @@
 }
 .search-container {
 	display: flex;
-	margin-top: 1rem;
+	margin-top: 20px;
 	width: 100%;
 	max-width: 600px;
 }
@@ -16,4 +16,8 @@
 	height: 56px;
 	border-radius: 0 4px 4px 0;
 	margin-left: -4px;
+}
+.sell-btn {
+	height: 56px;
+	border: 1px solid #b3b30a !important;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialModule } from 'app/material.module';
 import { Categories, Novel } from 'app/models/novels';
@@ -13,7 +13,6 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './sell-used-books.component.scss',
 })
 export class SellUsedBooksComponent implements OnInit {
-	private readonly _apiService = inject(ApiService);
 	categories: Categories[] = [];
 	isLoggedIn = false;
 	selectedFiles: File[] = [];
@@ -27,7 +26,7 @@ export class SellUsedBooksComponent implements OnInit {
 
 	novelForm: FormGroup;
 
-	constructor(private fb: FormBuilder) {
+	constructor(private fb: FormBuilder, private _apiService: ApiService) {
 		this.novelForm = this.fb.group({
 			title: ['', Validators.required],
 			category: ['', Validators.required],

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from '../../app.routes';
@@ -11,10 +11,12 @@ import { CLIENT_ROUTES } from '../../app.routes';
 	styleUrl: './banner.component.scss',
 })
 export class BannerComponent {
-	private readonly _router = inject(Router);
+	constructor(private _router: Router) {}
+
 	goToBuyBooks() {
 		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
 	}
+
 	goToSellUsedBooks() {
 		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
 	}

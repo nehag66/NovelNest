@@ -2,7 +2,7 @@
 	<div class="card p-3">
 		<div class="">
 			<div class="">
-				<div class="">My Cart ({{ cartItems.length }})</div>
+				<div class="">My Cart ({{ cartCount }})</div>
 			</div>
 		</div>
 	</div>
@@ -16,12 +16,29 @@
 			</div>
 		</div>
 		<div
-			*ngIf="isLoggedIn && cartItems.length === 0"
+			*ngIf="isLoggedIn && cartCount === 0"
 			class="d-flex flex-column align-items-center"
 		>
 			<mat-icon class="custom-icon-size">shopping_cart</mat-icon>
 			The cart is empty.
-			<button mat-button (click)="goToBuyBooks()">Start buying now</button>
+			<button mat-button (click)="goToBuyBooks()" class="buy-add-btn">Start buying now</button>
+		</div>
+		<div *ngIf="isLoggedIn && cartCount > 0">
+			<div *ngFor="let novel of cartItems$ | async; let i = index" class="border p-4 d-flex flex-column">
+				<div class="cursor-pointer">
+					<h3 (click)="goToNovelDetails(novel.id)">{{ novel.title }}</h3>
+					<div class="d-flex flex-column gap-2">
+						<span *ngIf="novel.author">Author: {{ novel.author }}</span>
+						<span>Category: {{ novel.category }}</span>
+						<span>Quantity: {{ novel.quantity }}</span>
+						<span>Price: &#8377;{{ novel.price }}</span>
+					</div>
+					<div class="d-flex gap-2">
+						<button mat-flat-button (click)="removeNovelFromCart(i)" class="buy-add-btn">Remove</button>
+						<!-- <button mat-flat-button (click)="buyNow()" class="buy-add-btn">Buy Now</button> -->
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

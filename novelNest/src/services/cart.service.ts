@@ -11,27 +11,32 @@ export class CartService {
 	// cartCount$ - Allows components to listen for cart count updates
 	cartCount$ = this.cartItemCount.asObservable();
 
-	private cartItems: Novel[] = [];
+	// Keeps track of the latest cart items
+	private cartItemsSubject = new BehaviorSubject<Novel[]>([]);
+	cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
 
 	constructor() {
 		const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-		this.cartItems = savedCart;
-		this.cartItemCount.next(this.cartItems.length);
+		this.cartItemsSubject.next(savedCart);
+		this.cartItemCount.next(savedCart.length);
 	}
 
 	addToCart(item: Novel) {
-		this.cartItems.push(item);
-		localStorage.setItem('cart', JSON.stringify(this.cartItems));
-		this.cartItemCount.next(this.cartItems.length);
+		const updatedCart = [...this.cartItemsSubject.value, item];
+		this.cartItemsSubject.next(updatedCart);
+		localStorage.setItem('cart', JSON.stringify(updatedCart));
+		this.cartItemCount.next(updatedCart.length);
 	}
 
 	getCartItems() {
-		return this.cartItems;
+		return this.cartItemsSubject.asObservable(); // Now returns an observable
 	}
 
 	removeFromCart(index: number) {
-		this.cartItems.splice(index, 1);
-		localStorage.setItem('cart', JSON.stringify(this.cartItems));
-		this.cartItemCount.next(this.cartItems.length);
+		const updatedCart = [...this.cartItemsSubject.value];
+		updatedCart.splice(index, 1);
+		this.cartItemsSubject.next(updatedCart);
+		localStorage.setItem('cart', JSON.stringify(updatedCart));
+		this.cartItemCount.next(updatedCart.length);
 	}
 }

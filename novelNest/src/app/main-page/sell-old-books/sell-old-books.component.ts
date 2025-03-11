@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
 import { MaterialModule } from 'app/material.module';
@@ -13,9 +13,9 @@ import { ApiService } from 'services/api.service';
 	imports: [MaterialModule, CardLayoutComponent, CommonModule],
 })
 export class SellOldBooksComponent implements OnInit {
-	private readonly _apiService = inject(ApiService);
-
 	cardDetails: CardDetails[] = [];
+
+	constructor(private _apiService: ApiService) {}
 
 	ngOnInit(): void {
 		this._apiService

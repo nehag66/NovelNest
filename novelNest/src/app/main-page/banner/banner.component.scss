@@ -86,11 +86,22 @@
 	font-weight: 600;
 }
 
-.buy-sell-btns {
+.buy-sell-btn-divs {
 	border-radius: 5px;
 	padding: 10px;
-	max-width: 200px; /* Adjust button container max-width as needed */
+	max-width: 200px;
 	text-align: center;
+}
+
+.buy-sell-btn {
+	background-color: #f1faff;
+	color: #0083CB;
+	border-radius: 4px;
+}
+
+.buy-sell-btn:hover {
+	background-color: #0083ca;
+	color: white;
 }
 
 .contained-buy-img,

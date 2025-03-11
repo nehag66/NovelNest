@@ -1,18 +1,18 @@
 <div class="carousel-container">
 	<div class="carousel" #carousel>
-		<div class="book-card" *ngFor="let book of novels">
-			<h4>{{ book.title }}</h4>
+		<div class="book-card" *ngFor="let novel of novels">
+			<h4>{{ novel.title }}</h4>
 			<p>
-				<strong>{{ book.price }}</strong>
+				<strong>{{ novel.price }}</strong>
 			</p>
-			<button>Buy Now</button>
+			<button mat-flat-button>Buy Now</button>
 		</div>
 	</div>
 	<button class="prev" (click)="scroll(-200)">❮</button>
 	<button class="next" (click)="scroll(200)">❯</button>
 </div>
 <div class="text-center mt-3">
-	<button mat-flat-button (click)="goToBuyBooks()">
+	<button mat-flat-button (click)="goToBuyBooks()" class="yellow-btn">
 		Explore all used books
 	</button>
 </div>
