@@ -18,6 +18,7 @@ export class NovelDetailsComponent implements OnInit {
 		title: '',
 		category: '',
 		quantity: 0,
+		totalQuantity: 0,
 		price: 0,
 		author: '',
 	};

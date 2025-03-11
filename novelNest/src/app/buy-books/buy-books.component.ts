@@ -32,6 +32,7 @@ export class BuyBooksComponent implements OnInit {
 						return {
 							title: novel.title,
 							quantity: novel.quantity,
+							totalQuantity: novel.totalQuantity,
 							price: novel.price,
 							category: novel.category,
 							author: novel.author,
