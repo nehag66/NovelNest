@@ -16,8 +16,9 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
-	novels: any[]= [];
-	cart = [];
+	novels: any[] = [];
+	cartItems: Novel[] = [];
+
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
@@ -25,6 +26,14 @@ export class BuyBooksComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		this._cartService.cartItems$.subscribe((cart) => {
+			this.cartItems = cart;
+			this.updateNovelsWithCart();
+		});
+		this.fetchNovels();
+	}
+
+	fetchNovels() {
 		this._apiService
 			.get<{ message: string; novels: Novel[] }>('novels')
 			.pipe(
@@ -44,31 +53,18 @@ export class BuyBooksComponent implements OnInit {
 			)
 			.subscribe((novels: any) => {
 				this.novels = novels;
+				this.updateNovelsWithCart();
 			});
 	}
 
-	mergeCartItems() {
-		return this.cart.reduce((acc: any, item: any) => {
-		  const existingItem = acc.find((product: any) => product.id === item.id);
-		  if (existingItem) {
-			existingItem.quantity += item.quantity; // Add quantity
-		  } else {
-			acc.push({ ...item });
-		  }
-		  return acc;
-		}, []);
-	  }
-
-	  updateNovelsWithCart() {
-		const mergedCart = this.mergeCartItems(); // Merge duplicates first
-		return this.novels.map((novel: any) => {
-		  const cartItem = mergedCart.find((item: any) => item.id === novel._id);
-		  return {
-			...novel,
-			cartQuantity: cartItem ? cartItem.quantity : 0, // Attach quantity
-		  };
+	updateNovelsWithCart() {
+		this.novels = this.novels.map((novel) => {
+			const cartItem = this.cartItems.find(
+				(item) => item.id === novel.id,
+			);
+			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
 		});
-	  }
+	}
 
 	goToNovelDetails(novelId: string) {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
@@ -76,7 +72,6 @@ export class BuyBooksComponent implements OnInit {
 
 	addToCart(novel: Novel) {
 		this._cartService.addToCart(novel);
-		this.novels = this.updateNovelsWithCart();
 	}
 	buyNow() {}
 }

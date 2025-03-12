@@ -1,21 +1,34 @@
 <div class="py-4 container">
-	<div class="d-flex flex-wrap gap-3 justify-content-center">
-		<div *ngFor="let novel of novels" class="border p-4 d-flex flex-column">
-			<div (click)="goToNovelDetails(novel.id)" class="cursor-pointer">
-				<p *ngIf="novel.cartQuantity > 0">
-					🛒 In Cart: <strong>{{ novel.cartQuantity }}</strong> copies
-				  </p>
+	<div class="d-flex flex-wrap gap-2 justify-content-center">
+		<div
+			*ngFor="let novel of novels"
+			class="border p-4 d-flex flex-column novel-card"
+		>
+			<div *ngIf="novel.cartQuantity > 0" class="cart-badge">
+				{{ novel.cartQuantity }} in cart
+			</div>
+			<div (click)="goToNovelDetails(novel.id)" class="cursor-pointer card-container">
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novel.author">Author: {{ novel.author }}</span>
 					<span>Category: {{ novel.category }}</span>
-					<span *ngIf="novel.quantity">Quantity: {{ novel.quantity }}</span>
+					<!-- <span *ngIf="novel.quantity"
+						>Quantity: {{ novel.quantity }}</span
+					> -->
 					<span>Price: &#8377;{{ novel.price }}</span>
 				</div>
 			</div>
-			<div class="d-flex gap-2">
-				<button mat-flat-button (click)="addToCart(novel)" class="buy-add-btn">Add to Cart</button>
-				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">Buy Now</button>
+			<div class="d-flex gap-2 actions">
+				<button
+					mat-flat-button
+					(click)="addToCart(novel)"
+					class="buy-add-btn"
+				>
+					Add to Cart
+				</button>
+				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
+					Buy Now
+				</button>
 			</div>
 		</div>
 	</div>

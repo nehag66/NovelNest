@@ -5,7 +5,6 @@ import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
-import { Observable } from 'rxjs';
 import { CartService } from 'services/cart.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -17,9 +16,10 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './my-cart.component.scss',
 })
 export class MyCartComponent implements OnInit {
-	cartItems$: Observable<Novel[]> | undefined;
 	isLoggedIn = true;
-	cartCount = 0;
+
+	cartItems: Novel[] = [];
+	cartCount: number = 0;
 
 	constructor(
 		private _dialog: MatDialog,
@@ -28,10 +28,13 @@ export class MyCartComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this._cartService.cartCount$.subscribe((count) => {
+		this._cartService.cartItems$.subscribe((items) => {
+			this.cartItems = items;
+		});
+
+		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
 		});
-		this.cartItems$ = this._cartService.getCartItems();
 	}
 
 	openLoginDialog(e: Event) {
@@ -53,7 +56,19 @@ export class MyCartComponent implements OnInit {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
 	}
 
-	removeNovelFromCart(i: number) {
-		this._cartService.removeFromCart(i);
+	increaseQuantity(novel: Novel) {
+		this._cartService.addToCart(novel);
 	}
+
+	decreaseQuantity(novel: Novel) {
+		if (novel.quantity > 1) {
+			this._cartService.updateCartQuantity(novel, novel.quantity - 1);
+		} else {
+			this._cartService.removeFromCart(novel);
+		}
+	}
+
+	/* removeNovelFromCart(novel: Novel) {
+		this._cartService.removeFromCart(novel);
+	} */
 }

@@ -21,7 +21,7 @@ export class HeaderComponent {
 		private _router: Router,
 		private _cartService: CartService,
 	) {
-		this._cartService.cartCount$.subscribe((count) => {
+		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
 		});
 	}
