@@ -56,6 +56,11 @@ export class MyCartComponent implements OnInit {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
 	}
 
+	buyBtnDisabled(novel: Novel) {
+		if (!novel.quantity) return false;
+		return novel.quantity && novel.totalQuantity <= novel.quantity;
+	}
+
 	increaseQuantity(novel: Novel) {
 		this._cartService.addToCart(novel);
 	}

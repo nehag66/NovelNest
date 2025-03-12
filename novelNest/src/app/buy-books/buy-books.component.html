@@ -23,6 +23,7 @@
 					mat-flat-button
 					(click)="addToCart(novel)"
 					class="buy-add-btn"
+					[disabled]="buyBtnDisabled(novel)"
 				>
 					Add to Cart
 				</button>

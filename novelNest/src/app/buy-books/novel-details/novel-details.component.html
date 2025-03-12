@@ -2,17 +2,30 @@
 	<div class="d-flex flex-wrap gap-3 justify-content-center">
 		<div class="border p-4 d-flex flex-column">
 			<div>
+				<div *ngIf="novelDetails.quantity > 0" class="cart-badge">
+					{{ novelDetails.quantity }} in cart
+				</div>
 				<h3>{{ novelDetails.title }}</h3>
 				<div class="d-flex flex-column gap-2">
-					<span *ngIf="novelDetails.author">Author: {{ novelDetails.author }}</span>
+					<span *ngIf="novelDetails.author"
+						>Author: {{ novelDetails.author }}</span
+					>
 					<span>Category: {{ novelDetails.category }}</span>
-					<span>Quantity: {{ novelDetails.quantity }}</span>
 					<span>Price: &#8377;{{ novelDetails.price }}</span>
 				</div>
 			</div>
 			<div class="d-flex gap-2">
-				<button mat-flat-button (click)="addToCart()" class="buy-add-btn">Add to Cart</button>
-				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">Buy Now</button>
+				<button
+					mat-flat-button
+					(click)="addToCart()"
+					[disabled]="buyBtnDisabled()"
+					class="buy-add-btn"
+				>
+					Add to Cart
+				</button>
+				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
+					Buy Now
+				</button>
 			</div>
 		</div>
 	</div>

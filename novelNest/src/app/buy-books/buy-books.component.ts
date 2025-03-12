@@ -57,6 +57,11 @@ export class BuyBooksComponent implements OnInit {
 			});
 	}
 
+	buyBtnDisabled(novel: Novel) {
+		if (!novel.cartQuantity) return false;
+		return novel.cartQuantity && novel.totalQuantity <= novel.cartQuantity;
+	}
+
 	updateNovelsWithCart() {
 		this.novels = this.novels.map((novel) => {
 			const cartItem = this.cartItems.find(

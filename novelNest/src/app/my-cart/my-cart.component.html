@@ -51,6 +51,7 @@
 							<button
 								mat-icon-button
 								(click)="increaseQuantity(novel)"
+								[disabled]="buyBtnDisabled(novel)"
 							>
 								<mat-icon>add</mat-icon>
 							</button>
