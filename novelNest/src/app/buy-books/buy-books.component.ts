@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Novel } from 'app/models/novels';
+import { Novel, NovelResponse } from 'app/models/novels';
 import { map } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
@@ -38,7 +38,7 @@ export class BuyBooksComponent implements OnInit {
 			.get<{ message: string; novels: Novel[] }>('novels')
 			.pipe(
 				map((novelData: any) => {
-					return novelData.novels.map((novel: any) => {
+					return novelData.novels.map((novel: NovelResponse) => {
 						return {
 							title: novel.title,
 							quantity: novel.quantity,
@@ -51,7 +51,7 @@ export class BuyBooksComponent implements OnInit {
 					});
 				}),
 			)
-			.subscribe((novels: any) => {
+			.subscribe((novels: Novel[]) => {
 				this.novels = novels;
 				this.updateNovelsWithCart();
 			});
@@ -78,5 +78,4 @@ export class BuyBooksComponent implements OnInit {
 	addToCart(novel: Novel) {
 		this._cartService.addToCart(novel);
 	}
-	buyNow() {}
 }

@@ -11,6 +11,9 @@ const novelSchema = new mongoose.Schema({
 	},
 	quantity: {
 		type: Number,
+	},
+	totalQuantity: {
+		type: Number,
 		required: true,
 	},
 	price: {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { Novel } from 'app/models/novels';
+import { Novel, NovelResponse } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
 
@@ -24,7 +24,7 @@ export class NovelDetailsComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		let novelId: string| null;
+		let novelId: string | null;
 		this._activatedRoute.paramMap.subscribe((params) => {
 			novelId = params.get('id');
 			novelId && this.fetchNovelDetails(novelId);
@@ -32,22 +32,34 @@ export class NovelDetailsComponent implements OnInit {
 		this._cartService.cartItems$.subscribe((cart) => {
 			const cartItem = cart.find((item) => item.id === novelId);
 			this.cartQuantity = cartItem ? cartItem.quantity : 0;
-		  });
+		});
 	}
 
 	fetchNovelDetails(novelId: string) {
 		this._apiService
-			.get<{ message: string; novel: Novel }>(`novels/${novelId}`)
+			.get<{
+				message: string;
+				novel: NovelResponse;
+			}>(`novels/${novelId}`)
 			.subscribe((res) => {
-				this.novelDetails = res.novel;
+				const novel = res.novel;
+				this.novelDetails = {
+					title: novel.title,
+					quantity: novel.quantity ?? 0,
+					totalQuantity: novel.totalQuantity,
+					price: novel.price,
+					category: novel.category,
+					author: novel.author,
+					id: novel._id,
+				};
 			});
 	}
 
 	buyBtnDisabled() {
-		if (!this.novelDetails.quantity) return false;
+		if (!this.cartQuantity) return false;
 		return (
-			this.novelDetails.quantity &&
-			this.novelDetails.totalQuantity <= this.novelDetails.quantity
+			this.cartQuantity &&
+			this.novelDetails.totalQuantity <= this.cartQuantity
 		);
 	}
 
@@ -55,5 +67,4 @@ export class NovelDetailsComponent implements OnInit {
 		this._cartService.addToCart(this.novelDetails);
 	}
 
-	buyNow() {}
 }

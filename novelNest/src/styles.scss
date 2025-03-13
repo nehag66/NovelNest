@@ -21,3 +21,10 @@ body {
 .buy-add-btn {
 	border-radius: 4px !important;
 }
+
+.add-to-cart {
+	// text-align: end;
+	display: flex;
+	justify-content: flex-end; /* Aligns the button to the right */
+	margin-top: auto;
+}

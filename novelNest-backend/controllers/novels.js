@@ -32,7 +32,7 @@ exports.postAddNovel = (req, res, next) => {
 	const novel = new Novel({
 		title: req.body.title,
 		category: req.body.category,
-		quantity: req.body.quantity,
+		totalQuantity: req.body.totalQuantity,
 		price: req.body.price,
 		author: req.body.author
 	});
