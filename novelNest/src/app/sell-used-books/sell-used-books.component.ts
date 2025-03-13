@@ -15,6 +15,7 @@ import { SharedModule } from 'shared/shared.module';
 export class SellUsedBooksComponent implements OnInit {
 	categories: Categories[] = [];
 	isLoggedIn = false;
+	isLoading = false;
 	selectedFiles: File[] = [];
 	previews: {
 		url: string | ArrayBuffer | null;
@@ -81,6 +82,7 @@ export class SellUsedBooksComponent implements OnInit {
 	}
 
 	postAd() {
+		this.isLoading = true;
 		if (this.novelForm.valid) {
 			this._apiService
 				.post<{
@@ -89,6 +91,7 @@ export class SellUsedBooksComponent implements OnInit {
 				}>('novels', this.novelForm.value)
 				.subscribe({
 					next: (res: any) => {
+						this.isLoading = false;
 						console.log(res.message);
 						this.novelForm.reset();
 					},

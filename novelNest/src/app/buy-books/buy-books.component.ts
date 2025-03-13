@@ -16,8 +16,9 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
-	novels: any[] = [];
+	novels: Novel[] = [];
 	cartItems: Novel[] = [];
+	isLoading: boolean = false;
 
 	constructor(
 		private _router: Router,
@@ -26,6 +27,7 @@ export class BuyBooksComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		this.isLoading = true;
 		this._cartService.cartItems$.subscribe((cart) => {
 			this.cartItems = cart;
 			this.updateNovelsWithCart();
@@ -52,6 +54,7 @@ export class BuyBooksComponent implements OnInit {
 				}),
 			)
 			.subscribe((novels: Novel[]) => {
+				this.isLoading = false;
 				this.novels = novels;
 				this.updateNovelsWithCart();
 			});

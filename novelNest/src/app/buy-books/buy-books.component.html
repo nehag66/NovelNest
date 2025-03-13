@@ -1,13 +1,25 @@
 <div class="py-4 container">
-	<div class="d-flex flex-wrap gap-2 justify-content-center">
+	<div *ngIf="isLoading" class="loading-overlay">
+		<mat-spinner [diameter]="50"></mat-spinner>
+	</div>
+	<div
+		class="d-flex flex-wrap gap-2 justify-content-center"
+		*ngIf="!isLoading"
+	>
 		<div
 			*ngFor="let novel of novels"
 			class="border p-4 d-flex flex-column novel-card"
 		>
-			<div *ngIf="novel.cartQuantity > 0" class="cart-badge">
+			<div
+				*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
+				class="cart-badge"
+			>
 				{{ novel.cartQuantity }} in cart
 			</div>
-			<div (click)="goToNovelDetails(novel.id)" class="cursor-pointer card-container">
+			<div
+				(click)="goToNovelDetails(novel.id)"
+				class="cursor-pointer card-container"
+			>
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novel.author">Author: {{ novel.author }}</span>

@@ -1,4 +1,7 @@
 <div class="py-4 container px-sm-5 d-flex flex-column">
+	<div *ngIf="isLoading" class="loading-overlay">
+		<mat-spinner [diameter]="50"></mat-spinner>
+	</div>
 	<div class="card p-3 mb-2">
 		<div class="">
 			Submit a free classified ad to <b>sell your books for cash</b>
@@ -47,7 +50,11 @@
 
 			<div class="my-2">
 				<label class="pe-3">Category</label>
-				<button mat-button [matMenuTriggerFor]="categoryMenu" class="rect-button">
+				<button
+					mat-button
+					[matMenuTriggerFor]="categoryMenu"
+					class="rect-button"
+				>
 					{{ novelForm.get('category')?.value || 'Select Category' }}
 				</button>
 				<mat-menu #categoryMenu="matMenu">
@@ -119,7 +126,10 @@
 				<span class="pe-4">Quantity Available(Stock) </span>
 				<div class="d-flex align-items-center cursor-pointer">
 					<mat-form-field appearance="outline" class="quantity-field">
-						<mat-select formControlName="totalQuantity" type="number">
+						<mat-select
+							formControlName="totalQuantity"
+							type="number"
+						>
 							<mat-option
 								*ngFor="let qty of quantities"
 								[value]="qty"

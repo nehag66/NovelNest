@@ -23,8 +23,24 @@ body {
 }
 
 .add-to-cart {
-	// text-align: end;
 	display: flex;
-	justify-content: flex-end; /* Aligns the button to the right */
+	justify-content: flex-end;
 	margin-top: auto;
+}
+
+mat-spinner {
+	margin: auto;
+}
+
+.loading-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
 }
