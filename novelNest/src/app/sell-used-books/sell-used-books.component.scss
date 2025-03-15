@@ -1,9 +1,6 @@
 .form-card {
 	padding: 2rem 10rem;
 }
-.quantity-field {
-	--mat-form-field-outline-color: black;
-}
 
 :host ::ng-deep .mat-mdc-text-field-wrapper {
 	height: 3rem;
@@ -11,8 +8,6 @@
 
 .post-ad-btn {
 	width: 10rem;
-	display: block;
-	margin: 0 auto;
 }
 
 .rect-button {

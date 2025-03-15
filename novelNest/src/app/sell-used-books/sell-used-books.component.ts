@@ -23,7 +23,6 @@ export class SellUsedBooksComponent implements OnInit {
 		isImage: boolean;
 	}[] = [];
 	fileNames: string = 'No files chosen';
-	quantities = Array.from({ length: 25 }, (_, i) => i + 1);
 
 	novelForm: FormGroup;
 
@@ -33,7 +32,9 @@ export class SellUsedBooksComponent implements OnInit {
 			category: ['', Validators.required],
 			price: ['', [Validators.required, Validators.min(1)]],
 			totalQuantity: ['', [Validators.required, Validators.min(1)]],
-			author: [''],
+			author: ['', Validators.required],
+			bookCondition: [null],
+			// image: [null, Validators.required],
 		});
 	}
 
@@ -92,14 +93,23 @@ export class SellUsedBooksComponent implements OnInit {
 				.subscribe({
 					next: (res: any) => {
 						this.isLoading = false;
+						this.onUpload();
 						console.log(res.message);
 						this.novelForm.reset();
 					},
 					error: (err) => {
+						this.isLoading = false;
 						console.error('Failed to add novel:', err);
 						alert('Failed to add novel. Please try again.');
 					},
 				});
+		} else {
+			this.isLoading = false;
+			console.error('The form is not valid');
 		}
+	}
+
+	resetForm() {
+		this.novelForm.reset();
 	}
 }
