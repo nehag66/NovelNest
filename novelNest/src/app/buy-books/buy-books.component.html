@@ -20,6 +20,7 @@
 				(click)="goToNovelDetails(novel.id)"
 				class="cursor-pointer card-container"
 			>
+			<!-- <img *ngIf="novel.images?.length" [src]="novel.images[0]" alt="{{ novel.title }}" class="novel-image" /> -->
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novel.author">Author: {{ novel.author }}</span>

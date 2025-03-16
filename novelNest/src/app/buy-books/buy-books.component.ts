@@ -49,6 +49,7 @@ export class BuyBooksComponent implements OnInit {
 							category: novel.category,
 							author: novel.author,
 							id: novel._id,
+							// images: novel.images && novel.images.length ? novel.images[0] : '',
 						};
 					});
 				}),

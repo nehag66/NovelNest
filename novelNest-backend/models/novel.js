@@ -22,7 +22,14 @@ const novelSchema = new mongoose.Schema({
 	},
 	author: {
 		type: String,
-	}
+	},
+	/* images: [
+		{
+			data: Buffer,
+			contentType: String,
+		},
+	], */
+	// images: [String] // Array of Base64 images
 });
 
 const Novels = mongoose.model('Novel', novelSchema);

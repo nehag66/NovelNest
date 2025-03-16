@@ -34,7 +34,7 @@ export class SellUsedBooksComponent implements OnInit {
 			totalQuantity: ['', [Validators.required, Validators.min(1)]],
 			author: ['', Validators.required],
 			bookCondition: [null],
-			// image: [null, Validators.required],
+			// images: [null, Validators.required],
 		});
 	}
 
