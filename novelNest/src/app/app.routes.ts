@@ -8,6 +8,7 @@ import { NovelDetailsComponent } from './buy-books/novel-details/novel-details.c
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
 	SELL_USED_BOOKS: 'post-ad',
+	EDIT_NOVELS: 'post-ad/:id',
 	BUY_BOOKS: 'books',
 	NOVEL: 'novels',
 	NOVEL_DETAILS: 'novels/:id',
@@ -24,6 +25,11 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.SELL_USED_BOOKS,
 		component: SellUsedBooksComponent,
 		title: 'Sell your used books for money',
+	},
+	{
+		path: CLIENT_ROUTES.EDIT_NOVELS,
+		component: SellUsedBooksComponent,
+		title: 'Edit Novel',
 	},
 	{
 		path: CLIENT_ROUTES.BUY_BOOKS,

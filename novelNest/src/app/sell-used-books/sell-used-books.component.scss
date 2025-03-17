@@ -13,3 +13,9 @@
 .rect-button {
 	border-radius: 0;
 }
+.image-preview img {
+	max-width: 150px;
+	height: auto;
+	display: block;
+	margin: 5px 0;
+}

@@ -79,9 +79,17 @@ exports.editNovel = (req, res, next) => {
 	});
 	Novel.updateOne({ _id: req.params.id, novel }).then(
 		(res) => console.log(res),
-		res.status(200).json({
-			message: 'Novel updated successfully!',
-		}),
+		res
+			.status(200)
+			.json({
+				message: 'Novel updated successfully!',
+			})
+			.catch((err) => {
+				res.status(500).json({
+					message: 'Error updating novel',
+					error,
+				});
+			}),
 	);
 };
 

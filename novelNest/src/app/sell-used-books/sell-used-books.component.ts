@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { BookCondition, Categories, Novel } from 'app/models/novels';
+import {
+	BookCondition,
+	Categories,
+	Novel,
+	NovelResponse,
+} from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -27,10 +33,16 @@ export class SellUsedBooksComponent implements OnInit {
 	BookConditions = BookCondition;
 
 	novelForm: FormGroup;
+	isEditMode: boolean = false;
+	novelId: string | null = null;
+	//imageUrl is also redundany. it is in 3 or more places
+	private imageUrl = 'http://localhost:3000';
 
 	constructor(
 		private fb: FormBuilder,
 		private _apiService: ApiService,
+		private _route: ActivatedRoute,
+		private _router: Router,
 	) {
 		this.novelForm = this.fb.group({
 			title: ['', Validators.required],
@@ -39,7 +51,7 @@ export class SellUsedBooksComponent implements OnInit {
 			totalQuantity: ['', [Validators.required, Validators.min(1)]],
 			author: ['', Validators.required],
 			bookCondition: [null],
-			// images: [null, Validators.required],
+			images: [[]], // Will store uploaded images
 		});
 	}
 
@@ -49,6 +61,33 @@ export class SellUsedBooksComponent implements OnInit {
 			.subscribe(
 				(response: any) => (this.categories = response.categories),
 			);
+		this.novelId = this._route.snapshot.paramMap.get('id');
+		if (this.novelId) {
+			this.isEditMode = true;
+			this.loadNovelDetails();
+		}
+	}
+
+	loadNovelDetails() {
+		this._apiService
+			.get<{
+				message: string;
+				novels: Novel[];
+			}>(`novels/${this.novelId!}`)
+			.subscribe((novel: any) => {
+				this.novelForm.patchValue(novel.novel);
+				if (novel.novel.images) {
+					this.previews = novel.novel.images.map(
+						(img: string) => `${this.imageUrl}${img}`,
+					);
+					this.fileNames = novel.novel.images
+						.map((img: string) => this.getFileName(img))
+						.join(', ');
+				}
+			});
+	}
+	getFileName(imageUrl: string): string {
+		return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
 	}
 
 	selectCategory(category: string) {
@@ -108,23 +147,44 @@ export class SellUsedBooksComponent implements OnInit {
 				formData.append('images', image);
 			});
 
-			this._apiService
-				.post<{ message: string; novels: Novel[] }>('novels', formData)
-				.subscribe({
-					next: (res: any) => {
-						this.isLoading = false;
-						console.log(res.message);
-						this.novelForm.reset();
-						this.fileNames = 'No files chosen'; // Clear displayed filenames
-						this.selectedFiles = []; // Clear selected images
-						this.previews = []; // Clear previews after successful upload
-					},
-					error: (err) => {
-						this.isLoading = false;
-						console.error('Failed to add novel:', err);
-						alert('Failed to add novel. Please try again.');
-					},
-				});
+			if (!this.isEditMode) {
+				this._apiService
+					.post<{
+						message: string;
+						novels: Novel[];
+					}>('novels', formData)
+					.subscribe({
+						next: (res: any) => {
+							this.isLoading = false;
+							console.log(res.message);
+							this.novelForm.reset();
+							this.fileNames = 'No files chosen'; // Clear displayed filenames
+							this.selectedFiles = []; // Clear selected images
+							this.previews = []; // Clear previews after successful upload
+						},
+						error: (err) => {
+							this.isLoading = false;
+							console.error('Failed to add novel:', err);
+							alert('Failed to add novel. Please try again.');
+						},
+					});
+			} else {
+				this._apiService
+					.patch(`novels/${this.novelId!}`, this.novelForm.value)
+					.subscribe({
+						next: () => {
+							this.isLoading = false;
+							// this.novelForm.reset();
+							// alert('Novel updated successfully!');
+							this._router.navigate(['/books']);
+						},
+						error: (err) => {
+							this.isLoading = false;
+							console.error('Failed to add novel:', err);
+							alert('Failed to add novel. Please try again.');
+						},
+					});
+			}
 		} else {
 			this.isLoading = false;
 			console.error('The form is not valid');

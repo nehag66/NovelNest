@@ -79,6 +79,10 @@ export class BuyBooksComponent implements OnInit {
 		}
 	}
 
+	editNovel(novel: Novel) {
+		this._router.navigate(['/post-ad', novel.id]); // Navigate to the edit page
+	}
+
 	buyBtnDisabled(novel: Novel) {
 		if (!novel.cartQuantity) return false;
 		return novel.cartQuantity && novel.totalQuantity <= novel.cartQuantity;

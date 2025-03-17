@@ -16,6 +16,9 @@
 			>
 				{{ novel.cartQuantity }} in cart
 			</div>
+			<button mat-icon-button class="edit-btn" (click)="editNovel(novel)">
+				<mat-icon class="edit-icon">edit</mat-icon>
+			</button>
 			<div
 				(click)="goToNovelDetails(novel.id)"
 				class="cursor-pointer card-container"

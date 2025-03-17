@@ -120,25 +120,37 @@
 					</mat-radio-button>
 				</mat-radio-group>
 			</div>
-			<div class="form-group d-flex align-items-baseline">
-				<span class="pe-4">Upload Photos </span>
-				<mat-form-field appearance="outline" class="full-width">
-					<input
-						type="file"
-						#fileInput
-						(change)="onFilesSelected($event)"
-						style="display: none"
-						multiple
-					/>
-					<input
-						matInput
-						placeholder="Choose files"
-						[value]="fileNames"
-						readonly
-						(click)="fileInput.click()"
-					/>
-					<mat-icon matSuffix>attach_file</mat-icon>
-				</mat-form-field>
+			<div class="form-group d-flex align-items-baseline gap-3">
+				<div>
+					<span class="pe-4">Upload Photos </span>
+					<mat-form-field appearance="outline" class="full-width">
+						<input
+							type="file"
+							#fileInput
+							(change)="onFilesSelected($event)"
+							style="display: none"
+							multiple
+						/>
+						<input
+							matInput
+							placeholder="Choose files"
+							[value]="fileNames"
+							readonly
+							(click)="fileInput.click()"
+						/>
+						<mat-icon matSuffix>attach_file</mat-icon>
+					</mat-form-field>
+				</div>
+				<div *ngIf="previews.length">
+					<p>Uploaded Images:</p>
+					<div class="image-preview">
+						<img
+							*ngFor="let img of previews"
+							[src]="img"
+							alt="Uploaded Image"
+						/>
+					</div>
+				</div>
 			</div>
 			<div class="form-group d-flex align-items-baseline mt-2">
 				<span class="pe-4">Quantity Available(Stock) </span>
@@ -215,8 +227,19 @@
 				(click)="postAd()"
 				type="submit"
 				[disabled]="!novelForm.valid"
+				*ngIf="!isEditMode"
 			>
 				Post Ad
+			</button>
+			<button
+				mat-flat-button
+				class="post-ad-btn buy-add-btn"
+				(click)="postAd()"
+				type="submit"
+				[disabled]="!novelForm.valid"
+				*ngIf="isEditMode"
+			>
+				Update Novel
 			</button>
 			<button
 				mat-flat-button
