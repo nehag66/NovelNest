@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialModule } from 'app/material.module';
-import { Categories, Novel } from 'app/models/novels';
+import { BookCondition, Categories, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -17,16 +17,21 @@ export class SellUsedBooksComponent implements OnInit {
 	isLoggedIn = false;
 	isLoading = false;
 	selectedFiles: File[] = [];
+	uploadedImageUrls: string[] = [];
 	previews: {
 		url: string | ArrayBuffer | null;
 		name: string;
 		isImage: boolean;
 	}[] = [];
 	fileNames: string = 'No files chosen';
+	BookConditions = BookCondition;
 
 	novelForm: FormGroup;
 
-	constructor(private fb: FormBuilder, private _apiService: ApiService) {
+	constructor(
+		private fb: FormBuilder,
+		private _apiService: ApiService,
+	) {
 		this.novelForm = this.fb.group({
 			title: ['', Validators.required],
 			category: ['', Validators.required],
@@ -74,6 +79,12 @@ export class SellUsedBooksComponent implements OnInit {
 		}
 	}
 
+	/* onFileSelected(event: any) {
+		if (event.target.files.length > 0) {
+		  this.selectedFiles = Array.from(event.target.files);
+		}
+	  } */
+
 	onUpload(): void {
 		if (!this.selectedFiles.length) return;
 
@@ -85,17 +96,28 @@ export class SellUsedBooksComponent implements OnInit {
 	postAd() {
 		this.isLoading = true;
 		if (this.novelForm.valid) {
+			const formData = new FormData();
+
+			// Append form fields
+			Object.keys(this.novelForm.value).forEach((key) => {
+				formData.append(key, this.novelForm.value[key]);
+			});
+
+			// Append images
+			this.selectedFiles.forEach((image) => {
+				formData.append('images', image);
+			});
+
 			this._apiService
-				.post<{
-					message: string;
-					novels: Novel[];
-				}>('novels', this.novelForm.value)
+				.post<{ message: string; novels: Novel[] }>('novels', formData)
 				.subscribe({
 					next: (res: any) => {
 						this.isLoading = false;
-						this.onUpload();
 						console.log(res.message);
 						this.novelForm.reset();
+						this.fileNames = 'No files chosen'; // Clear displayed filenames
+						this.selectedFiles = []; // Clear selected images
+						this.previews = []; // Clear previews after successful upload
 					},
 					error: (err) => {
 						this.isLoading = false;

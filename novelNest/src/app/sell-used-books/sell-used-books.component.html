@@ -109,9 +109,15 @@
 					aria-label="Select an option"
 					formControlName="bookCondition"
 				>
-					<mat-radio-button value="1">Excellent</mat-radio-button>
-					<mat-radio-button value="2">Good</mat-radio-button>
-					<mat-radio-button value="3">Fair</mat-radio-button>
+					<mat-radio-button [value]="BookConditions.Excellent"
+						>Excellent</mat-radio-button
+					>
+					<mat-radio-button [value]="BookConditions.Good"
+						>Good</mat-radio-button
+					>
+					<mat-radio-button [value]="BookConditions.Fair">
+						Fair
+					</mat-radio-button>
 				</mat-radio-group>
 			</div>
 			<div class="form-group d-flex align-items-baseline">

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { Novel, NovelResponse } from 'app/models/novels';
+import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
 
@@ -16,6 +16,7 @@ import { CartService } from 'services/cart.service';
 export class NovelDetailsComponent implements OnInit {
 	novelDetails!: Novel;
 	cartQuantity: number = 0;
+	private imageUrl = 'http://localhost:3000';
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -51,8 +52,25 @@ export class NovelDetailsComponent implements OnInit {
 					category: novel.category,
 					author: novel.author,
 					id: novel._id,
+					bookCondition: novel.bookCondition,
+					images: novel.images.map(
+						(img: any) => `${this.imageUrl}${img}`,
+					),
 				};
 			});
+	}
+
+	getBookCondition(condition: string): string {
+		switch (condition) {
+			case BookCondition.Excellent:
+				return 'Excellent';
+			case BookCondition.Good:
+				return 'Good';
+			case BookCondition.Fair:
+				return 'Fair';
+			default:
+				return 'Unknown';
+		}
 	}
 
 	buyBtnDisabled() {
@@ -66,5 +84,4 @@ export class NovelDetailsComponent implements OnInit {
 	addToCart() {
 		this._cartService.addToCart(this.novelDetails);
 	}
-
 }

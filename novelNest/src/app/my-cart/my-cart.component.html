@@ -31,16 +31,22 @@
 				class="border p-4 d-flex flex-column"
 			>
 				<div class="cursor-pointer">
+					<img
+						*ngIf="novel.images?.length"
+						[src]="novel.images[0]"
+						alt="{{ novel.title }}"
+						width="150"
+					/>
 					<h3 (click)="goToNovelDetails(novel.id)">
 						{{ novel.title }}
 					</h3>
 					<div class="d-flex flex-column gap-2">
 						<span *ngIf="novel.author"
-							>Author: {{ novel.author }}</span
+							><strong>Author:</strong> {{ novel.author }}</span
 						>
-						<span>Category: {{ novel.category }}</span>
+						<span><strong>Category:</strong> {{ novel.category }}</span>
 						<span class="d-flex align-items-center"
-							>Quantity:
+							><strong>Quantity:</strong>
 							<button
 								mat-icon-button
 								(click)="decreaseQuantity(novel)"
@@ -56,7 +62,7 @@
 								<mat-icon>add</mat-icon>
 							</button>
 						</span>
-						<span>Price: &#8377;{{ novel.price }}</span>
+						<span><strong>Price:</strong> &#8377;{{ novel.price }}</span>
 					</div>
 					<!-- <div class="d-flex gap-2">
 						<button

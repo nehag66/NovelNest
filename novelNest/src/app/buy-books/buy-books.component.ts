@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Novel, NovelResponse } from 'app/models/novels';
+import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { map } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
@@ -16,9 +16,11 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
+	private imageUrl = 'http://localhost:3000';
 	novels: Novel[] = [];
 	cartItems: Novel[] = [];
 	isLoading: boolean = false;
+	BookConditions = BookCondition;
 
 	constructor(
 		private _router: Router,
@@ -49,7 +51,10 @@ export class BuyBooksComponent implements OnInit {
 							category: novel.category,
 							author: novel.author,
 							id: novel._id,
-							// images: novel.images && novel.images.length ? novel.images[0] : '',
+							bookCondition: novel.bookCondition,
+							images: novel.images.map(
+								(img: any) => `${this.imageUrl}${img}`,
+							),
 						};
 					});
 				}),
@@ -59,6 +64,19 @@ export class BuyBooksComponent implements OnInit {
 				this.novels = novels;
 				this.updateNovelsWithCart();
 			});
+	}
+	//this getBookCondition method is duplicate in this component and novel details component - FIX THIS
+	getBookCondition(condition: string): string {
+		switch (condition) {
+			case BookCondition.Excellent:
+				return 'Excellent';
+			case BookCondition.Good:
+				return 'Good';
+			case BookCondition.Fair:
+				return 'Fair';
+			default:
+				return 'Unknown';
+		}
 	}
 
 	buyBtnDisabled(novel: Novel) {

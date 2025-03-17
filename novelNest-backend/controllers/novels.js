@@ -1,5 +1,5 @@
 const Novel = require('../models/novel');
-const sharp = require('sharp');
+const path = require('path');
 
 exports.getNovels = (req, res, next) => {
 	Novel.find()
@@ -15,35 +15,6 @@ exports.getNovels = (req, res, next) => {
 		});
 };
 
-/* exports.getNovels = async (req, res, next) => {
-    try {
-        const novels = await Novel.find();
-        const novelsWithConvertedImages = await Promise.all(
-            novels.map(async (novel) => {
-                if (novel.images && novel.images.length) {
-                    const convertedImages = await Promise.all(
-                        novel.images.map(async (imageBuffer) => {
-                            return await sharp(imageBuffer)
-                                .toFormat('jpeg')
-                                .toBuffer()
-                                .then((data) => `data:image/jpeg;base64,${data.toString('base64')}`);
-                        })
-                    );
-                    return { ...novel.toObject(), images: convertedImages };
-                }
-                return novel;
-            })
-        );
-
-        res.status(200).json({
-            message: 'Novels fetched successfully!',
-            novels: novelsWithConvertedImages
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Fetching novels failed', error });
-    }
-}; */
-
 exports.getNovelDetails = (req, res, next) => {
 	Novel.findById(req.params.id)
 		.then((novel) => {
@@ -58,49 +29,45 @@ exports.getNovelDetails = (req, res, next) => {
 		});
 };
 
-exports.postAddNovel = (req, res, next) => {
-	const novel = new Novel({
-		title: req.body.title,
-		category: req.body.category,
-		totalQuantity: req.body.totalQuantity,
-		price: req.body.price,
-		author: req.body.author,
-	});
-	novel.save().then((res) => console.log(res));
-	console.log(novel);
-	res.status(201).json({
-		message: 'Novel added successfully',
-		novels: novel,
-	});
+exports.postAddNovel = async (req, res) => {
+	console.log('Files received:', req.files);
+	try {
+		if (!req.files || req.files.length === 0) {
+			return res.status(400).json({ message: 'No images uploaded' });
+		}
+		// Get image file paths
+		const images = req.files?.map((file) => `/uploads/${file.filename}`);
+
+		// Create a new novel entry
+		const novel = new Novel({
+			title: req.body.title,
+			category: req.body.category,
+			totalQuantity: req.body.totalQuantity,
+			price: req.body.price,
+			author: req.body.author,
+			bookCondition: req.body.bookCondition,
+			images: images, // Store file paths in MongoDB
+		});
+
+		await novel.save();
+		res.status(201).json({ message: 'Novel added successfully!', novel });
+	} catch (error) {
+		console.error('Error saving novel:', error);
+		res.status(500).json({ message: 'Error adding novel' });
+	}
 };
 
-/* exports.postAddNovel = (req, res, next) => {
-    const images = req.files.map((file) => {
-        return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-    });
+// Serve images statically
+exports.getImage = (req, res) => {
+	const filename = req.params.filename;
+	const filePath = path.join(__dirname, '../uploads', filename);
 
-    const novel = new Novel({
-        title: req.body.title,
-        category: req.body.category,
-        totalQuantity: req.body.totalQuantity,
-        price: req.body.price,
-        author: req.body.author,
-        images: images, // Save Base64 images
-    });
-
-    novel.save()
-        .then(() => {
-            res.status(201).json({
-                message: 'Novel added successfully!',
-                novel: novel,
-            });
-        })
-        .catch((err) => {
-            console.error('Error adding novel:', err);
-            res.status(500).json({ message: 'Failed to add novel' });
-        });
-}; */
-
+	res.sendFile(filePath, (err) => {
+		if (err) {
+			res.status(404).json({ message: 'Image not found' });
+		}
+	});
+};
 
 exports.editNovel = (req, res, next) => {
 	const novel = new Novel({
@@ -110,8 +77,8 @@ exports.editNovel = (req, res, next) => {
 		price: req.body.price,
 		author: req.body.author,
 	});
-	Novel.updateOne({ _id: req.params.id, novel }).then((res) =>
-		console.log(res),
+	Novel.updateOne({ _id: req.params.id, novel }).then(
+		(res) => console.log(res),
 		res.status(200).json({
 			message: 'Novel updated successfully!',
 		}),

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MaterialModule } from './material.module';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { ApiService } from 'services/api.service';
 import { FooterComponent } from "./footer/footer.component";
@@ -17,7 +16,6 @@ import { FooterComponent } from "./footer/footer.component";
     HeaderComponent,
     MaterialModule,
     CommonModule,
-    HttpClientModule,
     FooterComponent
 ],
 	providers: [ApiService],

@@ -11,6 +11,7 @@ const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
 const cardsRoutes = require('./routes/cards');
+const path = require('path');
 // const errorController = require('./controllers/error');
 
 app.use(cors());
@@ -39,6 +40,10 @@ app.use(usersRoutes);
 app.use(novelsRoutes);
 app.use(categoriesRoutes);
 app.use(cardsRoutes);
+
+// Middleware to serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // app.use(errorController.get404);
 
 app.use((req, res, next) => {

@@ -7,7 +7,8 @@ export interface Novel {
 	price: number;
 	author: string;
 	cartQuantity?: number; // check if this is needed or not
-	// images?: any;
+	bookCondition: string;
+	images?: any;
 }
 
 export interface NovelResponse {
@@ -19,9 +20,16 @@ export interface NovelResponse {
 	__v: number;
 	totalQuantity: number;
 	quantity: number;
-	// images: any;
+	bookCondition: string;
+	images?: any;
 }
 
 export interface Categories {
 	name: string;
+}
+
+export enum BookCondition {
+	Excellent = '1',
+	Good = '2',
+	Fair = '3',
 }

@@ -20,15 +20,25 @@
 				(click)="goToNovelDetails(novel.id)"
 				class="cursor-pointer card-container"
 			>
-			<!-- <img *ngIf="novel.images?.length" [src]="novel.images[0]" alt="{{ novel.title }}" class="novel-image" /> -->
+				<img
+					*ngIf="novel.images?.length"
+					[src]="novel.images[0]"
+					alt="{{ novel.title }}"
+					width="150"
+				/>
 				<h3>{{ novel.title }}</h3>
 				<div class="d-flex flex-column gap-2">
-					<span *ngIf="novel.author">Author: {{ novel.author }}</span>
-					<span>Category: {{ novel.category }}</span>
-					<!-- <span *ngIf="novel.quantity"
-						>Quantity: {{ novel.quantity }}</span
-					> -->
-					<span>Price: &#8377;{{ novel.price }}</span>
+					<span *ngIf="novel.author"
+						><strong>Author:</strong> {{ novel.author }}</span
+					>
+					<span><strong>Category:</strong> {{ novel.category }}</span>
+					<span
+						><strong>Price:</strong> &#8377;{{ novel.price }}</span
+					>
+					<span *ngIf="novel.bookCondition"
+						><strong>Condition:</strong>
+						{{ getBookCondition(novel.bookCondition) }}</span
+					>
 				</div>
 			</div>
 			<div class="add-to-cart">
