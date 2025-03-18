@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import {
 	BookCondition,
 	Categories,
+	Category,
 	Novel,
-	NovelResponse,
 } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
@@ -35,8 +36,6 @@ export class SellUsedBooksComponent implements OnInit {
 	novelForm: FormGroup;
 	isEditMode: boolean = false;
 	novelId: string | null = null;
-	//imageUrl is also redundany. it is in 3 or more places
-	private imageUrl = 'http://localhost:3000';
 
 	constructor(
 		private fb: FormBuilder,
@@ -57,10 +56,12 @@ export class SellUsedBooksComponent implements OnInit {
 
 	ngOnInit() {
 		this._apiService
-			.get('categories')
-			.subscribe(
-				(response: any) => (this.categories = response.categories),
-			);
+			.get<{ message: string; categories: Category[] }>('categories')
+			.subscribe((response: any) => {
+				this.categories = response.categories.sort(
+					(a: Category, b: Category) => a.name?.localeCompare(b.name),
+				);
+			});
 		this.novelId = this._route.snapshot.paramMap.get('id');
 		if (this.novelId) {
 			this.isEditMode = true;
@@ -77,10 +78,10 @@ export class SellUsedBooksComponent implements OnInit {
 			.subscribe((novel: any) => {
 				this.novelForm.patchValue(novel.novel);
 				if (novel.novel.images) {
-					this.previews = novel.novel.images.map(
-						(img: string) => `${this.imageUrl}${img}`,
+					this.previews = novel.novel?.images?.map(
+						(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
 					);
-					this.fileNames = novel.novel.images
+					this.fileNames = novel.novel?.images
 						.map((img: string) => this.getFileName(img))
 						.join(', ');
 				}
@@ -116,20 +117,6 @@ export class SellUsedBooksComponent implements OnInit {
 				reader.readAsDataURL(file);
 			});
 		}
-	}
-
-	/* onFileSelected(event: any) {
-		if (event.target.files.length > 0) {
-		  this.selectedFiles = Array.from(event.target.files);
-		}
-	  } */
-
-	onUpload(): void {
-		if (!this.selectedFiles.length) return;
-
-		// Here, you would typically send the files to your server
-		console.log('Files ready for upload:', this.selectedFiles);
-		alert(`${this.selectedFiles.length} file(s) uploaded successfully!`);
 	}
 
 	postAd() {

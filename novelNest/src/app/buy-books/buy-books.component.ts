@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
+import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { map } from 'rxjs';
@@ -16,7 +17,6 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './buy-books.component.scss',
 })
 export class BuyBooksComponent implements OnInit {
-	private imageUrl = 'http://localhost:3000';
 	novels: Novel[] = [];
 	cartItems: Novel[] = [];
 	isLoading: boolean = false;
@@ -53,7 +53,7 @@ export class BuyBooksComponent implements OnInit {
 							id: novel._id,
 							bookCondition: novel.bookCondition,
 							images: novel.images.map(
-								(img: any) => `${this.imageUrl}${img}`,
+								(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
 							),
 						};
 					});

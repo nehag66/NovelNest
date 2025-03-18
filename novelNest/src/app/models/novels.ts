@@ -33,3 +33,8 @@ export enum BookCondition {
 	Good = '2',
 	Fair = '3',
 }
+
+export interface Category {
+	name: string;
+	_id: string;
+}

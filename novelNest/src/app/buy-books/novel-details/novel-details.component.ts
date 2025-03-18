@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
@@ -16,7 +17,6 @@ import { CartService } from 'services/cart.service';
 export class NovelDetailsComponent implements OnInit {
 	novelDetails!: Novel;
 	cartQuantity: number = 0;
-	private imageUrl = 'http://localhost:3000';
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -54,7 +54,7 @@ export class NovelDetailsComponent implements OnInit {
 					id: novel._id,
 					bookCondition: novel.bookCondition,
 					images: novel.images.map(
-						(img: any) => `${this.imageUrl}${img}`,
+						(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
 					),
 				};
 			});
