@@ -4,7 +4,8 @@ import { CLIENT_ROUTES } from 'app/app.routes';
 import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
-import { map } from 'rxjs';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
 import { SharedModule } from 'shared/shared.module';
@@ -12,7 +13,7 @@ import { SharedModule } from 'shared/shared.module';
 @Component({
 	selector: 'buy-books',
 	standalone: true,
-	imports: [SharedModule, MaterialModule],
+	imports: [SharedModule, MaterialModule, InfiniteScrollDirective],
 	templateUrl: './buy-books.component.html',
 	styleUrl: './buy-books.component.scss',
 })
@@ -22,6 +23,10 @@ export class BuyBooksComponent implements OnInit {
 	isLoading: boolean = false;
 	BookConditions = BookCondition;
 
+	page = 1;
+	limit = 10;
+	hasMoreNovels = true;
+
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
@@ -29,7 +34,6 @@ export class BuyBooksComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.isLoading = true;
 		this._cartService.cartItems$.subscribe((cart) => {
 			this.cartItems = cart;
 			this.updateNovelsWithCart();
@@ -38,8 +42,18 @@ export class BuyBooksComponent implements OnInit {
 	}
 
 	fetchNovels() {
+		if (!this.hasMoreNovels || this.isLoading) return;
+
+		this.isLoading = true;
+
 		this._apiService
-			.get<{ message: string; novels: Novel[] }>('novels')
+			.get<{ message: string; novels: Novel[]; totalPages: number }>(
+				'novels',
+				{
+					page: this.page,
+					limit: this.limit,
+				},
+			)
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: NovelResponse) => {
@@ -58,13 +72,26 @@ export class BuyBooksComponent implements OnInit {
 						};
 					});
 				}),
+				catchError((error) => {
+					console.error('Error fetching novels:', error);
+					this.isLoading = false;
+					return of([]); // Return an empty array if API fails
+				}),
 			)
 			.subscribe((novels: Novel[]) => {
 				this.isLoading = false;
-				this.novels = novels;
+				this.novels = [...this.novels, ...novels];
 				this.updateNovelsWithCart();
+
+				// Check if there are more novels to load
+				if (novels.length < this.limit) {
+					this.hasMoreNovels = false;
+				} else {
+					this.page++;
+				}
 			});
 	}
+
 	//this getBookCondition method is duplicate in this component and novel details component - FIX THIS
 	getBookCondition(condition: string): string {
 		switch (condition) {

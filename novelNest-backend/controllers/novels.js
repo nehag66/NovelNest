@@ -1,19 +1,30 @@
 const Novel = require('../models/novel');
 const path = require('path');
 
-exports.getNovels = (req, res, next) => {
-	Novel.find()
-		.then((novels) => {
-			res.status(200).json({
-				message: 'Novels Fetched Successfully.',
-				novels: novels,
-			});
-		})
-		.catch((err) => {
-			console.error('Error fetching novels:', err);
-			res.status(500).json({ message: 'Fetching novels failed.' });
-		});
-};
+exports.getNovels = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const novels = await Novel.find()
+            .skip(skip)
+            .limit(limit);
+
+        const totalNovels = await Novel.countDocuments();
+
+        res.status(200).json({
+            totalNovels,
+            hasMore: skip + limit < totalNovels, // Check if more data is available
+            novels,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error fetching novels",
+            error,
+        });
+    }
+}
 
 exports.getNovelDetails = (req, res, next) => {
 	Novel.findById(req.params.id)

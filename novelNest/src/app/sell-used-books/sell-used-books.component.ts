@@ -3,12 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
-import {
-	BookCondition,
-	Categories,
-	Category,
-	Novel,
-} from 'app/models/novels';
+import { BookCondition, Categories, Category, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { SharedModule } from 'shared/shared.module';
 
@@ -69,7 +64,7 @@ export class SellUsedBooksComponent implements OnInit {
 		}
 	}
 
-	loadNovelDetails() {
+	private loadNovelDetails() {
 		this._apiService
 			.get<{
 				message: string;
@@ -87,7 +82,7 @@ export class SellUsedBooksComponent implements OnInit {
 				}
 			});
 	}
-	getFileName(imageUrl: string): string {
+	private getFileName(imageUrl: string): string {
 		return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
 	}
 

@@ -1,58 +1,75 @@
-<div class="py-4 container">
-	<div *ngIf="isLoading" class="loading-overlay">
-		<mat-spinner [diameter]="50"></mat-spinner>
-	</div>
-	<div
-		class="d-flex flex-wrap gap-2 justify-content-center"
-		*ngIf="!isLoading"
-	>
+<div
+	infiniteScroll
+	[infiniteScrollDistance]="2"
+	[infiniteScrollUpDistance]="2"
+	[infiniteScrollThrottle]="300"
+	(scrolled)="fetchNovels()"
+>
+	<div class="py-4 container">
+		<div *ngIf="isLoading" class="loading-overlay">
+			<mat-spinner [diameter]="50"></mat-spinner>
+		</div>
 		<div
-			*ngFor="let novel of novels"
-			class="border p-4 d-flex flex-column novel-card"
+			class="d-flex flex-wrap gap-2 justify-content-center"
+			*ngIf="!isLoading"
 		>
 			<div
-				*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
-				class="cart-badge"
+				*ngFor="let novel of novels"
+				class="border p-4 d-flex flex-column novel-card"
 			>
-				{{ novel.cartQuantity }} in cart
-			</div>
-			<button mat-icon-button class="edit-btn" (click)="editNovel(novel)">
-				<mat-icon class="edit-icon">edit</mat-icon>
-			</button>
-			<div
-				(click)="goToNovelDetails(novel.id)"
-				class="cursor-pointer card-container"
-			>
-				<img
-					*ngIf="novel.images?.length"
-					[src]="novel.images[0]"
-					alt="{{ novel.title }}"
-					width="150"
-				/>
-				<h3>{{ novel.title }}</h3>
-				<div class="d-flex flex-column gap-2">
-					<span *ngIf="novel.author"
-						><strong>Author:</strong> {{ novel.author }}</span
-					>
-					<span><strong>Category:</strong> {{ novel.category }}</span>
-					<span
-						><strong>Price:</strong> &#8377;{{ novel.price }}</span
-					>
-					<span *ngIf="novel.bookCondition"
-						><strong>Condition:</strong>
-						{{ getBookCondition(novel.bookCondition) }}</span
-					>
-				</div>
-			</div>
-			<div class="add-to-cart">
-				<button
-					mat-flat-button
-					(click)="addToCart(novel)"
-					class="buy-add-btn"
-					[disabled]="buyBtnDisabled(novel)"
+				<div
+					*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
+					class="cart-badge"
 				>
-					Add to Cart
+					{{ novel.cartQuantity }} in cart
+				</div>
+				<button
+					mat-icon-button
+					class="edit-btn"
+					(click)="editNovel(novel)"
+				>
+					<mat-icon class="edit-icon">edit</mat-icon>
 				</button>
+				<div
+					(click)="goToNovelDetails(novel.id)"
+					class="cursor-pointer card-container"
+				>
+					<img
+						*ngIf="novel.images?.length"
+						[src]="novel.images[0]"
+						alt="{{ novel.title }}"
+						width="150"
+					/>
+					<h3>{{ novel.title }}</h3>
+					<div class="d-flex flex-column gap-2">
+						<span *ngIf="novel.author"
+							><strong>Author:</strong> {{ novel.author }}</span
+						>
+						<span
+							><strong>Category:</strong>
+							{{ novel.category }}</span
+						>
+						<span
+							><strong>Price:</strong> &#8377;{{
+								novel.price
+							}}</span
+						>
+						<span *ngIf="novel.bookCondition"
+							><strong>Condition:</strong>
+							{{ getBookCondition(novel.bookCondition) }}</span
+						>
+					</div>
+				</div>
+				<div class="add-to-cart">
+					<button
+						mat-flat-button
+						(click)="addToCart(novel)"
+						class="buy-add-btn"
+						[disabled]="buyBtnDisabled(novel)"
+					>
+						Add to Cart
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
