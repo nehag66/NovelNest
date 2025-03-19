@@ -69,28 +69,40 @@ exports.getImage = (req, res) => {
 	});
 };
 
-exports.editNovel = (req, res, next) => {
-	const novel = new Novel({
+exports.editNovel = (req, res) => {
+	let images = []
+	if (req.files || req.files.length > 0) {
+		images = req.files?.map((file) => `/uploads/${file.filename}`);
+	}
+	const updateData = {
 		title: req.body.title,
 		category: req.body.category,
 		totalQuantity: req.body.totalQuantity,
 		price: req.body.price,
 		author: req.body.author,
-	});
-	Novel.updateOne({ _id: req.params.id, novel }).then(
-		(res) => console.log(res),
-		res
-			.status(200)
-			.json({
+		bookCondition: req.body.bookCondition,
+		images: req.body.images || images,
+	};
+
+	Novel.findByIdAndUpdate(req.params.id, updateData, {
+		new: true,
+		runValidators: true,
+	})
+		.then((updatedNovel) => {
+			if (!updatedNovel) {
+				return res.status(404).json({ message: 'Novel not found!' });
+			}
+			res.status(200).json({
 				message: 'Novel updated successfully!',
-			})
-			.catch((err) => {
-				res.status(500).json({
-					message: 'Error updating novel',
-					error,
-				});
-			}),
-	);
+				updatedNovel,
+			});
+		})
+		.catch((error) => {
+			res.status(500).json({
+				message: 'Error updating novel',
+				error,
+			});
+		});
 };
 
 exports.deleteNovel = (req, res, next) => {

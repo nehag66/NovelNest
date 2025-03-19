@@ -157,18 +157,15 @@ export class SellUsedBooksComponent implements OnInit {
 					});
 			} else {
 				this._apiService
-					.patch(`novels/${this.novelId!}`, this.novelForm.value)
+					.put(`novels/${this.novelId!}`, formData)
 					.subscribe({
 						next: () => {
 							this.isLoading = false;
-							// this.novelForm.reset();
-							// alert('Novel updated successfully!');
 							this._router.navigate(['/books']);
 						},
 						error: (err) => {
 							this.isLoading = false;
 							console.error('Failed to add novel:', err);
-							alert('Failed to add novel. Please try again.');
 						},
 					});
 			}

@@ -25,7 +25,7 @@ router.post('/novels', upload.array('images', 5), novelsController.postAddNovel)
 router.get('/uploads/:filename', novelsController.getImage); // Serve uploaded images
 router.get('/novels', novelsController.getNovels);
 router.get('/novels/:id', novelsController.getNovelDetails);
-router.patch('/novels/:id', novelsController.editNovel);
+router.put("/novels/:id", upload.array('images', 5), novelsController.editNovel);
 router.delete('/novels/:id', novelsController.deleteNovel);
 
 module.exports = router;
