@@ -246,6 +246,7 @@
 				class="post-ad-btn buy-add-btn"
 				(click)="resetForm()"
 				type="button"
+				*ngIf="!isEditMode"
 			>
 				Reset Form
 			</button>

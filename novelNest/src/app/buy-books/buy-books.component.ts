@@ -21,6 +21,7 @@ export class BuyBooksComponent implements OnInit {
 	novels: Novel[] = [];
 	cartItems: Novel[] = [];
 	isLoading: boolean = false;
+	isLoadingMore = false;
 	BookConditions = BookCondition;
 
 	page = 1;
@@ -34,6 +35,7 @@ export class BuyBooksComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		this.isLoading = true;
 		this._cartService.cartItems$.subscribe((cart) => {
 			this.cartItems = cart;
 			this.updateNovelsWithCart();
@@ -42,9 +44,9 @@ export class BuyBooksComponent implements OnInit {
 	}
 
 	fetchNovels() {
-		if (!this.hasMoreNovels || this.isLoading) return;
+		if (!this.hasMoreNovels || this.isLoadingMore) return;
 
-		this.isLoading = true;
+		this.isLoadingMore = true;
 
 		this._apiService
 			.get<{ message: string; novels: Novel[]; totalPages: number }>(
@@ -79,6 +81,7 @@ export class BuyBooksComponent implements OnInit {
 				}),
 			)
 			.subscribe((novels: Novel[]) => {
+				this.isLoadingMore = false;
 				this.isLoading = false;
 				this.novels = [...this.novels, ...novels];
 				this.updateNovelsWithCart();
