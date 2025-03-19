@@ -1,11 +1,14 @@
 <div class="carousel-container">
 	<div class="carousel" #carousel>
 		<div class="book-card" *ngFor="let novel of novels">
+			<p class="text-center"><img *ngIf="novel.images?.length" [src]="novel.images[0]" alt="{{ novel.title }}" width="50" /></p>
 			<h4>{{ novel.title }}</h4>
-			<p>
-				<strong>{{ novel.price }}</strong>
-			</p>
-			<button mat-flat-button (click)="buyNow(novel.id)">Buy Now</button>
+			<p *ngIf="novel.author"
+				><strong>Author:</strong> {{ novel.author }}</p
+			>
+			<p><strong>Category:</strong> {{ novel.category }}</p>
+			<p><strong>Price:</strong> &#8377;{{ novel.price }}</p>
+			<p class="text-center"><button mat-flat-button (click)="buyNow(novel.id)">Buy Now</button></p>
 		</div>
 	</div>
 	<button class="prev" (click)="scroll(-200)">❮</button>

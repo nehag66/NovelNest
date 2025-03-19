@@ -11,7 +11,8 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { ApiService } from 'services/api.service';
 import { Novel, NovelResponse } from 'app/models/novels';
-import { map } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
+import { CONSTANTS } from 'app/constants';
 
 @Component({
 	selector: 'app-carousel',
@@ -25,14 +26,34 @@ export class CarouselComponent implements OnInit, OnDestroy {
 	private intervalId: any;
 	novels: Novel[] = [];
 
+	page = 1;
+	limit = 10;
+	hasMoreNovels = true;
+	isLoadingMore = false;
+
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
 	) {}
 
 	ngOnInit() {
+		this.fetchNovels();
+		this.startAutoScroll();
+	}
+
+	fetchNovels() {
+		if (!this.hasMoreNovels || this.isLoadingMore) return;
+
+		this.isLoadingMore = true;
+
 		this._apiService
-			.get<{ message: string; novels: Novel[] }>('novels')
+			.get<{ message: string; novels: Novel[]; totalPages: number }>(
+				'novels',
+				{
+					page: this.page,
+					limit: this.limit,
+				},
+			)
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: NovelResponse) => {
@@ -44,14 +65,29 @@ export class CarouselComponent implements OnInit, OnDestroy {
 							category: novel.category,
 							author: novel.author,
 							id: novel._id,
+							bookCondition: novel.bookCondition,
+							images: novel.images.map(
+								(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
+							),
 						};
 					});
 				}),
+				catchError((error) => {
+					console.error('Error fetching novels:', error);
+					return of([]); // Return an empty array if API fails
+				}),
 			)
 			.subscribe((novels: Novel[]) => {
-				this.novels = novels;
+				this.isLoadingMore = false;
+				this.novels = [...this.novels, ...novels];
+
+				// Check if there are more novels to load
+				if (novels.length < this.limit) {
+					this.hasMoreNovels = false;
+				} else {
+					this.page++;
+				}
 			});
-		this.startAutoScroll();
 	}
 
 	goToBuyBooks() {
@@ -68,6 +104,10 @@ export class CarouselComponent implements OnInit, OnDestroy {
 	startAutoScroll() {
 		this.intervalId = setInterval(() => {
 			this.scroll(200);
+
+			if (this.hasMoreNovels) {
+				this.fetchNovels();
+			}
 		}, 3000);
 	}
 
