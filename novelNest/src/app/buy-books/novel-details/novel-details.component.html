@@ -18,7 +18,7 @@
 							class="image-style"
 						/>
 					</div>
-					<div class="col-8">
+					<div class="col-8" *ngIf="novelDetails.images">
 						<img
 							*ngIf="novelDetails.images?.length"
 							[src]="novelDetails.images[0]"

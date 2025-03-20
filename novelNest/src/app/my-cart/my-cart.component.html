@@ -2,14 +2,12 @@
 	<div class="card p-3">
 		<div class="row d-flex align-items-center">
 			<div class="col-9">
-				<span><strong>My Cart ({{ cartCount }})</strong></span>
+				<span
+					><strong>My Cart ({{ cartCount }})</strong></span
+				>
 			</div>
 			<div class="buy-now-container col-3">
-				<button
-					mat-flat-button
-					(click)="buyNow()"
-					class="buy-add-btn"
-				>
+				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
 					Buy Now
 				</button>
 			</div>
@@ -55,9 +53,13 @@
 						</h3>
 						<div class="d-flex flex-column gap-2">
 							<span *ngIf="novel.author"
-								><strong>Author:</strong> {{ novel.author }}</span
+								><strong>Author:</strong>
+								{{ novel.author }}</span
 							>
-							<span><strong>Category:</strong> {{ novel.category }}</span>
+							<span
+								><strong>Category:</strong>
+								{{ novel.category }}</span
+							>
 							<span class="d-flex align-items-center"
 								><strong>Quantity:</strong>
 								<button
@@ -75,18 +77,17 @@
 									<mat-icon>add</mat-icon>
 								</button>
 							</span>
-							<span><strong>Price:</strong> &#8377;{{ novel.price }}</span>
+							<span
+								><strong>Price:</strong> &#8377;{{
+									novel.price
+								}}</span
+							>
 						</div>
 					</div>
-					
 				</div>
 			</div>
 			<div class="buy-now-container mt-3">
-				<button
-					mat-flat-button
-					(click)="buyNow()"
-					class="buy-add-btn"
-				>
+				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
 					Buy Now
 				</button>
 			</div>

@@ -11,13 +11,13 @@ import { CartService } from 'services/cart.service';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
-	selector: 'buy-books',
+	selector: 'all-books',
 	standalone: true,
 	imports: [SharedModule, MaterialModule, InfiniteScrollDirective],
-	templateUrl: './buy-books.component.html',
-	styleUrl: './buy-books.component.scss',
+	templateUrl: './all-books.component.html',
+	styleUrl: './all-books.component.scss',
 })
-export class BuyBooksComponent implements OnInit {
+export class AllBooksComponent implements OnInit {
 	novels: Novel[] = [];
 	cartItems: Novel[] = [];
 	isLoading: boolean = false;

@@ -1,15 +1,17 @@
 import { Routes } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
-import { BuyBooksComponent } from './buy-books/buy-books.component';
+import { AllBooksComponent } from './buy-books/all-books.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
 import { NovelDetailsComponent } from './buy-books/novel-details/novel-details.component';
+import { BuyNowComponent } from './buy-now/buy-now.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
 	SELL_USED_BOOKS: 'post-ad',
 	EDIT_NOVELS: 'post-ad/:id',
-	BUY_BOOKS: 'books',
+	ALL_BOOKS: 'books',
+	BUY_BOOKS: 'buy-books',
 	NOVEL: 'novels',
 	NOVEL_DETAILS: 'novels/:id',
 	MAIN_PAGE: '',
@@ -32,14 +34,19 @@ export const routes: Routes = [
 		title: 'Edit Novel',
 	},
 	{
-		path: CLIENT_ROUTES.BUY_BOOKS,
-		component: BuyBooksComponent,
+		path: CLIENT_ROUTES.ALL_BOOKS,
+		component: AllBooksComponent,
 		title: 'Buy New, Old and second hand books',
 	},
 	{
 		path: CLIENT_ROUTES.NOVEL_DETAILS,
 		component: NovelDetailsComponent,
 		title: 'Novel Details',
+	},
+	{
+		path: CLIENT_ROUTES.BUY_BOOKS,
+		component: BuyNowComponent,
+		title: 'Buy Now',
 	},
 	{
 		path: CLIENT_ROUTES.MAIN_PAGE,

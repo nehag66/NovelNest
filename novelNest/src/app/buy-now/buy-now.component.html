@@ -1,0 +1,43 @@
+<div class="row p-4 container">
+	<div class="col-9">
+		<h3>How would you like to pay?</h3>
+	</div>
+	<div class="col-3">
+		<button mat-flat-button (click)="placeOrder()" class="buy-add-btn">
+			Place your order
+		</button>
+		<div class="border p-4 d-flex flex-column" *ngIf="novelDetails">
+			<div class="cursor-pointer row">
+				<div class="col-6" *ngIf="novelDetails.images">
+					<img
+						*ngIf="novelDetails.images?.length"
+						[src]="novelDetails.images[0]"
+						alt="{{ novelDetails.title }}"
+						width="150"
+						height="200"
+					/>
+				</div>
+				<div class="col-6">
+					<h3>
+						{{ novelDetails.title }}
+					</h3>
+					<div class="d-flex flex-column gap-2">
+						<span *ngIf="novelDetails.author"
+							><strong>Author:</strong>
+							{{ novelDetails.author }}</span
+						>
+						<span
+							><strong>Category:</strong>
+							{{ novelDetails.category }}</span
+						>
+						<span
+							><strong>Price:</strong> &#8377;{{
+								novelDetails.price
+							}}</span
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

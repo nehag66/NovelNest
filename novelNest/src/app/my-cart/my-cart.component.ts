@@ -49,7 +49,7 @@ export class MyCartComponent implements OnInit {
 	}
 
 	goToBuyBooks() {
-		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
+		this._router.navigate([CLIENT_ROUTES.ALL_BOOKS]);
 	}
 
 	goToNovelDetails(novelId: string) {
@@ -77,5 +77,7 @@ export class MyCartComponent implements OnInit {
 		this._cartService.removeFromCart(novel);
 	} */
 
-	buyNow() {}
+	buyNow() {
+		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
+	}
 }
