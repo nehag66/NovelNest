@@ -28,13 +28,13 @@
 
 				<!-- Novel Card -->
 				<div (click)="goToNovelDetails(novel.id)" class="cursor-pointer card-container">
-					<img *ngIf="novel.images?.length" [src]="novel.images[0]" alt="{{ novel.title }}" width="150" />
+					<img *ngIf="novel.images?.length" [src]="novel.images[0]" alt="{{ novel.title }}" width="150" height="200"/>
 					<h3>{{ novel.title }}</h3>
 					<div class="d-flex flex-column gap-2">
 						<span *ngIf="novel.author"><strong>Author:</strong> {{ novel.author }}</span>
 						<span><strong>Category:</strong> {{ novel.category }}</span>
-						<span><strong>Price:</strong> &#8377;{{ novel.price }}</span>
 						<span *ngIf="novel.bookCondition"><strong>Condition:</strong> {{ getBookCondition(novel.bookCondition) }}</span>
+						<span><strong>Price:</strong> &#8377;{{ novel.price }}</span>
 					</div>
 				</div>
 

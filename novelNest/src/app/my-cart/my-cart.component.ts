@@ -76,4 +76,6 @@ export class MyCartComponent implements OnInit {
 	/* removeNovelFromCart(novel: Novel) {
 		this._cartService.removeFromCart(novel);
 	} */
+
+	buyNow() {}
 }
