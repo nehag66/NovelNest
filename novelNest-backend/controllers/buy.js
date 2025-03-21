@@ -1,7 +1,6 @@
 const novels = ['Firefly Lane', 'Fly Away', 'Twisted Love', 'Twisted Fate'];
 
 exports.getCart = (req, res, next) => {
-	// res.send('respond with books list');
 	res.status(200).json({
 		message: "Novels Fetched Successfully.",
 		novels: novels,
