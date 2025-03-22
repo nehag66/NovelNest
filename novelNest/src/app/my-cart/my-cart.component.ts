@@ -44,6 +44,7 @@ export class MyCartComponent implements OnInit {
 			height: '300px',
 			maxWidth: '80vw',
 			minWidth: '200px',
+			panelClass: 'custom-dialog'
 		});
 		dialogRef.afterClosed().subscribe((result) => {});
 	}

@@ -44,3 +44,7 @@ mat-spinner {
 	align-items: center;
 	z-index: 9999;
 }
+
+.custom-dialog .mat-mdc-dialog-surface {
+	border-radius: 10px !important;
+}
