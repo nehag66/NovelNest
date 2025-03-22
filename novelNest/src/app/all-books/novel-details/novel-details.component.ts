@@ -17,6 +17,7 @@ import { CartService } from 'services/cart.service';
 export class NovelDetailsComponent implements OnInit {
 	novelDetails!: Novel;
 	cartQuantity: number = 0;
+	isFavorite = false;
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -83,5 +84,9 @@ export class NovelDetailsComponent implements OnInit {
 
 	addToCart() {
 		this._cartService.addToCart(this.novelDetails);
+	}
+
+	toggleHeart() {
+		this.isFavorite = !this.isFavorite;
 	}
 }

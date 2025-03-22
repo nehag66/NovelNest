@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
-import { AllBooksComponent } from './buy-books/all-books.component';
+import { AllBooksComponent } from './all-books/all-books.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
-import { NovelDetailsComponent } from './buy-books/novel-details/novel-details.component';
+import { NovelDetailsComponent } from './all-books/novel-details/novel-details.component';
 import { BuyNowComponent } from './buy-now/buy-now.component';
 
 export const CLIENT_ROUTES = {
