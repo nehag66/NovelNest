@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { BookCondition, Categories, Category, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({

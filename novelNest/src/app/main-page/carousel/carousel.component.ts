@@ -12,7 +12,7 @@ import { CLIENT_ROUTES } from 'app/app.routes';
 import { ApiService } from 'services/api.service';
 import { Novel, NovelResponse } from 'app/models/novels';
 import { catchError, map, of } from 'rxjs';
-import { CONSTANTS } from 'app/constants';
+import { CONSTANTS } from 'shared/constants';
 
 @Component({
 	selector: 'app-carousel',

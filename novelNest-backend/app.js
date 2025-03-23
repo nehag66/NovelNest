@@ -7,14 +7,18 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+app.use(cors());
+app.use(express.json());
+
 const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
 const cardsRoutes = require('./routes/cards');
+const authRoutes = require('./routes/auth');
 const path = require('path');
 // const errorController = require('./controllers/error');
 
-app.use(cors());
+app.use('/auth', authRoutes);
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -46,7 +50,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // app.use(errorController.get404);
 
-app.use((req, res, next) => {
+app.use((req, res) => {
 	res.status(404).send('<h1>Page Not Found!</h1>');
 });
 

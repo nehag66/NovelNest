@@ -6,7 +6,7 @@
 					><strong>My Cart ({{ cartCount }})</strong></span
 				>
 			</div>
-			<div class="buy-now-container col-3">
+			<div class="buy-now-container col-3" *ngIf="isLoggedIn">
 				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
 					Buy Now
 				</button>
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div
-			*ngIf="isLoggedIn && cartCount === 0"
+			*ngIf="isLoggedIn() && cartCount === 0"
 			class="d-flex flex-column align-items-center"
 		>
 			<mat-icon class="custom-icon-size">shopping_cart</mat-icon>
@@ -32,7 +32,7 @@
 				Start buying now
 			</button>
 		</div>
-		<div *ngIf="isLoggedIn && cartCount > 0">
+		<div *ngIf="isLoggedIn() && cartCount > 0">
 			<div
 				*ngFor="let novel of cartItems; let i = index"
 				class="border p-4 d-flex flex-column"

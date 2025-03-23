@@ -1,19 +1,56 @@
-<form class="login-form d-flex flex-column m-4">
+<form
+	[formGroup]="loginForm"
+	(ngSubmit)="onLogin()"
+	class="login-form d-flex flex-column m-4"
+>
 	<mat-form-field class="full-width">
 		<mat-label>Email or Phone Number</mat-label>
-		<input matInput />
+		<input matInput formControlName="emailOrPhone" />
+		<mat-error
+			*ngIf="
+				loginForm.get('emailOrPhone')?.invalid &&
+				loginForm.get('emailOrPhone')?.touched
+			"
+		>
+			Email or phone is required
+		</mat-error>
 	</mat-form-field>
-	<mat-form-field class="full-width" name="email">
+
+	<mat-form-field class="full-width">
 		<mat-label>Password</mat-label>
-		<input matInput [type]="hidePassword ? 'password' : 'text'" />
+		<input
+			matInput
+			[type]="hidePassword ? 'password' : 'text'"
+			formControlName="password"
+		/>
 		<button
 			type="button"
 			mat-icon-button
 			matSuffix
 			(click)="togglePasswordVisibility()"
 		>
-			<mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+			<mat-icon>{{
+				hidePassword ? 'visibility_off' : 'visibility'
+			}}</mat-icon>
 		</button>
+		<mat-error
+			*ngIf="
+				loginForm.get('password')?.invalid &&
+				loginForm.get('password')?.touched
+			"
+		>
+			Password is required
+		</mat-error>
 	</mat-form-field>
-	<button type="button" mat-button class="login-signup-btn">Login</button>
+
+	<button
+		type="submit"
+		mat-button
+		class="login-signup-btn"
+		[disabled]="loginForm.invalid || isLoading"
+	>
+		{{ isLoading ? 'Logging in...' : 'Login' }}
+	</button>
+
+	<p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
 </form>

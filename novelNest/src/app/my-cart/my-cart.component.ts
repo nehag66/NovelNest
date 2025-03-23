@@ -16,7 +16,7 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './my-cart.component.scss',
 })
 export class MyCartComponent implements OnInit {
-	isLoggedIn = true;
+	token: string = '';
 
 	cartItems: Novel[] = [];
 	cartCount: number = 0;
@@ -28,6 +28,7 @@ export class MyCartComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		// localStorage.getItem('token')
 		this._cartService.cartItems$.subscribe((items) => {
 			this.cartItems = items;
 		});
@@ -37,6 +38,10 @@ export class MyCartComponent implements OnInit {
 		});
 	}
 
+	isLoggedIn(): boolean {
+		return !!localStorage.getItem('token');
+	}
+
 	openLoginDialog(e: Event) {
 		e.preventDefault();
 		const dialogRef = this._dialog.open(LoginSignupDialogComponent, {
@@ -44,7 +49,7 @@ export class MyCartComponent implements OnInit {
 			height: '300px',
 			maxWidth: '80vw',
 			minWidth: '200px',
-			panelClass: 'custom-dialog'
+			panelClass: 'custom-dialog',
 		});
 		dialogRef.afterClosed().subscribe((result) => {});
 	}
