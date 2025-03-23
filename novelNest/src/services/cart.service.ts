@@ -103,4 +103,9 @@ export class CartService {
 			updatedCart.reduce((sum, item) => sum + item.quantity, 0),
 		);
 	}
+
+	clearCart() {
+		localStorage.removeItem('cart');
+		this.cartItemCount.next(0); // Reset count to 0
+	}
 }
