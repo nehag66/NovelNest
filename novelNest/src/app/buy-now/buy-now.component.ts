@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { Novel, NovelResponse } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { CONSTANTS } from 'shared/constants';
 
 @Component({
 	selector: 'buy-now',

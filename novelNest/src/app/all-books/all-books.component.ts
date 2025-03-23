@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
-import { CONSTANTS } from 'app/constants';
 import { MaterialModule } from 'app/material.module';
 import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
+import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
