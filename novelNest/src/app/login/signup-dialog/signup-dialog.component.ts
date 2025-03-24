@@ -30,7 +30,7 @@ export class SignupDialogComponent {
 		private _router: Router,
 	) {
 		this.signUpForm = this.fb.group({
-			emailOrPhone: ['', Validators.required],
+			email: ['', [Validators.required]],
 			name: ['', Validators.required],
 			password: ['', Validators.required],
 		});
@@ -48,7 +48,7 @@ export class SignupDialogComponent {
 		this._authService
 			.register({
 				name: this.signUpForm.value.name,
-				email: this.signUpForm.value.emailOrPhone,
+				email: this.signUpForm.value.email,
 				password: this.signUpForm.value.password,
 			})
 			.subscribe({

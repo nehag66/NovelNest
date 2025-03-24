@@ -7,8 +7,11 @@ import { CONSTANTS } from 'shared/constants';
 	providedIn: 'root',
 })
 export class ApiService {
-	token = localStorage.getItem('token'); // Retrieve the token
-	constructor(private http: HttpClient) {}
+	token: string | null = null;
+
+	constructor(private http: HttpClient) {
+		this.token = localStorage.getItem('token');
+	}
 
 	private handleError(error: any) {
 		console.error('An error occurred:', error); // Log the error for now
@@ -19,7 +22,7 @@ export class ApiService {
 
 	get<T>(endpoint: string, params?: any): Observable<T> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${localStorage.getItem('token')}`, // Get token from localStorage
+			Authorization: `Bearer ${this.token}`, // Get token from localStorage
 		});
 
 		return this.http

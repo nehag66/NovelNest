@@ -6,6 +6,7 @@ import { ApiService } from './api.service';
 	providedIn: 'root',
 })
 export class CartService {
+	token: string | null = null;
 	// Store cart count
 	private cartItemCount = new BehaviorSubject<number>(0);
 	cartItemCount$ = this.cartItemCount.asObservable();
@@ -17,7 +18,8 @@ export class CartService {
 	cartItems$ = this.cartItemsSubject.asObservable();
 
 	constructor(private _apiService: ApiService) {
-		this.loadCartFromServer();
+		this.token = localStorage.getItem('token');
+		this.token && this.loadCartFromServer();
 	}
 
 	/** ✅ Load cart from API on startup */

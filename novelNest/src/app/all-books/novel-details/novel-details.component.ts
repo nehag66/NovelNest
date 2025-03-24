@@ -18,6 +18,7 @@ export class NovelDetailsComponent implements OnInit {
 	novelDetails!: Novel;
 	cartQuantity: number = 0;
 	isFavorite = false;
+	token: string | null = null;
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -31,10 +32,8 @@ export class NovelDetailsComponent implements OnInit {
 			novelId = params.get('id');
 			novelId && this.fetchNovelDetails(novelId);
 		});
-		this._cartService.getCart().subscribe((cart) => {
-			/* const cartItem = cart.find((item) => item.id === novelId);
-			this.cartQuantity = cartItem ? cartItem.quantity : 0; */
-		});
+		this.token = localStorage.getItem('token');
+		this.token && this._cartService.getCart().subscribe();
 	}
 
 	fetchNovelDetails(novelId: string) {

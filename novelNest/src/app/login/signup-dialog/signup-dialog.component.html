@@ -17,15 +17,15 @@
 	</mat-form-field>
 
 	<mat-form-field class="full-width">
-		<mat-label>Email</mat-label>
-		<input matInput formControlName="emailOrPhone" />
+		<mat-label>Enter email</mat-label>
+		<input matInput formControlName="email" />
 		<mat-error
 			*ngIf="
-				signUpForm.get('emailOrPhone')?.invalid &&
-				signUpForm.get('emailOrPhone')?.touched
+				signUpForm.get('email')?.invalid &&
+				signUpForm.get('email')?.touched
 			"
 		>
-			Enter a valid email or phone number
+			Enter a valid email
 		</mat-error>
 	</mat-form-field>
 
