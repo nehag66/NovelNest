@@ -27,16 +27,20 @@ export class ApiService {
 			.pipe(catchError(this.handleError));
 	}
 
-	// POST method
-	post<T>(endpoint: string, body: any): Observable<T> {
-		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.token}`, // Ensure token is stored properly
-			'Content-Type': 'application/json',
-		});
+	post<T>(
+		endpoint: string,
+		body: any,
+		requiresAuth: boolean = true,
+	): Observable<T> {
+		let headers = new HttpHeaders();
 
-		return this.http.post<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, {
-			headers,
-		});
+		if (requiresAuth && this.token) {
+			headers = headers.set('Authorization', `Bearer ${this.token}`);
+		}
+
+		return this.http
+			.post<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, { headers })
+			.pipe(catchError(this.handleError));
 	}
 
 	// PUT method

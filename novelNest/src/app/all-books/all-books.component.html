@@ -22,7 +22,7 @@
 				</div>
 
 				<!-- Edit Button -->
-				<button mat-icon-button class="edit-btn" (click)="editNovel(novel)">
+				<button mat-icon-button class="edit-btn" (click)="editNovel(novel)" [disabled]="!isLoggedIn()">
 					<mat-icon class="edit-icon">edit</mat-icon>
 				</button>
 

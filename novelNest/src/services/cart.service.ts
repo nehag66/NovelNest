@@ -9,106 +9,32 @@ import { ApiService } from './api.service';
 export class CartService {
 	cart = new BehaviorSubject<number>(0); // Store cart count
 	// Behaviour Subject - Keeps track of the latest cart count and notifies all subscribed components whenever the value changes.
-	// private cartItemCount = new BehaviorSubject<number>(0);
+	private cartItemCount = new BehaviorSubject<number>(0);
 	// cartItemCount$ - Allows components to listen for cart count updates
-
-	// cartItemCount$ = this.cartItemCount.asObservable();
+	cartItemCount$ = this.cartItemCount.asObservable();
 
 	// Keeps track of the latest cart items
-	// private cartItemsSubject = new BehaviorSubject<Novel[]>([]);
-	// cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
+	private cartItemsSubject = new BehaviorSubject<
+		{ novelId: string; quantity: number }[]
+	>([]);
+	cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
 
 	constructor(private _apiService: ApiService) {
-		// const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-		// this.cartItemsSubject.next(savedCart);
-		// this.cartItemCount.next(savedCart.length);
-		// this.loadCartFromStorage();
+		this.loadCartFromServer();
 	}
 
-	/** Load cart from localStorage and update BehaviorSubjects */
-	/* private loadCartFromStorage() {
-		const storedCart = localStorage.getItem('cart');
-		const parsedCart = storedCart ? JSON.parse(storedCart) : [];
-
-		// Remove duplicates and sum quantities
-		const cleanedCart = this.removeDuplicatesAndSumQuantities(parsedCart);
-
-		this.cartItemsSubject.next(cleanedCart);
-		this.updateCartCount(cleanedCart);
-		localStorage.setItem('cart', JSON.stringify(cleanedCart));
-	} */
-
-	/* addToCart(item: Novel) {
-		const currentCart = [...this.cartItemsSubject.value];
-		const existingItemIndex = currentCart.findIndex(
-			(cartItem) => cartItem.id === item.id,
-		);
-
-		if (existingItemIndex !== -1) {
-			currentCart[existingItemIndex].quantity++;
-		} else {
-			currentCart.push({ ...item, quantity: 1 });
-		}
-
-		const cleanedCart = this.removeDuplicatesAndSumQuantities(currentCart);
-		this.cartItemsSubject.next(cleanedCart);
-		this.updateCartCount(cleanedCart);
-		localStorage.setItem('cart', JSON.stringify(cleanedCart));
-	} */
-
-	/* private removeDuplicatesAndSumQuantities(cart: Novel[]): Novel[] {
-		const cartMap = new Map<string, Novel>();
-
-		cart.forEach((item) => {
-			if (cartMap.has(item.id)) {
-				cartMap.get(item.id)!.quantity += item.quantity;
-			} else {
-				cartMap.set(item.id, { ...item });
+	/** Load cart from API */
+	private async loadCartFromServer() {
+		try {
+			const response: any = await this._apiService.get('/cart');
+			if (response && response?.cart?.items) {
+				this.cartItemsSubject.next(response?.cart?.items);
+				this.updateCartCount(response?.cart?.items);
 			}
-		});
-
-		return Array.from(cartMap.values());
+		} catch (error) {
+			console.error('Error loading cart:', error);
+		}
 	}
-
-	private updateCartCount(cart: Novel[]) {
-		const totalItemsInCart = cart.reduce(
-			(sum, item) => sum + item.quantity,
-			0,
-		);
-		this.cartItemCount.next(totalItemsInCart);
-	} */
-
-	/* getCartItems(): Novel[] {
-		return this.cartItemsSubject.value;
-	}
-
-	updateCartQuantity(item: Novel, quantity: number) {
-		const updatedCart = this.cartItemsSubject.value.map((cartItem) =>
-			cartItem.id === item.id ? { ...cartItem, quantity } : cartItem,
-		);
-
-		this.cartItemsSubject.next(updatedCart);
-		localStorage.setItem('cart', JSON.stringify(updatedCart));
-		this.cartItemCount.next(
-			updatedCart.reduce((sum, item) => sum + item.quantity, 0),
-		);
-	} */
-
-	/* removeFromCart(item: Novel) {
-		const updatedCart = this.cartItemsSubject.value.filter(
-			(cartItem) => cartItem.id !== item.id,
-		);
-		this.cartItemsSubject.next(updatedCart);
-		localStorage.setItem('cart', JSON.stringify(updatedCart));
-		this.cartItemCount.next(
-			updatedCart.reduce((sum, item) => sum + item.quantity, 0),
-		);
-	} */
-
-	/* clearCart() {
-		localStorage.removeItem('cart');
-		this.cartItemCount.next(0); // Reset count to 0
-	} */
 
 	////////////////////////////////NEW CODE//////////////////////////////////////
 
@@ -123,19 +49,72 @@ export class CartService {
 		return this._apiService.get<{ items: any[] }>('cart/');
 	}
 
+	/** Add item to cart */
 	addToCart(novelId: string, quantity: number = 1) {
-		return this._apiService.post(`cart/add`, { novelId, quantity }).pipe(
-			tap(() => {
-				this.cart.next(this.cart.value + 1);
-			}),
-		).subscribe((res) => console.log(res))
+		return this._apiService
+			.post(`cart/add`, { novelId, quantity })
+			.pipe(
+				tap(() => {
+					this.cart.next(this.cart.value + 1);
+				}),
+			)
+			.subscribe((response: any) => {
+				this.cartItemsSubject.next(response?.cart?.items);
+				this.updateCartCount(response?.cart?.items);
+			});
 	}
 
+	/** Update item quantity */
+	async updateCartQuantity(novelId: string, quantity: number) {
+		if (quantity < 1) {
+			await this.removeFromCart(novelId);
+			return;
+		}
+
+		try {
+			const response: any = await this._apiService.put('/cart/update', {
+				novelId,
+				quantity,
+			});
+			this.cartItemsSubject.next(response?.cart?.items);
+			this.updateCartCount(response?.cart?.items);
+		} catch (error) {
+			console.error('Error updating cart:', error);
+		}
+	}
+
+	/** Remove item from cart */
 	removeFromCart(novelId: string) {
-		return this._apiService.post(`cart/remove`, { novelId }).pipe(
-			tap(() => {
-				this.cart.next(this.cart.value - 1);
-			}),
-		).subscribe((res) => console.log(res))
+		return this._apiService
+			.post(`cart/remove`, { novelId })
+			.pipe(
+				tap(() => {
+					this.cart.next(this.cart.value - 1);
+				}),
+			)
+			.subscribe((response: any) => {
+				this.cartItemsSubject.next(response?.cart?.items);
+				this.updateCartCount(response?.cart?.items);
+			});
+	}
+
+	/** Clear cart */
+	async clearCart() {
+		try {
+			await this._apiService.delete('/cart/clear');
+			this.cartItemsSubject.next([]);
+			this.cartItemCount.next(0);
+		} catch (error) {
+			console.error('Error clearing cart:', error);
+		}
+	}
+
+	/** Update cart count */
+	private updateCartCount(cart: { novelId: string; quantity: number }[]) {
+		const totalItemsInCart = cart.reduce(
+			(sum, item) => sum + item.quantity,
+			0,
+		);
+		this.cartItemCount.next(totalItemsInCart);
 	}
 }

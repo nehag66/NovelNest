@@ -25,7 +25,7 @@ export class AuthService {
 
 	login(credentials: any) {
 		return this._apiService
-			.post<{ token: string }>(`auth/login`, credentials)
+			.post<{ token: string }>(`auth/login`, credentials, false)
 			.pipe(
 				tap((res) => {
 					this.token = res.token;

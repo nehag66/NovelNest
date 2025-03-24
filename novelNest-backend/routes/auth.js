@@ -1,9 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const verifyToken = require('../middlewares/verifyToken');
 const router = express.Router();
+require('dotenv').config();
 
 // Register a new user
 router.post(
@@ -54,7 +56,6 @@ router.post(
 		check('password', 'Password is required').exists(),
 	],
 	async (req, res) => {
-		console.log(req.body)
 		const errors = validationResult(req);
 		if (!errors.isEmpty())
 			return res.status(400).json({ errors: errors.array() });
@@ -70,22 +71,26 @@ router.post(
 			if (!isMatch)
 				return res.status(400).json({ msg: 'Invalid Credentials' });
 
+			if (!process.env.JWT_SECRET)
+				throw new Error('JWT_SECRET is missing');
+
 			const token = jwt.sign(
-				{ userId: user.id },
+				{ userId: user._id.toString() },
 				process.env.JWT_SECRET,
 				{ expiresIn: process.env.JWT_EXPIRES_IN },
 			);
-
 			res.json({ token });
 		} catch (err) {
-			res.status(500).send('Server Error');
+			res.status(500).json({
+				error: 'JWT Generation Error',
+				details: err.message,
+			});
 		}
 	},
 );
 
 // Get user details (protected route)
 router.get('/me', verifyToken, async (req, res) => {
-	console.log("userId=====>", req.user)
 	try {
 		const user = await User.findById(req.user.userId).select('-password');
 		res.json(user);
