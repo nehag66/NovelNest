@@ -30,7 +30,10 @@ export class AuthService {
 				tap((res) => {
 					this.token = res.token;
 					localStorage.setItem('token', res.token);
-					this._cartService.loadCart();
+					this._cartService.getCart().subscribe((cart) => {
+						console.log(cart)
+					});
+					// this._cartService.getCart().subscribe((res: any) => console.log(res));
 				}),
 			);
 	}
@@ -38,7 +41,7 @@ export class AuthService {
 	logout() {
 		localStorage.removeItem('token');
 		this.authState.next(false);
-		// this._cartService.clearCart()
+		this._cartService.clearCart()
 		this._router.navigate(['/']);
 	}
 

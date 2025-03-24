@@ -17,6 +17,7 @@ import { CartService } from 'services/cart.service';
 })
 export class HeaderComponent {
 	cartCount: number = 0;
+	cartItems: any[] = [];
 
 	constructor(
 		private _dialog: MatDialog,
@@ -28,7 +29,7 @@ export class HeaderComponent {
 	}
 
 	updateCartCount() {
-		this._cartService.cart.subscribe((count) => {
+		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
 		});
 	}

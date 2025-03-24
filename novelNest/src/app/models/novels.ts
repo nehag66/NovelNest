@@ -38,3 +38,19 @@ export interface Category {
 	name: string;
 	_id: string;
 }
+
+export interface CartResponse {
+	novelId: {
+		_id: string;
+		title: string;
+		category: string;
+		price: number;
+		__v: number;
+		totalQuantity: number;
+		author: string;
+		bookCondition: number;
+		images?: any;
+	};
+	quantity: number;
+	_id: string;
+}

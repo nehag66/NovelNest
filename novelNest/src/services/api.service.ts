@@ -45,7 +45,11 @@ export class ApiService {
 
 	// PUT method
 	put<T>(endpoint: string, body: any): Observable<T> {
-		return this.http.put<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body);
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.token}`, // Add Bearer Token
+		});
+	
+		return this.http.put<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, { headers });
 	}
 
 	// DELETE method

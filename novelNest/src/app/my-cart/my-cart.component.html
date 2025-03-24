@@ -32,7 +32,8 @@
 				Start buying now
 			</button>
 		</div>
-		<div *ngIf="isLoggedIn() && cartCount > 0">
+		<!-- <div *ngIf="isLoggedIn() && cartCount > 0"> -->
+			<div *ngIf="isLoggedIn()">
 			<div
 				*ngFor="let novel of cartItems; let i = index"
 				class="border p-4 d-flex flex-column"
@@ -40,25 +41,25 @@
 				<div class="cursor-pointer row">
 					<div class="col-6">
 						<img
-							*ngIf="novel.images?.length"
-							[src]="novel.images[0]"
-							alt="{{ novel.title }}"
+							*ngIf="novel.novelId?.images?.length"
+							[src]="novel.novelId?.images[0]"
+							alt="{{ novel.novelId.title }}"
 							width="150"
 							height="200"
 						/>
 					</div>
 					<div class="col-6">
-						<h3 (click)="goToNovelDetails(novel.id)">
-							{{ novel.title }}
+						<h3 (click)="goToNovelDetails(novel.novelId?.id)">
+							{{ novel.novelId?.title }}
 						</h3>
 						<div class="d-flex flex-column gap-2">
-							<span *ngIf="novel.author"
+							<span *ngIf="novel.novelId?.author"
 								><strong>Author:</strong>
-								{{ novel.author }}</span
+								{{ novel.novelId?.author }}</span
 							>
 							<span
 								><strong>Category:</strong>
-								{{ novel.category }}</span
+								{{ novel.novelId?.category }}</span
 							>
 							<span class="d-flex align-items-center"
 								><strong>Quantity:</strong>
@@ -71,7 +72,7 @@
 								<span class="mx-2">{{ novel.quantity }}</span>
 								<button
 									mat-icon-button
-									(click)="increaseQuantity(novel.id)"
+									(click)="increaseQuantity(novel)"
 									[disabled]="buyBtnDisabled(novel)"
 								>
 									<mat-icon>add</mat-icon>
@@ -79,7 +80,7 @@
 							</span>
 							<span
 								><strong>Price:</strong> &#8377;{{
-									novel.price
+									novel.novelId?.price
 								}}</span
 							>
 						</div>

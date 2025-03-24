@@ -1,120 +1,100 @@
 import { Injectable } from '@angular/core';
-import { Novel } from 'app/models/novels';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CartService {
-	cart = new BehaviorSubject<number>(0); // Store cart count
-	// Behaviour Subject - Keeps track of the latest cart count and notifies all subscribed components whenever the value changes.
+	// Store cart count
 	private cartItemCount = new BehaviorSubject<number>(0);
-	// cartItemCount$ - Allows components to listen for cart count updates
 	cartItemCount$ = this.cartItemCount.asObservable();
 
-	// Keeps track of the latest cart items
+	// Store cart items
 	private cartItemsSubject = new BehaviorSubject<
 		{ novelId: string; quantity: number }[]
 	>([]);
-	cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
+	cartItems$ = this.cartItemsSubject.asObservable();
 
 	constructor(private _apiService: ApiService) {
 		this.loadCartFromServer();
 	}
 
-	/** Load cart from API */
-	private async loadCartFromServer() {
-		try {
-			const response: any = await this._apiService.get('/cart');
-			if (response && response?.cart?.items) {
-				this.cartItemsSubject.next(response?.cart?.items);
-				this.updateCartCount(response?.cart?.items);
-			}
-		} catch (error) {
-			console.error('Error loading cart:', error);
-		}
-	}
-
-	////////////////////////////////NEW CODE//////////////////////////////////////
-
-	// ✅ Fetch user's cart after login
-	loadCart() {
-		this.getCart().subscribe((cart) => {
-			this.cart.next(cart.items.length || 0);
+	/** ✅ Load cart from API on startup */
+	private loadCartFromServer() {
+		this._apiService.get<{ items: any[] }>('cart').subscribe({
+			next: (response) => {
+				this.cartItemsSubject.next(response.items);
+				this.updateCartCount(response.items);
+			},
+			error: (error) => console.error('Error loading cart:', error),
 		});
 	}
 
-	getCart() {
-		return this._apiService.get<{ items: any[] }>('cart/');
+	/** ✅ Get cart */
+	getCart(): Observable<{ items: any[] }> {
+		return this._apiService.get<{ items: any[] }>('cart');
 	}
 
-	/** Add item to cart */
+	/** ✅ Add item to cart */
 	addToCart(novelId: string, quantity: number = 1) {
-		return this._apiService
-			.post(`cart/add`, { novelId, quantity })
-			.pipe(
-				tap(() => {
-					this.cart.next(this.cart.value + 1);
-				}),
-			)
-			.subscribe((response: any) => {
-				this.cartItemsSubject.next(response?.cart?.items);
-				this.updateCartCount(response?.cart?.items);
-			});
+		return this._apiService.post(`cart/add`, { novelId, quantity }).pipe(
+			tap((response: any) => {
+				this.cartItemsSubject.next(response.items);
+				this.updateCartCount(response.items);
+			}),
+		).subscribe();
 	}
 
-	/** Update item quantity */
-	async updateCartQuantity(novelId: string, quantity: number) {
-		if (quantity < 1) {
-			await this.removeFromCart(novelId);
-			return;
-		}
+	/** ✅ Update item quantity */
+	updateCartQuantity(novelId: string, quantity: number) {
+		if (quantity < 1) return this.removeFromCart(novelId);
 
-		try {
-			const response: any = await this._apiService.put('/cart/update', {
-				novelId,
-				quantity,
-			});
-			this.cartItemsSubject.next(response?.cart?.items);
-			this.updateCartCount(response?.cart?.items);
-		} catch (error) {
-			console.error('Error updating cart:', error);
-		}
+		return this._apiService.put('cart/update', { novelId, quantity }).pipe(
+			tap((response: any) => {
+				this.cartItemsSubject.next(response.items);
+				this.updateCartCount(response.items);
+			}),
+		);
 	}
 
-	/** Remove item from cart */
+	/** ✅ Remove item from cart */
 	removeFromCart(novelId: string) {
-		return this._apiService
-			.post(`cart/remove`, { novelId })
-			.pipe(
-				tap(() => {
-					this.cart.next(this.cart.value - 1);
-				}),
-			)
-			.subscribe((response: any) => {
-				this.cartItemsSubject.next(response?.cart?.items);
-				this.updateCartCount(response?.cart?.items);
-			});
+		return this._apiService.post(`cart/remove`, { novelId }).pipe(
+			tap((response: any) => {
+				this.cartItemsSubject.next(response.items);
+				this.updateCartCount(response.items);
+			}),
+		);
 	}
 
-	/** Clear cart */
-	async clearCart() {
-		try {
-			await this._apiService.delete('/cart/clear');
-			this.cartItemsSubject.next([]);
-			this.cartItemCount.next(0);
-		} catch (error) {
-			console.error('Error clearing cart:', error);
-		}
+	/** ✅ Clear cart */
+	clearCart() {
+		return this._apiService.delete('cart/clear').pipe(
+			tap(() => {
+				this.cartItemsSubject.next([]);
+				this.cartItemCount.next(0);
+			}),
+		);
 	}
 
-	/** Update cart count */
+	/** ✅ Update cart count */
 	private updateCartCount(cart: { novelId: string; quantity: number }[]) {
 		const totalItemsInCart = cart.reduce(
 			(sum, item) => sum + item.quantity,
 			0,
 		);
 		this.cartItemCount.next(totalItemsInCart);
+	}
+
+	/** Get quantity of a specific book */
+	getBookQuantity(novelId: string): Observable<number> {
+		return this.cartItems$.pipe(
+			tap((items) => console.log('Cart Items:', items)), // Debugging line
+			map((items) => {
+				const item = items.find((book) => book.novelId === novelId);
+				return item ? item.quantity : 0;
+			}),
+		);
 	}
 }

@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
-import { Novel } from 'app/models/novels';
+import { Novel, NovelResponse } from 'app/models/novels';
 import { CartService } from 'services/cart.service';
+import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
@@ -16,9 +17,7 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './my-cart.component.scss',
 })
 export class MyCartComponent implements OnInit {
-	token: string = '';
-cartItems: any;
-	// cartItems: Novel[] = [];
+	cartItems: any;
 	cartCount: number = 0;
 
 	constructor(
@@ -28,14 +27,24 @@ cartItems: any;
 	) {}
 
 	ngOnInit(): void {
-		// localStorage.getItem('token')
-		this._cartService.getCart().subscribe((items) => {
-			this.cartItems = items;
+		this._cartService.cartItems$.subscribe((items: any) => {
+			this.cartItems = items.map((item: any) => ({
+				...item,
+				novelId: {
+					...item.novelId,
+					images: item.novelId?.images.map(
+						(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
+					),
+				},
+			}));
 		});
+		this.updateCartCount();
+	}
 
-		/* this._cartService.cartItemCount$.subscribe((count) => {
+	updateCartCount() {
+		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
-		}); */
+		});
 	}
 
 	isLoggedIn(): boolean {
@@ -67,21 +76,21 @@ cartItems: any;
 		return novel.quantity && novel.totalQuantity <= novel.quantity;
 	}
 
-	increaseQuantity(novelId: string) {
-		this._cartService.addToCart(novelId);
+	increaseQuantity(novel: NovelResponse) {
+		this._cartService
+			.updateCartQuantity(novel._id, novel.quantity + 1)
+			.subscribe();
 	}
 
-	decreaseQuantity(novel: Novel) {
-		/* if (novel.quantity > 1) {
-			this._cartService.updateCartQuantity(novel, novel.quantity - 1);
+	decreaseQuantity(novel: NovelResponse) {
+		if (novel.quantity > 1) {
+			this._cartService
+				.updateCartQuantity(novel._id, novel.quantity - 1)
+				.subscribe();
 		} else {
-			this._cartService.removeFromCart(novel);
-		} */
+			this._cartService.removeFromCart(novel._id).subscribe();
+		}
 	}
-
-	/* removeNovelFromCart(novel: Novel) {
-		this._cartService.removeFromCart(novel);
-	} */
 
 	buyNow() {
 		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
