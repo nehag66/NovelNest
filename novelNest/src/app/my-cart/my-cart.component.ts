@@ -17,8 +17,8 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class MyCartComponent implements OnInit {
 	token: string = '';
-
-	cartItems: Novel[] = [];
+cartItems: any;
+	// cartItems: Novel[] = [];
 	cartCount: number = 0;
 
 	constructor(
@@ -29,13 +29,13 @@ export class MyCartComponent implements OnInit {
 
 	ngOnInit(): void {
 		// localStorage.getItem('token')
-		this._cartService.cartItems$.subscribe((items) => {
+		this._cartService.getCart().subscribe((items) => {
 			this.cartItems = items;
 		});
 
-		this._cartService.cartItemCount$.subscribe((count) => {
+		/* this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
-		});
+		}); */
 	}
 
 	isLoggedIn(): boolean {
@@ -46,7 +46,7 @@ export class MyCartComponent implements OnInit {
 		e.preventDefault();
 		const dialogRef = this._dialog.open(LoginSignupDialogComponent, {
 			width: '400px',
-			height: '300px',
+			height: '350px',
 			maxWidth: '80vw',
 			minWidth: '200px',
 			panelClass: 'custom-dialog',
@@ -67,16 +67,16 @@ export class MyCartComponent implements OnInit {
 		return novel.quantity && novel.totalQuantity <= novel.quantity;
 	}
 
-	increaseQuantity(novel: Novel) {
-		this._cartService.addToCart(novel);
+	increaseQuantity(novelId: string) {
+		this._cartService.addToCart(novelId);
 	}
 
 	decreaseQuantity(novel: Novel) {
-		if (novel.quantity > 1) {
+		/* if (novel.quantity > 1) {
 			this._cartService.updateCartQuantity(novel, novel.quantity - 1);
 		} else {
 			this._cartService.removeFromCart(novel);
-		}
+		} */
 	}
 
 	/* removeNovelFromCart(novel: Novel) {

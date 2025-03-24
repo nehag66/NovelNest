@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { CartService } from './cart.service';
 })
 export class AuthService {
 	private authState = new BehaviorSubject<boolean>(this.isAuthenticated());
+	token: string | null = null;
 
 	constructor(
 		private _jwtHelper: JwtHelperService,
@@ -23,18 +24,26 @@ export class AuthService {
 	}
 
 	login(credentials: any) {
-		return this._apiService.post(`auth/login`, credentials);
+		return this._apiService
+			.post<{ token: string }>(`auth/login`, credentials)
+			.pipe(
+				tap((res) => {
+					this.token = res.token;
+					localStorage.setItem('token', res.token);
+					this._cartService.loadCart();
+				}),
+			);
 	}
 
 	logout() {
 		localStorage.removeItem('token');
 		this.authState.next(false);
-		this._cartService.clearCart()
+		// this._cartService.clearCart()
 		this._router.navigate(['/']);
 	}
 
 	getToken() {
-		return localStorage.getItem('token');
+		return this.token || localStorage.getItem('token');
 	}
 
 	isAuthenticated(): boolean {

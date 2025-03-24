@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { CONSTANTS } from 'shared/constants';
 
@@ -7,7 +7,7 @@ import { CONSTANTS } from 'shared/constants';
 	providedIn: 'root',
 })
 export class ApiService {
-
+	token = localStorage.getItem('token'); // Retrieve the token
 	constructor(private http: HttpClient) {}
 
 	private handleError(error: any) {
@@ -18,14 +18,25 @@ export class ApiService {
 	}
 
 	get<T>(endpoint: string, params?: any): Observable<T> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${localStorage.getItem('token')}`, // Get token from localStorage
+		});
+
 		return this.http
-			.get<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, { params })
+			.get<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, { params, headers }) // Pass headers
 			.pipe(catchError(this.handleError));
 	}
 
 	// POST method
 	post<T>(endpoint: string, body: any): Observable<T> {
-		return this.http.post<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body);
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.token}`, // Ensure token is stored properly
+			'Content-Type': 'application/json',
+		});
+
+		return this.http.post<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, {
+			headers,
+		});
 	}
 
 	// PUT method

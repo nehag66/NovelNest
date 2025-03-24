@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { MaterialModule } from '../../material.module';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormGroup,
+	ReactiveFormsModule,
+	Validators,
+} from '@angular/forms';
 import { AuthService } from 'services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -19,7 +24,11 @@ export class SignupDialogComponent {
 	isLoading = false;
 	errorMessage = '';
 
-	constructor(private fb: FormBuilder, private _authService: AuthService, private _router: Router) {
+	constructor(
+		private fb: FormBuilder,
+		private _authService: AuthService,
+		private _router: Router,
+	) {
 		this.signUpForm = this.fb.group({
 			emailOrPhone: ['', Validators.required],
 			name: ['', Validators.required],

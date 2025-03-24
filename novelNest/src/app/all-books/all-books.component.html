@@ -39,8 +39,8 @@
 				</div>
 
 				<!-- Add to Cart -->
-				<div class="add-to-cart">
-					<button mat-flat-button (click)="addToCart(novel)" class="buy-add-btn" [disabled]="buyBtnDisabled(novel)">
+				<div class="add-to-cart" *ngIf="isLoggedIn()">
+					<button mat-flat-button (click)="addToCart(novel.id)" class="buy-add-btn" [disabled]="buyBtnDisabled(novel)">
 						Add to Cart
 					</button>
 				</div>

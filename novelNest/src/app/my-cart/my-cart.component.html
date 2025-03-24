@@ -71,7 +71,7 @@
 								<span class="mx-2">{{ novel.quantity }}</span>
 								<button
 									mat-icon-button
-									(click)="increaseQuantity(novel)"
+									(click)="increaseQuantity(novel.id)"
 									[disabled]="buyBtnDisabled(novel)"
 								>
 									<mat-icon>add</mat-icon>

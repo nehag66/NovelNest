@@ -14,7 +14,7 @@ export const AuthGuard: CanActivateFn = () => {
 	} else {
 		const dialogRef = dialogService.open(LoginSignupDialogComponent, {
 			width: '400px',
-			height: '300px',
+			height: '350px',
 			maxWidth: '80vw',
 			minWidth: '200px',
 			panelClass: 'custom-dialog',

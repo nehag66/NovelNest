@@ -19,7 +19,8 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class AllBooksComponent implements OnInit {
 	novels: Novel[] = [];
-	cartItems: Novel[] = [];
+	cartItems: any
+	// cartItems: Novel[] = [];
 	isLoading: boolean = false;
 	isLoadingMore = false;
 	BookConditions = BookCondition;
@@ -36,11 +37,16 @@ export class AllBooksComponent implements OnInit {
 
 	ngOnInit() {
 		this.isLoading = true;
-		this._cartService.cartItems$.subscribe((cart) => {
+		this._cartService.getCart().subscribe((cart) => {
 			this.cartItems = cart;
 			this.updateNovelsWithCart();
 		});
 		this.fetchNovels();
+	}
+
+	//this isLoggedIn method is duplicate in many other components - FIX THIS
+	isLoggedIn(): boolean {
+		return !!localStorage.getItem('token');
 	}
 
 	fetchNovels() {
@@ -119,19 +125,19 @@ export class AllBooksComponent implements OnInit {
 	}
 
 	updateNovelsWithCart() {
-		this.novels = this.novels.map((novel) => {
+		/* this.novels = this.novels.map((novel) => {
 			const cartItem = this.cartItems.find(
 				(item) => item.id === novel.id,
 			);
 			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
-		});
+		}); */
 	}
 
 	goToNovelDetails(novelId: string) {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
 	}
 
-	addToCart(novel: Novel) {
-		this._cartService.addToCart(novel);
+	addToCart(novelId: string) {
+		this._cartService.addToCart(novelId);
 	}
 }

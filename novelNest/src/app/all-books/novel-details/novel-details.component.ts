@@ -31,9 +31,9 @@ export class NovelDetailsComponent implements OnInit {
 			novelId = params.get('id');
 			novelId && this.fetchNovelDetails(novelId);
 		});
-		this._cartService.cartItems$.subscribe((cart) => {
-			const cartItem = cart.find((item) => item.id === novelId);
-			this.cartQuantity = cartItem ? cartItem.quantity : 0;
+		this._cartService.getCart().subscribe((cart) => {
+			/* const cartItem = cart.find((item) => item.id === novelId);
+			this.cartQuantity = cartItem ? cartItem.quantity : 0; */
 		});
 	}
 
@@ -83,7 +83,7 @@ export class NovelDetailsComponent implements OnInit {
 	}
 
 	addToCart() {
-		this._cartService.addToCart(this.novelDetails);
+		this._cartService.addToCart(this.novelDetails?.id);
 	}
 
 	toggleHeart() {

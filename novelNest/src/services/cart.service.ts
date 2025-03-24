@@ -1,31 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Novel } from 'app/models/novels';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CartService {
+	cart = new BehaviorSubject<number>(0); // Store cart count
 	// Behaviour Subject - Keeps track of the latest cart count and notifies all subscribed components whenever the value changes.
-	private cartItemCount = new BehaviorSubject<number>(0);
+	// private cartItemCount = new BehaviorSubject<number>(0);
 	// cartItemCount$ - Allows components to listen for cart count updates
 
-	cartItemCount$ = this.cartItemCount.asObservable();
+	// cartItemCount$ = this.cartItemCount.asObservable();
 
 	// Keeps track of the latest cart items
-	private cartItemsSubject = new BehaviorSubject<Novel[]>([]);
-	cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
+	// private cartItemsSubject = new BehaviorSubject<Novel[]>([]);
+	// cartItems$ = this.cartItemsSubject.asObservable(); // Observable for the components
 
-	constructor() {
-		const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-		this.cartItemsSubject.next(savedCart);
-		this.cartItemCount.next(savedCart.length);
-
-		this.loadCartFromStorage();
+	constructor(private _apiService: ApiService) {
+		// const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+		// this.cartItemsSubject.next(savedCart);
+		// this.cartItemCount.next(savedCart.length);
+		// this.loadCartFromStorage();
 	}
 
 	/** Load cart from localStorage and update BehaviorSubjects */
-	private loadCartFromStorage() {
+	/* private loadCartFromStorage() {
 		const storedCart = localStorage.getItem('cart');
 		const parsedCart = storedCart ? JSON.parse(storedCart) : [];
 
@@ -35,9 +36,9 @@ export class CartService {
 		this.cartItemsSubject.next(cleanedCart);
 		this.updateCartCount(cleanedCart);
 		localStorage.setItem('cart', JSON.stringify(cleanedCart));
-	}
+	} */
 
-	addToCart(item: Novel) {
+	/* addToCart(item: Novel) {
 		const currentCart = [...this.cartItemsSubject.value];
 		const existingItemIndex = currentCart.findIndex(
 			(cartItem) => cartItem.id === item.id,
@@ -53,9 +54,9 @@ export class CartService {
 		this.cartItemsSubject.next(cleanedCart);
 		this.updateCartCount(cleanedCart);
 		localStorage.setItem('cart', JSON.stringify(cleanedCart));
-	}
+	} */
 
-	private removeDuplicatesAndSumQuantities(cart: Novel[]): Novel[] {
+	/* private removeDuplicatesAndSumQuantities(cart: Novel[]): Novel[] {
 		const cartMap = new Map<string, Novel>();
 
 		cart.forEach((item) => {
@@ -75,9 +76,9 @@ export class CartService {
 			0,
 		);
 		this.cartItemCount.next(totalItemsInCart);
-	}
+	} */
 
-	getCartItems(): Novel[] {
+	/* getCartItems(): Novel[] {
 		return this.cartItemsSubject.value;
 	}
 
@@ -91,9 +92,9 @@ export class CartService {
 		this.cartItemCount.next(
 			updatedCart.reduce((sum, item) => sum + item.quantity, 0),
 		);
-	}
+	} */
 
-	removeFromCart(item: Novel) {
+	/* removeFromCart(item: Novel) {
 		const updatedCart = this.cartItemsSubject.value.filter(
 			(cartItem) => cartItem.id !== item.id,
 		);
@@ -102,10 +103,39 @@ export class CartService {
 		this.cartItemCount.next(
 			updatedCart.reduce((sum, item) => sum + item.quantity, 0),
 		);
-	}
+	} */
 
-	clearCart() {
+	/* clearCart() {
 		localStorage.removeItem('cart');
 		this.cartItemCount.next(0); // Reset count to 0
+	} */
+
+	////////////////////////////////NEW CODE//////////////////////////////////////
+
+	// ✅ Fetch user's cart after login
+	loadCart() {
+		this.getCart().subscribe((cart) => {
+			this.cart.next(cart.items.length || 0);
+		});
+	}
+
+	getCart() {
+		return this._apiService.get<{ items: any[] }>('cart/');
+	}
+
+	addToCart(novelId: string, quantity: number = 1) {
+		return this._apiService.post(`cart/add`, { novelId, quantity }).pipe(
+			tap(() => {
+				this.cart.next(this.cart.value + 1);
+			}),
+		).subscribe((res) => console.log(res))
+	}
+
+	removeFromCart(novelId: string) {
+		return this._apiService.post(`cart/remove`, { novelId }).pipe(
+			tap(() => {
+				this.cart.next(this.cart.value - 1);
+			}),
+		).subscribe((res) => console.log(res))
 	}
 }

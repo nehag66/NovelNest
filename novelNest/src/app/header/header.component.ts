@@ -16,7 +16,7 @@ import { CartService } from 'services/cart.service';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-	cartCount = 0;
+	cartCount: number = 0;
 
 	constructor(
 		private _dialog: MatDialog,
@@ -28,7 +28,7 @@ export class HeaderComponent {
 	}
 
 	updateCartCount() {
-		this._cartService.cartItemCount$.subscribe((count) => {
+		this._cartService.cart.subscribe((count) => {
 			this.cartCount = count;
 		});
 	}
@@ -40,7 +40,7 @@ export class HeaderComponent {
 	openLoginSignup() {
 		const dialogRef = this._dialog.open(LoginSignupDialogComponent, {
 			width: '400px',
-			height: '300px',
+			height: '350px',
 			maxWidth: '80vw',
 			minWidth: '200px',
 			panelClass: 'custom-dialog',

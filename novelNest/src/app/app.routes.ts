@@ -46,7 +46,7 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.NOVEL_DETAILS,
 		component: NovelDetailsComponent,
 		title: 'Novel Details',
-		// canActivate: [AuthGuard],
+		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.BUY_BOOKS,

@@ -10,11 +10,12 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 
+const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
 const cardsRoutes = require('./routes/cards');
-const authRoutes = require('./routes/auth');
+const cartRoutes = require('./routes/carts');
 const path = require('path');
 // const errorController = require('./controllers/error');
 
@@ -44,6 +45,7 @@ app.use(usersRoutes);
 app.use(novelsRoutes);
 app.use(categoriesRoutes);
 app.use(cardsRoutes);
+app.use(cartRoutes);
 
 // Middleware to serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
