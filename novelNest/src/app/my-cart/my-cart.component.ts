@@ -27,6 +27,11 @@ export class MyCartComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.updateCartItems();
+		this.updateCartCount();
+	}
+
+	updateCartItems() {
 		this._cartService.cartItems$.subscribe((items: any) => {
 			this.cartItems = items.map((item: any) => ({
 				...item,
@@ -38,7 +43,6 @@ export class MyCartComponent implements OnInit {
 				},
 			}));
 		});
-		this.updateCartCount();
 	}
 
 	updateCartCount() {
@@ -77,22 +81,30 @@ export class MyCartComponent implements OnInit {
 	}
 
 	increaseQuantity(novel: NovelResponse) {
-		this._cartService
-			.updateCartQuantity(novel._id, novel.quantity + 1)
-			.subscribe();
+		this._cartService.updateCartQuantity(novel._id, novel.quantity + 1);
 	}
 
 	decreaseQuantity(novel: NovelResponse) {
-		if (novel.quantity > 1) {
-			this._cartService
-				.updateCartQuantity(novel._id, novel.quantity - 1)
-				.subscribe();
-		} else {
-			this._cartService.removeFromCart(novel._id).subscribe();
-		}
+		this._cartService.updateCartQuantity(novel._id, novel.quantity - 1);
 	}
 
 	buyNow() {
 		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
 	}
+
+	/* buyBtnDisabled(novel: Novel) {
+		if (!novel.cartQuantity) return false;
+		return novel.cartQuantity && novel.totalQuantity <= novel.cartQuantity;
+	}
+
+	updateNovelsWithCart() {
+		if (!this.cartItems) return;
+
+		this.novels = this.novels.map((novel) => {
+			const cartItem = this.cartItems.find(
+				(item: any) => item.novelId?._id === novel.id,
+			);
+			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
+		});
+	} */
 }

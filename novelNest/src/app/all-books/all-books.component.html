@@ -40,7 +40,7 @@
 
 				<!-- Add to Cart -->
 				<div class="add-to-cart" *ngIf="isLoggedIn()">
-					<button mat-flat-button (click)="addToCart(novel.id)" class="buy-add-btn" [disabled]="buyBtnDisabled(novel)">
+					<button mat-flat-button (click)="addToCart(novel.id, novel.quantity)" class="buy-add-btn" [disabled]="buyBtnDisabled(novel)">
 						Add to Cart
 					</button>
 				</div>

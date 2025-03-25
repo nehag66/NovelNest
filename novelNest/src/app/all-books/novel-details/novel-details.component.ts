@@ -82,7 +82,7 @@ export class NovelDetailsComponent implements OnInit {
 	}
 
 	addToCart() {
-		this._cartService.addToCart(this.novelDetails?.id);
+		this._cartService.addToCart(this.novelDetails?.id, this.novelDetails.quantity);
 	}
 
 	toggleHeart() {

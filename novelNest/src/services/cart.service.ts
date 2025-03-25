@@ -18,13 +18,16 @@ export class CartService {
 	cartItems$ = this.cartItemsSubject.asObservable();
 
 	constructor(private _apiService: ApiService) {
-		this.token = localStorage.getItem('token');
-		this.token && this.loadCartFromServer();
+		this.bearerToken && this.loadCartFromServer();
+	}
+
+	get bearerToken() {
+		return localStorage.getItem('token');
 	}
 
 	/** ✅ Load cart from API on startup */
 	private loadCartFromServer() {
-		this._apiService.get<{ items: any[] }>('cart').subscribe({
+		this.getCart().subscribe({
 			next: (response) => {
 				this.cartItemsSubject.next(response.items);
 				this.updateCartCount(response.items);
@@ -39,8 +42,32 @@ export class CartService {
 	}
 
 	/** ✅ Add item to cart */
-	addToCart(novelId: string, quantity: number = 1) {
-		return this._apiService.post(`cart/add`, { novelId, quantity }).pipe(
+	addToCart(novelId: string, quantity: number) {
+		return this._apiService
+			.post(`cart/add`, { novelId, quantity })
+			.pipe(
+				tap((response: any) => {
+					this.cartItemsSubject.next(response.cart?.items); // Update cart items
+					this.updateCartCount(response.cart?.items); // Ensure count is updated
+				}),
+			)
+			.subscribe();
+	}
+
+	fetchCart() {
+		this.getCart().subscribe((response: any) => {
+			this.cartItemsSubject.next(response.items);
+			this.updateCartCount(response.items);
+		});
+	}
+
+	/** ✅ Update item quantity */
+	updateCartQuantity(novelId: string, quantity: number) {
+		if (quantity < 1) {
+			return this.removeFromCart(novelId).subscribe(); // Ensure UI updates immediately
+		}
+
+		return this._apiService.put('cart/update', { novelId, quantity }).pipe(
 			tap((response: any) => {
 				this.cartItemsSubject.next(response.items);
 				this.updateCartCount(response.items);
@@ -48,21 +75,9 @@ export class CartService {
 		).subscribe();
 	}
 
-	/** ✅ Update item quantity */
-	updateCartQuantity(novelId: string, quantity: number) {
-		if (quantity < 1) return this.removeFromCart(novelId);
-
-		return this._apiService.put('cart/update', { novelId, quantity }).pipe(
-			tap((response: any) => {
-				this.cartItemsSubject.next(response.items);
-				this.updateCartCount(response.items);
-			}),
-		);
-	}
-
 	/** ✅ Remove item from cart */
 	removeFromCart(novelId: string) {
-		return this._apiService.post(`cart/remove`, { novelId }).pipe(
+		return this._apiService.delete(`cart/remove`, { novelId }).pipe(
 			tap((response: any) => {
 				this.cartItemsSubject.next(response.items);
 				this.updateCartCount(response.items);
@@ -72,7 +87,7 @@ export class CartService {
 
 	/** ✅ Clear cart */
 	clearCart() {
-		return this._apiService.delete('cart/clear').pipe(
+		return this._apiService.delete('cart/remove').pipe(
 			tap(() => {
 				this.cartItemsSubject.next([]);
 				this.cartItemCount.next(0);
@@ -87,16 +102,5 @@ export class CartService {
 			0,
 		);
 		this.cartItemCount.next(totalItemsInCart);
-	}
-
-	/** Get quantity of a specific book */
-	getBookQuantity(novelId: string): Observable<number> {
-		return this.cartItems$.pipe(
-			tap((items) => console.log('Cart Items:', items)), // Debugging line
-			map((items) => {
-				const item = items.find((book) => book.novelId === novelId);
-				return item ? item.quantity : 0;
-			}),
-		);
 	}
 }

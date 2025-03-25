@@ -19,6 +19,10 @@ export class AuthService {
 		private _cartService: CartService,
 	) {}
 
+	get bearerToken() {
+		return this.token || localStorage.getItem('token');
+	}
+
 	register(user: any) {
 		return this._apiService.post(`auth/register`, user);
 	}
@@ -28,26 +32,21 @@ export class AuthService {
 			.post<{ token: string }>(`auth/login`, credentials, false)
 			.pipe(
 				tap((res) => {
-					localStorage.setItem('token', res.token);
-					this.token = localStorage.getItem('token');
-					this.token && this._cartService.getCart().subscribe();
+					this.token = res.token;
 				}),
 			);
 	}
 
 	logout() {
-		localStorage.removeItem('token');
-		this.authState.next(false);
-		this._cartService.clearCart();
-		this._router.navigate(['/']);
-	}
-
-	getToken() {
-		return this.token || localStorage.getItem('token');
+		this._cartService.clearCart().subscribe((res) => {
+			localStorage.removeItem('token');
+			this.authState.next(false);
+			this._router.navigate(['/']);
+		});
 	}
 
 	isAuthenticated(): boolean {
-		const token = this.getToken();
+		const token = this.bearerToken;
 		return token ? !this._jwtHelper.isTokenExpired(token) : false;
 	}
 

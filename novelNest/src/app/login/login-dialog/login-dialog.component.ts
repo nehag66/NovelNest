@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'services/auth.service';
 import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { CartService } from 'services/cart.service';
 
 @Component({
 	selector: 'login-dialog',
@@ -26,11 +27,13 @@ export class LoginDialogComponent {
 	loginForm: FormGroup;
 	isLoading = false;
 	errorMessage = '';
+	cartCount: number = 0;
 
 	constructor(
 		private fb: FormBuilder,
 		private _router: Router,
 		private _authService: AuthService,
+		private _cartService: CartService,
 		private _dialogRef: MatDialogRef<LoginSignupDialogComponent>,
 	) {
 		this.loginForm = this.fb.group({
@@ -56,8 +59,9 @@ export class LoginDialogComponent {
 			.subscribe({
 				next: (response: any) => {
 					this.isLoading = false;
+					localStorage.setItem('token', response.token);
 					this._dialogRef.close();
-					localStorage.setItem('token', response.token); // Store JWT token
+					this._cartService.fetchCart();
 					this._router.navigate(['/']);
 				},
 				error: (error) => {
@@ -67,4 +71,5 @@ export class LoginDialogComponent {
 				},
 			});
 	}
+	
 }

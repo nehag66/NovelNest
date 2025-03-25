@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 // Middleware to verify token
 function verifyToken(req, res, next) {
 	const authHeader = req.header('Authorization'); // Full header: "Bearer token"
-
+	
 	if (!authHeader) {
 		return res.status(401).json({ msg: 'No token, authorization denied' });
 	}

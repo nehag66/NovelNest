@@ -7,10 +7,10 @@ import { CONSTANTS } from 'shared/constants';
 	providedIn: 'root',
 })
 export class ApiService {
-	token: string | null = null;
+	constructor(private http: HttpClient) {}
 
-	constructor(private http: HttpClient) {
-		this.token = localStorage.getItem('token');
+	get bearerToken() {
+		return localStorage.getItem('token');
 	}
 
 	private handleError(error: any) {
@@ -22,7 +22,7 @@ export class ApiService {
 
 	get<T>(endpoint: string, params?: any): Observable<T> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.token}`, // Get token from localStorage
+			Authorization: `Bearer ${this.bearerToken}`, // Get token from localStorage
 		});
 
 		return this.http
@@ -37,8 +37,11 @@ export class ApiService {
 	): Observable<T> {
 		let headers = new HttpHeaders();
 
-		if (requiresAuth && this.token) {
-			headers = headers.set('Authorization', `Bearer ${this.token}`);
+		if (requiresAuth && this.bearerToken) {
+			headers = headers.set(
+				'Authorization',
+				`Bearer ${this.bearerToken}`,
+			);
 		}
 
 		return this.http
@@ -49,19 +52,33 @@ export class ApiService {
 	// PUT method
 	put<T>(endpoint: string, body: any): Observable<T> {
 		const headers = new HttpHeaders({
-			Authorization: `Bearer ${this.token}`, // Add Bearer Token
+			Authorization: `Bearer ${this.bearerToken}`,
 		});
-	
-		return this.http.put<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, { headers });
+
+		return this.http.put<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, {
+			headers,
+		});
 	}
 
 	// DELETE method
-	delete<T>(endpoint: string): Observable<T> {
-		return this.http.delete<T>(`${CONSTANTS.BASE_URL}/${endpoint}`);
+	delete<T>(endpoint: string, body?: any): Observable<T> {
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.bearerToken}`,
+		});
+	
+		return this.http.request<T>('DELETE', `${CONSTANTS.BASE_URL}/${endpoint}`, {
+			headers,
+			body, // Explicitly set body
+		});
 	}
 
 	// PATCH method (optional)
 	patch<T>(endpoint: string, body: any): Observable<T> {
-		return this.http.patch<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body);
+		const headers = new HttpHeaders({
+			Authorization: `Bearer ${this.bearerToken}`,
+		});
+		return this.http.patch<T>(`${CONSTANTS.BASE_URL}/${endpoint}`, body, {
+			headers,
+		});
 	}
 }
