@@ -33,13 +33,16 @@ export class MyCartComponent implements OnInit {
 
 	updateCartItems() {
 		this._cartService.cartItems$.subscribe((items: any) => {
+			if (!items) return;
+
 			this.cartItems = items.map((item: any) => ({
 				...item,
 				novelId: {
 					...item.novelId,
-					images: item.novelId?.images.map(
-						(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
-					),
+					images:
+						item.novelId?.images?.map(
+							(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
+						) || [],
 				},
 			}));
 		});
@@ -64,7 +67,7 @@ export class MyCartComponent implements OnInit {
 			minWidth: '200px',
 			panelClass: 'custom-dialog',
 		});
-		dialogRef.afterClosed().subscribe((result) => {});
+		dialogRef.afterClosed().subscribe();
 	}
 
 	goToBuyBooks() {
@@ -81,30 +84,14 @@ export class MyCartComponent implements OnInit {
 	}
 
 	increaseQuantity(novel: NovelResponse) {
-		this._cartService.updateCartQuantity(novel._id, novel.quantity + 1);
+		this._cartService.updateCartQuantity(novel, novel.quantity + 1);
 	}
 
 	decreaseQuantity(novel: NovelResponse) {
-		this._cartService.updateCartQuantity(novel._id, novel.quantity - 1);
+		this._cartService.updateCartQuantity(novel, novel.quantity - 1);
 	}
 
 	buyNow() {
 		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
 	}
-
-	/* buyBtnDisabled(novel: Novel) {
-		if (!novel.cartQuantity) return false;
-		return novel.cartQuantity && novel.totalQuantity <= novel.cartQuantity;
-	}
-
-	updateNovelsWithCart() {
-		if (!this.cartItems) return;
-
-		this.novels = this.novels.map((novel) => {
-			const cartItem = this.cartItems.find(
-				(item: any) => item.novelId?._id === novel.id,
-			);
-			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
-		});
-	} */
 }

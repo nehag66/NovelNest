@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
+import { Novel, NovelResponse } from 'app/models/novels';
+import { CONSTANTS } from 'shared/constants';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CartService {
+	novelDetails!: Novel;
 	token: string | null = null;
 	// Store cart count
 	private cartItemCount = new BehaviorSubject<number>(0);
 	cartItemCount$ = this.cartItemCount.asObservable();
+	cartItems = [];
 
 	// Store cart items
 	private cartItemsSubject = new BehaviorSubject<
@@ -62,21 +66,52 @@ export class CartService {
 	}
 
 	/** ✅ Update item quantity */
-	updateCartQuantity(novelId: string, quantity: number) {
+	updateCartQuantity(novel: NovelResponse, quantity: number) {
 		if (quantity < 1) {
-			return this.removeFromCart(novelId).subscribe(); // Ensure UI updates immediately
+			return this.removeFromCart(novel).subscribe(); // Ensure UI updates immediately
 		}
 
-		return this._apiService.put('cart/update', { novelId, quantity }).pipe(
+		return this._apiService.put('cart/update', { novel, quantity }).pipe(
 			tap((response: any) => {
 				this.cartItemsSubject.next(response.items);
 				this.updateCartCount(response.items);
 			}),
-		).subscribe();
+		).subscribe((res:any) => {
+			/* console.log(res)
+			this.cartItems = res.items?.map((ele: any) => {
+				return this.fetchNovelDetails(ele.novelId);
+			})
+			console.log(this.cartItems) */
+		});
 	}
 
+	/* fetchNovelDetails(novelId: string) {
+			this._apiService
+				.get<{
+					message: string;
+					novel: NovelResponse;
+				}>(`novels/${novelId}`)
+				.subscribe((res) => {
+					const novel = res.novel;
+					this.novelDetails = {
+						title: novel.title,
+						quantity: novel.quantity ?? 0,
+						totalQuantity: novel.totalQuantity,
+						price: novel.price,
+						category: novel.category,
+						author: novel.author,
+						id: novel._id,
+						bookCondition: novel.bookCondition,
+						images: novel.images.map(
+							(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
+						),
+					};
+				});
+		} */
+
 	/** ✅ Remove item from cart */
-	removeFromCart(novelId: string) {
+	removeFromCart(novel?: any) {
+		let novelId = novel?.novelId?._id;
 		return this._apiService.delete(`cart/remove`, { novelId }).pipe(
 			tap((response: any) => {
 				this.cartItemsSubject.next(response.items);
