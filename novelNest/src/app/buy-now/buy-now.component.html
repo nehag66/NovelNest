@@ -1,40 +1,90 @@
 <div class="row p-4 container">
 	<div class="col-9">
 		<h3>How would you like to pay?</h3>
+		<div class="container">
+			<!-- Delivery Section -->
+			<div class="checkout-section">
+				<h4>Delivering to <span class="bold">Ashish Kumar</span></h4>
+				<p>
+					2-F/30, NEHRU NAGAR, Ghaziabad, UttarPradesh, 201001, India
+				</p>
+				<a href="#" class="change-link">Change</a>
+			</div>
+
+			<!-- Payment Method -->
+			<div class="payment-section">
+				<h3>Payment method</h3>
+
+				<!-- Payment Method Section -->
+				<div class="payment-methods">
+					<h4>Payment method</h4>
+					<mat-radio-group [(ngModel)]="selectedPaymentMethod">
+						<div
+							*ngFor="let payment of paymentMethods"
+							class="payment-option"
+						>
+							<mat-radio-button
+								[value]="payment"
+								[checked]="payment.default"
+							>
+								<span class="bold">{{ payment.cardName }}</span>
+								ending in {{ payment.lastFour }}
+								<span class="nickname">{{
+									payment.nickname
+								}}</span>
+							</mat-radio-button>
+							<p *ngIf="payment.cvvNote" class="cvv-note">
+								CVV not needed <a href="#">Why?</a>
+							</p>
+						</div>
+					</mat-radio-group>
+				</div>
+			</div>
+
+			<!-- Order Summary -->
+			<div class="order-summary">
+				<button
+					mat-raised-button
+					color="accent"
+					(click)="confirmPayment()"
+				>
+					Use this payment method
+				</button>
+				<p>
+					Order Total:
+					<span class="total-price">₹{{ orderTotal }}</span>
+				</p>
+			</div>
+		</div>
 	</div>
 	<div class="col-3">
-		<button mat-flat-button (click)="placeOrder()" class="buy-add-btn">
+		<button mat-flat-button (click)="placeOrder()" class="buy-add-btn mb-4">
 			Place your order
 		</button>
-		<div class="border p-4 d-flex flex-column" *ngIf="novelDetails">
-			<div class="cursor-pointer row">
-				<div class="col-6" *ngIf="novelDetails.images">
-					<img
-						*ngIf="novelDetails.images?.length"
-						[src]="novelDetails.images[0]"
-						alt="{{ novelDetails.title }}"
-						width="150"
-						height="200"
-					/>
-				</div>
-				<div class="col-6">
-					<h3>
-						{{ novelDetails.title }}
-					</h3>
-					<div class="d-flex flex-column gap-2">
-						<span *ngIf="novelDetails.author"
-							><strong>Author:</strong>
-							{{ novelDetails.author }}</span
-						>
-						<span
-							><strong>Category:</strong>
-							{{ novelDetails.category }}</span
-						>
-						<span
-							><strong>Price:</strong> &#8377;{{
-								novelDetails.price
-							}}</span
-						>
+		<div
+			class="border p-4 d-flex flex-column bg-white cart-container"
+			*ngIf="selectedNovels.length > 0"
+		>
+			<h5 class="m-auto">Your Items</h5>
+			<div *ngFor="let novel of selectedNovels" class="novel-item">
+				<div class="row p-2 mb-2">
+					<div class="col-6">
+						<img
+							[src]="novel.novelId.images"
+							alt="{{ novel.novelId.title }}"
+							width="100"
+							height="120"
+						/>
+					</div>
+					<div class="col-6">
+						<h3>{{ novel.novelId.title }}</h3>
+						<p>
+							<strong>Author:</strong> {{ novel.novelId.author }}
+						</p>
+						<p><strong>Quantity:</strong> {{ novel.quantity }}</p>
+						<!-- <span>
+							<strong>Price:</strong> ₹{{ novel.novelId.price }}
+						</span> -->
 					</div>
 				</div>
 			</div>

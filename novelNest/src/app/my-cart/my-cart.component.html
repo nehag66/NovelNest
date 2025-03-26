@@ -7,14 +7,25 @@
 				>
 			</div>
 			<div class="buy-now-container col-3" *ngIf="isLoggedIn()">
-				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
+				<!-- <button mat-flat-button (click)="buyNow()" class="buy-add-btn">
+					Buy Now
+				</button> -->
+				<button
+					mat-flat-button
+					(click)="buyNow()"
+					[disabled]="this.selectedNovels.length === 0"
+					class="buy-add-btn"
+				>
 					Buy Now
 				</button>
 			</div>
 		</div>
 	</div>
 	<div class="card p-3">
-		<div *ngIf="!isLoggedIn()" class="d-flex flex-column align-items-center">
+		<div
+			*ngIf="!isLoggedIn()"
+			class="d-flex flex-column align-items-center"
+		>
 			<mat-icon class="custom-icon-size">lock_person</mat-icon>
 			<div class="d-flex">
 				<span class="pe-2">Please</span>
@@ -38,6 +49,13 @@
 				class="border p-4 d-flex flex-column"
 			>
 				<div class="cursor-pointer row">
+					<div class="col-2 m-auto">
+						<mat-checkbox
+							color="primary"
+							[checked]="isSelected(novel)"
+							(change)="toggleSelection(novel)"
+						></mat-checkbox>
+					</div>
 					<div class="col-6">
 						<img
 							*ngIf="novel.novelId?.images?.length"
@@ -47,7 +65,7 @@
 							height="200"
 						/>
 					</div>
-					<div class="col-6">
+					<div class="col-4">
 						<h3 (click)="goToNovelDetails(novel.novelId?.id)">
 							{{ novel.novelId?.title }}
 						</h3>
@@ -87,7 +105,12 @@
 				</div>
 			</div>
 			<div class="buy-now-container mt-3">
-				<button mat-flat-button (click)="buyNow()" class="buy-add-btn">
+				<button
+					mat-flat-button
+					(click)="buyNow()"
+					[disabled]="this.selectedNovels.length === 0"
+					class="buy-add-btn"
+				>
 					Buy Now
 				</button>
 			</div>

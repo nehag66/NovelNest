@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
 	exports: [
@@ -28,6 +29,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 		MatBadgeModule,
 		MatDividerModule,
 		MatProgressSpinnerModule,
+		FormsModule,
 	],
 })
 export class MaterialModule {}

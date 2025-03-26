@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { Novel, NovelResponse } from 'app/models/novels';
-import { ApiService } from 'services/api.service';
-import { CONSTANTS } from 'shared/constants';
-
+import { Novel } from 'app/models/novels';
 @Component({
 	selector: 'buy-now',
 	standalone: true,
@@ -15,43 +12,48 @@ import { CONSTANTS } from 'shared/constants';
 })
 export class BuyNowComponent implements OnInit {
 	novelDetails!: Novel;
+	selectedNovels: any[] = [];
+
+	orderTotal: number = 805.0;
+
+  paymentMethods = [
+    {
+      cardName: 'Amazon Pay ICICI Bank Credit Card',
+      lastFour: '3008',
+      nickname: 'Neha Goel',
+      default: true,
+      cvvNote: true,
+    },
+    {
+      cardName: 'Axis Bank Credit Card',
+      lastFour: '2589',
+      nickname: 'Ashish Kumar',
+      default: false,
+    },
+    {
+      cardName: 'SBI Credit Card',
+      lastFour: '3151',
+      nickname: 'Ashish Kumar',
+      default: false,
+      disabled: true,
+    },
+  ];
+
+  selectedPaymentMethod = this.paymentMethods.find((p) => p.default);
 
 	constructor(
-		private _activatedRoute: ActivatedRoute,
-		private _apiService: ApiService,
-	) {}
-
-	ngOnInit(): void {
-		let novelId: string | null;
-		this._activatedRoute.paramMap.subscribe((params) => {
-			novelId = params.get('id');
-			novelId && this.fetchNovelDetails(novelId);
-		});
+		private _router: Router,
+	) {
+		const navigation = this._router.getCurrentNavigation();
+		this.selectedNovels =
+			navigation?.extras.state?.['selectedNovels'] || [];
 	}
 
-	fetchNovelDetails(novelId: string) {
-		this._apiService
-			.get<{
-				message: string;
-				novel: NovelResponse;
-			}>(`novels/${novelId}`)
-			.subscribe((res) => {
-				const novel = res.novel;
-				this.novelDetails = {
-					title: novel.title,
-					quantity: novel.quantity ?? 0,
-					totalQuantity: novel.totalQuantity,
-					price: novel.price,
-					category: novel.category,
-					author: novel.author,
-					id: novel._id,
-					bookCondition: novel.bookCondition,
-					images: novel.images.map(
-						(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
-					),
-				};
-			});
-	}
+	ngOnInit(): void {}
+
+	confirmPayment() {
+		alert(`Payment method selected: ${this.selectedPaymentMethod?.cardName}`);
+	  }
 
 	placeOrder() {}
 }

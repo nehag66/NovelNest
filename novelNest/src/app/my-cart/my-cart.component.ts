@@ -19,6 +19,7 @@ import { SharedModule } from 'shared/shared.module';
 export class MyCartComponent implements OnInit {
 	cartItems: any;
 	cartCount: number = 0;
+	selectedNovels: any[] = [];
 
 	constructor(
 		private _dialog: MatDialog,
@@ -29,6 +30,21 @@ export class MyCartComponent implements OnInit {
 	ngOnInit(): void {
 		this.updateCartItems();
 		this.updateCartCount();
+	}
+
+	isSelected(novel: any): boolean {
+		return this.selectedNovels.some((item) => item.novelId._id === novel.novelId._id);
+	}	
+
+	toggleSelection(novel: any) {
+		const index = this.selectedNovels.findIndex(
+			(item) => item.novelId._id === novel.novelId._id,
+		);
+		if (index > -1) {
+			this.selectedNovels.splice(index, 1); // Remove if already selected
+		} else {
+			this.selectedNovels.push(novel); // Add if not selected
+		}
 	}
 
 	updateCartItems() {
@@ -92,6 +108,8 @@ export class MyCartComponent implements OnInit {
 	}
 
 	buyNow() {
-		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS]);
+		this._router.navigate([CLIENT_ROUTES.BUY_BOOKS], {
+			state: { selectedNovels: this.selectedNovels },
+		});
 	}
 }

@@ -4,7 +4,6 @@ const Novel = require('../models/novel');
 // Add item to cart
 exports.addToCart = async (req, res) => {
 	try {
-
 		const { novelId, quantity } = req.body;
 		const userId = req.user.userId;
 
