@@ -16,34 +16,32 @@ export class BuyNowComponent implements OnInit {
 
 	orderTotal: number = 805.0;
 
-  paymentMethods = [
-    {
-      cardName: 'Amazon Pay ICICI Bank Credit Card',
-      lastFour: '3008',
-      nickname: 'Neha Goel',
-      default: true,
-      cvvNote: true,
-    },
-    {
-      cardName: 'Axis Bank Credit Card',
-      lastFour: '2589',
-      nickname: 'Ashish Kumar',
-      default: false,
-    },
-    {
-      cardName: 'SBI Credit Card',
-      lastFour: '3151',
-      nickname: 'Ashish Kumar',
-      default: false,
-      disabled: true,
-    },
-  ];
+	paymentMethods = [
+		{
+			cardName: 'Amazon Pay ICICI Bank Credit Card',
+			lastFour: '3008',
+			nickname: 'Neha Goel',
+			default: true,
+			cvvNote: true,
+		},
+		{
+			cardName: 'Axis Bank Credit Card',
+			lastFour: '2589',
+			nickname: 'Ashish Kumar',
+			default: false,
+		},
+		{
+			cardName: 'SBI Credit Card',
+			lastFour: '3151',
+			nickname: 'Ashish Kumar',
+			default: false,
+			disabled: true,
+		},
+	];
 
-  selectedPaymentMethod = this.paymentMethods.find((p) => p.default);
+	selectedPaymentMethod = this.paymentMethods.find((p) => p.default);
 
-	constructor(
-		private _router: Router,
-	) {
+	constructor(private _router: Router) {
 		const navigation = this._router.getCurrentNavigation();
 		this.selectedNovels =
 			navigation?.extras.state?.['selectedNovels'] || [];
@@ -52,8 +50,10 @@ export class BuyNowComponent implements OnInit {
 	ngOnInit(): void {}
 
 	confirmPayment() {
-		alert(`Payment method selected: ${this.selectedPaymentMethod?.cardName}`);
-	  }
+		alert(
+			`Payment method selected: ${this.selectedPaymentMethod?.cardName}`,
+		);
+	}
 
 	placeOrder() {}
 }
