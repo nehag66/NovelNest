@@ -8,12 +8,12 @@
 				<p>
 					2-F/30, NEHRU NAGAR, Ghaziabad, UttarPradesh, 201001, India
 				</p>
-				<a href="#" class="change-link">Change</a>
+				<!-- <a href="#" class="change-link">Change</a> -->
 			</div>
 
 			<!-- Payment Method -->
 			<div class="payment-section">
-				<h3>Payment method</h3>
+				<!-- <h3>Payment method</h3> -->
 
 				<!-- Payment Method Section -->
 				<div class="payment-methods">
@@ -52,7 +52,7 @@
 				</button>
 				<p>
 					Order Total:
-					<span class="total-price">₹{{ orderTotal }}</span>
+					<!-- <span class="total-price">₹{{ orderTotal }}</span> -->
 				</p>
 			</div>
 		</div>
@@ -76,15 +76,15 @@
 							height="120"
 						/>
 					</div>
-					<div class="col-6">
-						<h3>{{ novel.novelId.title }}</h3>
-						<p>
+					<div class="col-6 novel-deets">
+						<h4>{{ novel.novelId.title }}</h4>
+						<span>
 							<strong>Author:</strong> {{ novel.novelId.author }}
-						</p>
-						<p><strong>Quantity:</strong> {{ novel.quantity }}</p>
-						<!-- <span>
+						</span>
+						<span><strong>Quantity:</strong> {{ novel.quantity }}</span>
+						<p>
 							<strong>Price:</strong> ₹{{ novel.novelId.price }}
-						</span> -->
+						</p>
 					</div>
 				</div>
 			</div>
