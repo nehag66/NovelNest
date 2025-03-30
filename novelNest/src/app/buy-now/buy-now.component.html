@@ -11,49 +11,122 @@
 				<!-- <a href="#" class="change-link">Change</a> -->
 			</div>
 
-			<!-- Payment Method -->
-			<div class="payment-section">
-				<!-- <h3>Payment method</h3> -->
+			<div class="payment-container">
+				<!-- Payment Method -->
+				<div class="payment-section">
+					<!-- <h3>Payment method</h3> -->
 
-				<!-- Payment Method Section -->
-				<div class="payment-methods">
-					<h4>Payment method</h4>
-					<mat-radio-group [(ngModel)]="selectedPaymentMethod">
-						<div
-							*ngFor="let payment of paymentMethods"
-							class="payment-option"
-						>
-							<mat-radio-button
-								[value]="payment"
-								[checked]="payment.default"
+					<!-- Payment Method Section -->
+					<!-- <div class="payment-methods">
+						<h4>Payment method</h4>
+						<mat-radio-group [(ngModel)]="selectedPaymentMethod">
+							<div
+								*ngFor="let payment of paymentMethods"
+								class="payment-option"
 							>
-								<span class="bold">{{ payment.cardName }}</span>
-								ending in {{ payment.lastFour }}
-								<span class="nickname">{{
-									payment.nickname
-								}}</span>
-							</mat-radio-button>
-							<p *ngIf="payment.cvvNote" class="cvv-note">
-								CVV not needed <a href="#">Why?</a>
+								<mat-radio-button
+									[value]="payment"
+									[checked]="payment.default"
+								>
+									<span class="bold">{{
+										payment.cardName
+									}}</span>
+									ending in {{ payment.lastFour }}
+									<span class="nickname">{{
+										payment.nickname
+									}}</span>
+								</mat-radio-button>
+								<p *ngIf="payment.cvvNote" class="cvv-note">
+									CVV not needed <a href="#">Why?</a>
+								</p>
+							</div>
+						</mat-radio-group>
+					</div> -->
+				</div>
+
+				<!-- Order Summary -->
+				<!-- <div class="order-summary">
+					<button
+						mat-raised-button
+						color="accent"
+						(click)="confirmPayment()"
+					>
+						Use this payment method
+					</button>
+					<p>
+						Order Total:
+						<span class="total-price">₹{{ orderTotal }}</span>
+					</p>
+				</div> -->
+
+				<!-- Another Payment Methods Section -->
+				<div class="payment-methods">
+					<h4>Another payment method</h4>
+					<mat-radio-group
+						[(ngModel)]="selectedPaymentMethod"
+						class="d-flex flex-column gap-3"
+					>
+						<!-- Credit/Debit Card -->
+						<mat-radio-button
+							[value]="'credit-card'"
+							class="d-flex flex-column"
+						>
+							<div>Credit or debit card</div>
+							<div>
+								<span class="card-icons">
+									<img src="visa.png" alt="Visa" />
+									<img
+										src="mastercard.jpeg"
+										alt="Mastercard"
+									/>
+									<img src="upi.png" alt="Upi" />
+									<img src="rupay.png" alt="Rupay" />
+									<img src="paytm.jpg" alt="Paytm" />
+								</span>
+							</div>
+						</mat-radio-button>
+
+						<!-- Net Banking -->
+						<mat-radio-button [value]="'net-banking'">
+							Net Banking
+							<mat-select placeholder="Choose an Option">
+								<mat-option
+									*ngFor="let bank of paymentMethods"
+									[value]="bank"
+									>{{ bank }}</mat-option
+								>
+							</mat-select>
+						</mat-radio-button>
+
+						<!-- Other UPI Apps -->
+						<mat-radio-button [value]="'upi'"
+							>Other UPI Apps</mat-radio-button
+						>
+
+						<!-- EMI Unavailable -->
+						<mat-radio-button [disabled]="true">
+							EMI Unavailable <a href="#">Why?</a>
+						</mat-radio-button>
+
+						<!-- Cash on Delivery -->
+						<mat-radio-button [value]="'cod'">
+							Cash on Delivery/Pay on Delivery
+							<p class="small-text">
+								Cash, UPI, and Cards accepted.
+								<a href="#">Know more.</a>
 							</p>
-						</div>
+						</mat-radio-button>
 					</mat-radio-group>
 				</div>
-			</div>
 
-			<!-- Order Summary -->
-			<div class="order-summary">
+				<!-- Confirm Payment Button -->
 				<button
-					mat-raised-button
-					color="accent"
-					(click)="confirmPayment()"
+					mat-button
+					class="yellow-btn d-flex m-auto"
+					[disabled]="!selectedPaymentMethod"
 				>
 					Use this payment method
 				</button>
-				<p>
-					Order Total:
-					<!-- <span class="total-price">₹{{ orderTotal }}</span> -->
-				</p>
 			</div>
 		</div>
 	</div>
@@ -81,7 +154,10 @@
 						<span>
 							<strong>Author:</strong> {{ novel.novelId.author }}
 						</span>
-						<span><strong>Quantity:</strong> {{ novel.quantity }}</span>
+						<span
+							><strong>Quantity:</strong>
+							{{ novel.quantity }}</span
+						>
 						<p>
 							<strong>Price:</strong> ₹{{ novel.novelId.price }}
 						</p>
