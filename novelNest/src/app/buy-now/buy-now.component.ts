@@ -14,7 +14,7 @@ export class BuyNowComponent implements OnInit {
 	novelDetails!: Novel;
 	selectedNovels: any[] = [];
 
-	orderTotal: number = 805.0;
+	orderTotal: number = 0;
 
 	paymentMethods = [
 		{
@@ -47,7 +47,9 @@ export class BuyNowComponent implements OnInit {
 			navigation?.extras.state?.['selectedNovels'] || [];
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.orderTotal = this.selectedNovels.reduce((acc, curr) => acc+=curr.novelId.price, 0);
+	}
 
 	confirmPayment() {
 		alert(
