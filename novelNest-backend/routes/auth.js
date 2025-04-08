@@ -73,7 +73,7 @@ router.post(
 
 			const payload = { userId: user._id.toString() };
 			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-				expiresIn: '15m',
+				expiresIn: '1m',
 			});
 
 			const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
@@ -98,7 +98,7 @@ router.post(
 );
 
 router.post('/refresh-token', async (req, res) => {
-	const { refreshToken } = req.body;
+	const { refreshToken } = req.body;	
 
 	if (!refreshToken)
 		return res.status(401).json({ msg: 'Refresh token required' });
@@ -107,10 +107,10 @@ router.post('/refresh-token', async (req, res) => {
 		// Verify refresh token
 		const decoded = jwt.verify(
 			refreshToken,
-			process.env.REFRESH_TOKEN_SECRET,
+			process.env.REFRESH_SECRET,
 		);
 		const userId = decoded.userId;
-
+		
 		// You could check if the refreshToken is in DB and still valid (optional)
 
 		// Generate new access token

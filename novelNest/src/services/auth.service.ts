@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
@@ -27,11 +27,17 @@ export class AuthService {
 		return this._apiService.post(`auth/register`, user);
 	}
 
-	refreshToken(): Observable<any> {
+	refreshToken(): Observable<{ token: string }> {
 		const refreshToken = localStorage.getItem('refreshToken');
-		return this._apiService.post<any>('/auth/refresh-token', {
-			refreshToken,
-		});
+		if (!refreshToken) {
+			return throwError(() => new Error('No refresh token found'));
+		}
+
+		return this._apiService.post<{ token: string }>(
+			'auth/refresh-token',
+			{ refreshToken },
+			false,
+		);
 	}
 
 	login(credentials: any) {
@@ -50,12 +56,12 @@ export class AuthService {
 	}
 
 	logout() {
-		this._cartService.clearCart().subscribe((res) => {
+		// this._cartService.clearCart().subscribe((res) => {
 			localStorage.removeItem('accessToken');
 			localStorage.removeItem('refreshToken');
 			this.authState.next(false);
 			this._router.navigate(['/']);
-		});
+		// });
 	}
 
 	isAuthenticated(): boolean {

@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MaterialModule } from './material.module';
+import { MaterialModule } from 'app/material.module';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from 'app/header/header.component';
 import { ApiService } from 'services/api.service';
-import { FooterComponent } from './footer/footer.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from 'interceptors/tokenInterceptor';
+import { FooterComponent } from 'app/footer/footer.component';
 
 @Component({
 	selector: 'app-root',
@@ -22,11 +20,6 @@ import { TokenInterceptor } from 'interceptors/tokenInterceptor';
 	],
 	providers: [
 		ApiService,
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: TokenInterceptor,
-			multi: true,
-		},
 	],
 })
 export class AppComponent {}
