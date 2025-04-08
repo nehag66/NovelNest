@@ -59,7 +59,7 @@ export class LoginDialogComponent {
 			.subscribe({
 				next: (response: any) => {
 					this.isLoading = false;
-					localStorage.setItem('token', response.token);
+					localStorage.setItem('accessToken', response.accessToken);
 					this._dialogRef.close();
 					this._cartService.fetchCart();
 					this._router.navigate(['/']);

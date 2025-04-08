@@ -32,7 +32,7 @@ export class NovelDetailsComponent implements OnInit {
 			novelId = params.get('id');
 			novelId && this.fetchNovelDetails(novelId);
 		});
-		this.token = localStorage.getItem('token');
+		this.token = localStorage.getItem('accessToken');
 		this.token && this._cartService.getCart().subscribe();
 	}
 

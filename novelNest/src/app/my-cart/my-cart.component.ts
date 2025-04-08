@@ -71,7 +71,7 @@ export class MyCartComponent implements OnInit {
 	}
 
 	isLoggedIn(): boolean {
-		return !!localStorage.getItem('token');
+		return !!localStorage.getItem('accessToken');
 	}
 
 	openLoginDialog(e: Event) {

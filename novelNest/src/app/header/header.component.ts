@@ -35,7 +35,7 @@ export class HeaderComponent {
 	}
 
 	isLoggedIn(): boolean {
-		return !!localStorage.getItem('token');
+		return !!localStorage.getItem('accessToken');
 	}
 
 	openLoginSignup() {

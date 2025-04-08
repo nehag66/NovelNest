@@ -48,7 +48,7 @@ export class AllBooksComponent implements OnInit {
 
 	//this isLoggedIn method is duplicate in many other components - FIX THIS
 	isLoggedIn(): boolean {
-		return !!localStorage.getItem('token');
+		return !!localStorage.getItem('accessToken');
 	}
 
 	fetchNovels() {

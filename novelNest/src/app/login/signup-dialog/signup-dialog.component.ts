@@ -53,7 +53,7 @@ export class SignupDialogComponent {
 			})
 			.subscribe({
 				next: (response: any) => {
-					localStorage.setItem('token', response.token); // Store JWT token
+					localStorage.setItem('accessToken', response.accessToken); // Store JWT token
 					this._router.navigate(['/']); // Redirect
 				},
 				error: (error) => {

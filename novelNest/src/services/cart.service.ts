@@ -26,7 +26,7 @@ export class CartService {
 	}
 
 	get bearerToken() {
-		return localStorage.getItem('token');
+		return localStorage.getItem('accessToken');
 	}
 
 	/** ✅ Load cart from API on startup */

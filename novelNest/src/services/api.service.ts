@@ -10,7 +10,7 @@ export class ApiService {
 	constructor(private http: HttpClient) {}
 
 	get bearerToken() {
-		return localStorage.getItem('token');
+		return localStorage.getItem('accessToken');
 	}
 
 	private handleError(error: any) {
