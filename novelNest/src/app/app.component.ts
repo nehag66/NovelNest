@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { ApiService } from 'services/api.service';
 import { FooterComponent } from './footer/footer.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from 'interceptors/tokenInterceptor';
 
 @Component({
 	selector: 'app-root',
@@ -18,6 +20,13 @@ import { FooterComponent } from './footer/footer.component';
 		CommonModule,
 		FooterComponent,
 	],
-	providers: [ApiService],
+	providers: [
+		ApiService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true,
+		},
+	],
 })
 export class AppComponent {}

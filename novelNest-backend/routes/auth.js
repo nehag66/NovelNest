@@ -71,15 +71,23 @@ router.post(
 			if (!isMatch)
 				return res.status(400).json({ msg: 'Invalid Credentials' });
 
-			if (!process.env.JWT_SECRET)
-				throw new Error('JWT_SECRET is missing');
+			const payload = { userId: user._id.toString() };
+			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+				expiresIn: '15m',
+			});
 
-			const token = jwt.sign(
-				{ userId: user._id.toString() },
-				process.env.JWT_SECRET,
-				{ expiresIn: process.env.JWT_EXPIRES_IN },
-			);
-			res.json({ token });
+			const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
+				expiresIn: '7d',
+			});
+
+			// Optional: Save refresh token to DB if you want to manage invalidation
+			user.refreshToken = refreshToken;
+			await user.save();
+
+			res.json({
+				accessToken,
+				refreshToken,
+			});
 		} catch (err) {
 			res.status(500).json({
 				error: 'JWT Generation Error',
@@ -88,6 +96,36 @@ router.post(
 		}
 	},
 );
+
+router.post('/refresh-token', async (req, res) => {
+	const { refreshToken } = req.body;
+
+	if (!refreshToken)
+		return res.status(401).json({ msg: 'Refresh token required' });
+
+	try {
+		// Verify refresh token
+		const decoded = jwt.verify(
+			refreshToken,
+			process.env.REFRESH_TOKEN_SECRET,
+		);
+		const userId = decoded.userId;
+
+		// You could check if the refreshToken is in DB and still valid (optional)
+
+		// Generate new access token
+		const newAccessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
+			expiresIn: process.env.JWT_EXPIRES_IN || '15m',
+		});
+
+		res.json({ accessToken: newAccessToken });
+	} catch (err) {
+		console.error(err);
+		return res
+			.status(403)
+			.json({ msg: 'Invalid or expired refresh token' });
+	}
+});
 
 // Get user details (protected route)
 router.get('/me', verifyToken, async (req, res) => {

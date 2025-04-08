@@ -46,6 +46,7 @@ export class SellUsedBooksComponent implements OnInit {
 			author: ['', Validators.required],
 			bookCondition: [null],
 			images: [[]], // Will store uploaded images
+			// fileInput: ['', Validators.required],
 		});
 	}
 
