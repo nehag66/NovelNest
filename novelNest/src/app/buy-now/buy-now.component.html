@@ -74,14 +74,12 @@
 							<div>Credit or debit card</div>
 							<div>
 								<span class="card-icons">
-									<img src="visa.png" alt="Visa" />
 									<img
-										src="mastercard.jpeg"
-										alt="Mastercard"
+										*ngFor="let card of paymentIcons"
+										[src]="card.src"
+										[alt]="card.alt"
+										loading="lazy"
 									/>
-									<img src="upi.png" alt="Upi" />
-									<img src="rupay.png" alt="Rupay" />
-									<img src="paytm.jpg" alt="Paytm" />
 								</span>
 							</div>
 						</mat-radio-button>
@@ -147,6 +145,7 @@
 							alt="{{ novel.novelId.title }}"
 							width="100"
 							height="120"
+							loading="lazy"
 						/>
 					</div>
 					<div class="col-6 novel-deets">

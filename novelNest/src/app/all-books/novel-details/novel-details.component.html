@@ -13,6 +13,7 @@
 							alt="Novel Image"
 							width="100"
 							class="image-style"
+							loading="lazy"
 						/>
 					</div>
 					<div class="col-8" *ngIf="novelDetails.images">
@@ -21,6 +22,7 @@
 							[src]="novelDetails.images[0]"
 							alt="{{ novelDetails.title }}"
 							width="300"
+							loading="lazy"
 						/>
 					</div>
 				</div>

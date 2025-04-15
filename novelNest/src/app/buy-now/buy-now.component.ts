@@ -39,6 +39,14 @@ export class BuyNowComponent implements OnInit {
 		},
 	];
 
+	paymentIcons = [
+		{ src: 'visa.png', alt: 'Visa' },
+		{ src: 'mastercard.jpeg', alt: 'Mastercard' },
+		{ src: 'upi.png', alt: 'Upi' },
+		{ src: 'rupay.png', alt: 'Rupay' },
+		{ src: 'paytm.jpg', alt: 'Paytm' },
+	];
+
 	selectedPaymentMethod = this.paymentMethods.find((p) => p.default);
 
 	constructor(private _router: Router) {
