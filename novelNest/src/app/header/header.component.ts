@@ -16,7 +16,7 @@ import { CartService } from 'services/cart.service';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-	cartCount: number = 0;
+	cartCount = 0;
 	cartItems: any[] = [];
 
 	constructor(
@@ -47,7 +47,7 @@ export class HeaderComponent {
 			panelClass: 'custom-dialog',
 		});
 
-		dialogRef.afterClosed().subscribe((result) => {});
+		dialogRef.afterClosed().subscribe();
 	}
 
 	goToCart() {
@@ -67,6 +67,8 @@ export class HeaderComponent {
 	}
 
 	onLogout() {
-		this._authService.logout();
+		this._cartService.clearCart().subscribe(() => {
+			this._authService.logout();
+		});
 	}
 }

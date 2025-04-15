@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { Novel, NovelResponse } from 'app/models/novels';
 import { CONSTANTS } from 'shared/constants';
@@ -22,7 +22,7 @@ export class CartService {
 	cartItems$ = this.cartItemsSubject.asObservable();
 
 	constructor(private _apiService: ApiService) {
-		this.bearerToken && this.loadCartFromServer();
+		if (this.bearerToken) this.loadCartFromServer();
 	}
 
 	get bearerToken() {
@@ -111,7 +111,7 @@ export class CartService {
 
 	/** ✅ Remove item from cart */
 	removeFromCart(novel?: any) {
-		let novelId = novel?.novelId?._id;
+		const novelId = novel?.novelId?._id;
 		return this._apiService.delete(`cart/remove`, { novelId }).pipe(
 			tap((response: any) => {
 				this.cartItemsSubject.next(response.items);

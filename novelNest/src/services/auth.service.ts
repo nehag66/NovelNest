@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
-import { CartService } from './cart.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,7 +15,6 @@ export class AuthService {
 		private _jwtHelper: JwtHelperService,
 		private _apiService: ApiService,
 		private _router: Router,
-		private _cartService: CartService,
 	) {}
 
 	get bearerToken() {
@@ -56,12 +54,10 @@ export class AuthService {
 	}
 
 	logout() {
-		// this._cartService.clearCart().subscribe((res) => {
-			localStorage.removeItem('accessToken');
-			localStorage.removeItem('refreshToken');
-			this.authState.next(false);
-			this._router.navigate(['/']);
-		// });
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		this.authState.next(false);
+		this._router.navigate(['/']);
 	}
 
 	isAuthenticated(): boolean {
