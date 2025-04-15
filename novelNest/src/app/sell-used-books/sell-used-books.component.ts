@@ -8,7 +8,7 @@ import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
-	selector: 'sell-used-books',
+	selector: 'app-sell-used-books',
 	standalone: true,
 	imports: [MaterialModule, SharedModule],
 	templateUrl: './sell-used-books.component.html',

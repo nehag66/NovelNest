@@ -5,7 +5,7 @@ import { SignupDialogComponent } from '../signup-dialog/signup-dialog.component'
 import { ForgotPasswordDialogComponent } from '../forgot-password-dialog/forgot-password-dialog.component';
 
 @Component({
-	selector: 'login-signup-dialog',
+	selector: 'app-login-signup-dialog',
 	standalone: true,
 	imports: [
 		MaterialModule,

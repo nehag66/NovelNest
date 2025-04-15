@@ -11,7 +11,7 @@ import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
-	selector: 'all-books',
+	selector: 'app-all-books',
 	standalone: true,
 	imports: [SharedModule, MaterialModule, InfiniteScrollDirective],
 	templateUrl: './all-books.component.html',

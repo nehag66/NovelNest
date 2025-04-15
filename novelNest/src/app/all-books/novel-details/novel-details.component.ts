@@ -8,7 +8,7 @@ import { CartService } from 'services/cart.service';
 import { CONSTANTS } from 'shared/constants';
 
 @Component({
-	selector: 'novel-details',
+	selector: 'app-novel-details',
 	standalone: true,
 	imports: [CommonModule, MaterialModule],
 	templateUrl: './novel-details.component.html',

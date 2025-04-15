@@ -14,7 +14,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { CartService } from 'services/cart.service';
 
 @Component({
-	selector: 'login-dialog',
+	selector: 'app-login-dialog',
 	standalone: true,
 	imports: [MaterialModule, CommonModule, ReactiveFormsModule],
 	templateUrl: './login-dialog.component.html',

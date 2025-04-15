@@ -10,7 +10,7 @@ import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
 @Component({
-	selector: 'my-cart',
+	selector: 'app-my-cart',
 	standalone: true,
 	imports: [MaterialModule, SharedModule],
 	templateUrl: './my-cart.component.html',

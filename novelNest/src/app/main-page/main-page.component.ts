@@ -7,7 +7,7 @@ import { BannerComponent } from './banner/banner.component';
 import { CarouselComponent } from './carousel/carousel.component';
 
 @Component({
-	selector: 'main-page',
+	selector: 'app-main-page',
 	standalone: true,
 	imports: [
 		SecondHandBooksComponent,

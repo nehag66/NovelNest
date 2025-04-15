@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 
 @Component({
-	selector: 'forgot-password-dialog',
+	selector: 'app-forgot-password-dialog',
 	standalone: true,
 	imports: [MaterialModule],
 	templateUrl: './forgot-password-dialog.component.html',

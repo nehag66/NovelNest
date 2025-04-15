@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-	selector: 'signup-dialog',
+	selector: 'app-signup-dialog',
 	standalone: true,
 	imports: [MaterialModule, CommonModule, ReactiveFormsModule],
 	templateUrl: './signup-dialog.component.html',

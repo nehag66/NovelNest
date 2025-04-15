@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
 @Component({
-	selector: 'buy-now',
+	selector: 'app-buy-now',
 	standalone: true,
 	imports: [CommonModule, MaterialModule],
 	templateUrl: './buy-now.component.html',
