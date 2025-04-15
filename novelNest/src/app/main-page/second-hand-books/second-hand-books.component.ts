@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardLayoutComponent } from 'app/card-layout/card-layout.component';
 import { CardDetails } from 'app/models/card';
@@ -11,7 +11,7 @@ import { ApiService } from 'services/api.service';
 	styleUrl: './second-hand-books.component.scss',
 	imports: [CardLayoutComponent, CommonModule],
 })
-export class SecondHandBooksComponent {
+export class SecondHandBooksComponent implements OnInit {
 	cardDetails: CardDetails[] = [];
 
 	constructor(private _apiService: ApiService) {}

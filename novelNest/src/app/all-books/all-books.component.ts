@@ -20,7 +20,7 @@ import { SharedModule } from 'shared/shared.module';
 export class AllBooksComponent implements OnInit {
 	novels: Novel[] = [];
 	cartItems: any;
-	isLoading: boolean = false;
+	isLoading = false;
 	isLoadingMore = false;
 	BookConditions = BookCondition;
 
@@ -92,8 +92,10 @@ export class AllBooksComponent implements OnInit {
 				this.isLoadingMore = false;
 				this.isLoading = false;
 				this.novels = [...this.novels, ...novels];
-				this.getCart();
-				this.updateNovelsWithCart();
+				if (this.isLoggedIn()) {
+					this.getCart();
+					// this.updateNovelsWithCart();
+				}
 
 				// Check if there are more novels to load
 				if (novels.length < this.limit) {

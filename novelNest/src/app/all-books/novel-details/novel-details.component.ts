@@ -16,7 +16,7 @@ import { CONSTANTS } from 'shared/constants';
 })
 export class NovelDetailsComponent implements OnInit {
 	novelDetails!: Novel;
-	cartQuantity: number = 0;
+	cartQuantity = 0;
 	isFavorite = false;
 	token: string | null = null;
 
@@ -30,10 +30,10 @@ export class NovelDetailsComponent implements OnInit {
 		let novelId: string | null;
 		this._activatedRoute.paramMap.subscribe((params) => {
 			novelId = params.get('id');
-			novelId && this.fetchNovelDetails(novelId);
+			if (novelId) this.fetchNovelDetails(novelId);
 		});
 		this.token = localStorage.getItem('accessToken');
-		this.token && this._cartService.getCart().subscribe();
+		if (this.token) this._cartService.getCart().subscribe();
 	}
 
 	fetchNovelDetails(novelId: string) {

@@ -18,7 +18,7 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class MyCartComponent implements OnInit {
 	cartItems: any;
-	cartCount: number = 0;
+	cartCount = 0;
 	selectedNovels: any[] = [];
 
 	constructor(

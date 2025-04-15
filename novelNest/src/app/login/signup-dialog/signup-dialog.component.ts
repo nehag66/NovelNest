@@ -18,8 +18,8 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './signup-dialog.component.scss',
 })
 export class SignupDialogComponent {
-	hidePassword = true; // Controls the password visibility
-	password: string = ''; // Model for the password input
+	hidePassword = true;
+	password = '';
 	signUpForm: FormGroup;
 	isLoading = false;
 	errorMessage = '';
@@ -53,8 +53,8 @@ export class SignupDialogComponent {
 			})
 			.subscribe({
 				next: (response: any) => {
-					localStorage.setItem('accessToken', response.accessToken); // Store JWT token
-					this._router.navigate(['/']); // Redirect
+					localStorage.setItem('accessToken', response.accessToken);
+					this._router.navigate(['/']);
 				},
 				error: (error) => {
 					this.errorMessage =

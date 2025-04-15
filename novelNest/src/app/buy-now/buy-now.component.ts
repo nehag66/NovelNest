@@ -14,7 +14,7 @@ export class BuyNowComponent implements OnInit {
 	novelDetails!: Novel;
 	selectedNovels: any[] = [];
 
-	orderTotal: number = 0;
+	orderTotal = 0;
 
 	paymentMethods = [
 		{

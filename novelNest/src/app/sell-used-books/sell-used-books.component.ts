@@ -25,11 +25,11 @@ export class SellUsedBooksComponent implements OnInit {
 		name: string;
 		isImage: boolean;
 	}[] = [];
-	fileNames: string = 'No files chosen';
+	fileNames = 'No files chosen';
 	BookConditions = BookCondition;
 
 	novelForm: FormGroup;
-	isEditMode: boolean = false;
+	isEditMode = false;
 	novelId: string | null = null;
 
 	constructor(

@@ -74,6 +74,7 @@ router.post(
 			const payload = { userId: user._id.toString() };
 			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
 				expiresIn: '1m',
+				// expiresIn: '1d',
 			});
 
 			const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
@@ -115,7 +116,7 @@ router.post('/refresh-token', async (req, res) => {
 
 		// Generate new access token
 		const newAccessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
-			expiresIn: process.env.JWT_EXPIRES_IN || '15m',
+			expiresIn: process.env.JWT_EXPIRES_IN || '1d',
 		});
 
 		res.json({ accessToken: newAccessToken });
@@ -128,13 +129,13 @@ router.post('/refresh-token', async (req, res) => {
 });
 
 // Get user details (protected route)
-router.get('/me', verifyToken, async (req, res) => {
+/* router.get('/me', verifyToken, async (req, res) => {
 	try {
 		const user = await User.findById(req.user.userId).select('-password');
 		res.json(user);
 	} catch (err) {
 		res.status(500).send('Server Error');
 	}
-});
+}); */
 
 module.exports = router;

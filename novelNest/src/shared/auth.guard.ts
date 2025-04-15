@@ -19,7 +19,7 @@ export const AuthGuard: CanActivateFn = () => {
 			minWidth: '200px',
 			panelClass: 'custom-dialog',
 		});
-		dialogRef.afterClosed().subscribe((result) => {});
+		dialogRef.afterClosed().subscribe();
 		return false;
 	}
 };

@@ -22,12 +22,12 @@ import { CartService } from 'services/cart.service';
 })
 export class LoginDialogComponent {
 	hidePassword = true; // Controls the password visibility
-	password: string = ''; // Model for the password input
+	password = ''; // Model for the password input
 
 	loginForm: FormGroup;
 	isLoading = false;
 	errorMessage = '';
-	cartCount: number = 0;
+	cartCount = 0;
 
 	constructor(
 		private fb: FormBuilder,
