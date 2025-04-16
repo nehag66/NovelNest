@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ProfileResponse } from 'app/models/profile';
 import { ApiService } from 'services/api.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { ApiService } from 'services/api.service';
 	styleUrl: './my-profile.component.scss',
 })
 export class MyProfileComponent {
-	profileDetails = null;
+	profileDetails = {};
 	userId: string | null = '';
 
 	constructor(private _apiService: ApiService) {
@@ -21,10 +22,10 @@ export class MyProfileComponent {
 		this._apiService
 			.get<{
 				message: string;
-				users: any;
+				user: ProfileResponse;
 			}>(`users/${this.userId}`)
-			.subscribe((res: any) => {
-				console.log('res=>', res.user);
+			.subscribe((res: { message: string; user: ProfileResponse }) => {
+				this.profileDetails = res.user;
 			});
 	}
 }

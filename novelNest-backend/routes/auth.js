@@ -70,8 +70,8 @@ router.post(
 			const isMatch = await bcrypt.compare(password, user.password);
 			if (!isMatch)
 				return res.status(400).json({ msg: 'Invalid Credentials' });
-
-			const payload = { userId: user._id.toString() };
+			let userId = user.id;
+			const payload = { userId: userId.toString() };
 			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
 				expiresIn: '1m',
 				// expiresIn: '1d',
@@ -88,6 +88,7 @@ router.post(
 			res.json({
 				accessToken,
 				refreshToken,
+				userId
 			});
 		} catch (err) {
 			res.status(500).json({

@@ -12,7 +12,6 @@ import { AuthService } from 'services/auth.service';
 import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CartService } from 'services/cart.service';
-import { jwtDecode } from 'jwt-decode';
 
 @Component({
 	selector: 'app-login-dialog',
@@ -58,12 +57,8 @@ export class LoginDialogComponent {
 				password: this.loginForm.value.password,
 			})
 			.subscribe({
-				next: (response: any) => {
+				next: () => {
 					this.isLoading = false;
-					localStorage.setItem('accessToken', response.accessToken);
-					const decodedToken = jwtDecode<any>(response.accessToken);
-					const userId = decodedToken.userId;
-					localStorage.setItem('userId', userId);
 					this._dialogRef.close();
 					this._cartService.fetchCart();
 					this._router.navigate(['/']);

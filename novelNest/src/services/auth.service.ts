@@ -43,11 +43,13 @@ export class AuthService {
 			.post<{
 				accessToken: string;
 				refreshToken: string;
+				userId: string;
 			}>(`auth/login`, credentials, false)
 			.pipe(
 				tap((res) => {
 					localStorage.setItem('accessToken', res.accessToken);
 					localStorage.setItem('refreshToken', res.refreshToken);
+					localStorage.setItem('userId', res.userId);
 					this.accessToken = res.accessToken;
 				}),
 			);
@@ -56,6 +58,7 @@ export class AuthService {
 	logout() {
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
+		localStorage.removeItem('userId');
 		this.authState.next(false);
 		this._router.navigate(['/']);
 	}
