@@ -12,6 +12,7 @@ import { AuthService } from 'services/auth.service';
 import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CartService } from 'services/cart.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
 	selector: 'app-login-dialog',
@@ -21,8 +22,8 @@ import { CartService } from 'services/cart.service';
 	styleUrl: './login-dialog.component.scss',
 })
 export class LoginDialogComponent {
-	hidePassword = true; // Controls the password visibility
-	password = ''; // Model for the password input
+	hidePassword = true;
+	password = '';
 
 	loginForm: FormGroup;
 	isLoading = false;
@@ -60,6 +61,9 @@ export class LoginDialogComponent {
 				next: (response: any) => {
 					this.isLoading = false;
 					localStorage.setItem('accessToken', response.accessToken);
+					const decodedToken = jwtDecode<any>(response.accessToken);
+					const userId = decodedToken.userId;
+					localStorage.setItem('userId', userId);
 					this._dialogRef.close();
 					this._cartService.fetchCart();
 					this._router.navigate(['/']);
@@ -71,5 +75,4 @@ export class LoginDialogComponent {
 				},
 			});
 	}
-	
 }

@@ -7,6 +7,7 @@ import { AllBooksComponent } from './all-books/all-books.component';
 import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -17,6 +18,7 @@ export const CLIENT_ROUTES = {
 	WISHLIST: 'wishlist',
 	NOVEL: 'novels',
 	NOVEL_DETAILS: 'novels/:id',
+	PROFILE_DETAILS: 'user',
 	MAIN_PAGE: '',
 };
 
@@ -68,6 +70,13 @@ export const routes: Routes = [
 		component: WishlistComponent,
 		title: 'Wishlist',
 		canActivate: [AuthGuard]
+	},
+	{
+		path: CLIENT_ROUTES.PROFILE_DETAILS,
+		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.MyProfileComponent),
+		component: MyProfileComponent,
+		title: 'Profile Details',
+		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.MAIN_PAGE,

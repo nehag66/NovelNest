@@ -66,6 +66,10 @@ export class HeaderComponent {
 		this._router.navigate([CLIENT_ROUTES.WISHLIST]);
 	}
 
+	goToProfile() {
+		this._router.navigate([CLIENT_ROUTES.PROFILE_DETAILS]);
+	}
+
 	goToMainPage() {
 		this._router.navigate([CLIENT_ROUTES.MAIN_PAGE]);
 	}
