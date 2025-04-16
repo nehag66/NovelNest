@@ -62,6 +62,10 @@ export class HeaderComponent {
 		this._router.navigate([CLIENT_ROUTES.ALL_BOOKS]);
 	}
 
+	goToWishList() {
+		this._router.navigate([CLIENT_ROUTES.WISHLIST]);
+	}
+
 	goToMainPage() {
 		this._router.navigate([CLIENT_ROUTES.MAIN_PAGE]);
 	}

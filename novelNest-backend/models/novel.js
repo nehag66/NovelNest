@@ -20,6 +20,9 @@ const novelSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	/* priceAfterDiscount: {
+		type: Number,
+	}, */
 	author: {
 		type: String,
 	},

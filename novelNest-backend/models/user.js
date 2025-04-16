@@ -14,14 +14,12 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	/* mobile: {
+	mobile: {
 		type: Number,
-		required: true,
 	},
 	address: {
 		type: String,
-		required: true,
-	}, */
+	},
 	
 	// userType: {
 	// 	type: String,
