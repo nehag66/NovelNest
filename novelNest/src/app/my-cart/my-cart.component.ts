@@ -90,10 +90,6 @@ export class MyCartComponent implements OnInit {
 		this._router.navigate([CLIENT_ROUTES.ALL_BOOKS]);
 	}
 
-	goToNovelDetails(novelId: string) {
-		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
-	}
-
 	buyBtnDisabled(novel: Novel) {
 		if (!novel.quantity) return false;
 		return novel.quantity && novel.totalQuantity <= novel.quantity;

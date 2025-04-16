@@ -92,7 +92,7 @@ exports.editNovel = (req, res) => {
 		price: req.body.price,
 		author: req.body.author,
 		bookCondition: req.body.bookCondition,
-		images: req.body.images || images,
+		images: images.length ? images : req.body.images,
 	};
 
 	Novel.findByIdAndUpdate(req.params.id, updateData, {

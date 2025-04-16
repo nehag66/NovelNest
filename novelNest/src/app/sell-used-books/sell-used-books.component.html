@@ -146,7 +146,7 @@
 					<div class="image-preview">
 						<img
 							*ngFor="let img of previews"
-							[src]="img"
+							[src]="img.url || img"
 							alt="Uploaded Image"
 							loading="lazy"
 						/>
