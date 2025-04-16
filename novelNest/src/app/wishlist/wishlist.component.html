@@ -1,0 +1,38 @@
+<div class="d-flex flex-wrap gap-2 m-5">
+	<div
+		*ngFor="let novel of wishlist"
+		class="border p-4 d-flex flex-column m-3"
+	>
+		<!-- Novel Card -->
+		<div class="cursor-pointer card-container">
+			<img
+				*ngIf="novel.novelId?.images?.length"
+				[src]="novel.novelId?.images[0]"
+				alt="{{ novel.novelId.title }}"
+				width="150"
+				height="200"
+				loading="lazy"
+			/>
+			<h3>{{ novel.title }}</h3>
+			<div class="d-flex flex-column gap-2">
+				<span *ngIf="novel.novelId?.title"
+					><strong>{{ novel.novelId?.title }}</strong></span
+				>
+				<span><strong>Category:</strong> {{ novel.novelId?.category }}</span>
+				<span><strong>Price:</strong> &#8377;{{ novel.novelId?.price }}</span>
+			</div>
+		</div>
+
+		<!-- Add to Cart -->
+		<div  *ngIf="isLoggedIn()">
+			<button
+				mat-flat-button
+				(click)="addToCart(novel.novelId?.id, novel.quantity)"
+				class="buy-add-btn"
+				[disabled]="buyBtnDisabled(novel)"
+			>
+				Add to Cart
+			</button>
+		</div>
+	</div>
+</div>
