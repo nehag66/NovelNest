@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { MaterialModule } from 'app/material.module';
 import { ProfileResponse } from 'app/models/profile';
 import { ApiService } from 'services/api.service';
 
 @Component({
 	selector: 'app-my-profile',
 	standalone: true,
-	imports: [],
+	imports: [MaterialModule],
 	templateUrl: './my-profile.component.html',
 	styleUrl: './my-profile.component.scss',
 })
