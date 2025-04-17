@@ -14,15 +14,21 @@
 							width="100"
 							class="image-style"
 							loading="lazy"
+							(click)="onImageClick(img)"
 						/>
 					</div>
 					<div class="col-8" *ngIf="novelDetails.images">
 						<img
 							*ngIf="novelDetails.images?.length"
-							[src]="novelDetails.images[0]"
+							[src]="
+								currentDisplayedImg
+									? currentDisplayedImg
+									: novelDetails.images[0]
+							"
 							alt="{{ novelDetails.title }}"
 							width="300"
 							loading="lazy"
+							class="zoom-img"
 						/>
 					</div>
 				</div>
@@ -37,7 +43,16 @@
 					>
 						{{ isFavorite ? 'favorite' : 'favorite_border' }}
 					</mat-icon>
-					<mat-icon class="share-icon cursor-pointer">share</mat-icon>
+					<mat-icon
+						class="share-icon cursor-pointer"
+						(click)="
+							shareNovel(
+								novelDetails.title,
+								'https://novelnest.com/novel/' + novelDetails.id
+							)
+						"
+						>share</mat-icon
+					>
 				</div>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novelDetails.author"

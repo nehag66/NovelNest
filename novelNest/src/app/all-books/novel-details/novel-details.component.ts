@@ -22,6 +22,7 @@ export class NovelDetailsComponent implements OnInit {
 	isFavorite = false;
 	token: string | null = null;
 	wishlist: any[] = [];
+	currentDisplayedImg = '';
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -125,6 +126,25 @@ export class NovelDetailsComponent implements OnInit {
 						this.getFavorites();
 					});
 			}
+		}
+	}
+
+	onImageClick(img: string) {
+		this.currentDisplayedImg = img;
+	}
+
+	shareNovel(title: string, url: string) {
+		if (navigator.share) {
+			navigator
+				.share({
+					title: title,
+					text: 'Check out this novel on NovelNest!',
+					url: url,
+				})
+				.then(() => console.log('Shared successfully!'))
+				.catch((error) => console.error('Error sharing:', error));
+		} else {
+			alert('Sharing not supported on this browser.');
 		}
 	}
 }

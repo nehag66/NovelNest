@@ -67,6 +67,15 @@
 .discount-text {
 	color: rgb(188, 26, 26);
 }
+
 .mrp-text {
 	color: #605d5d;
+}
+
+.zoom-img {
+	transition: transform 0.3s ease;
+}
+
+.zoom-img:hover {
+	transform: scale(1.2);
 }

@@ -30,13 +30,13 @@ export class LoginDialogComponent {
 	cartCount = 0;
 
 	constructor(
-		private fb: FormBuilder,
+		private _fb: FormBuilder,
 		private _router: Router,
 		private _authService: AuthService,
 		private _cartService: CartService,
 		private _dialogRef: MatDialogRef<LoginSignupDialogComponent>,
 	) {
-		this.loginForm = this.fb.group({
+		this.loginForm = this._fb.group({
 			emailOrPhone: ['', Validators.required],
 			password: ['', Validators.required],
 		});

@@ -56,7 +56,10 @@ export class BuyNowComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.orderTotal = this.selectedNovels.reduce((acc, curr) => acc+=curr.novelId.price, 0);
+		this.orderTotal = this.selectedNovels.reduce(
+			(acc, curr) => (acc += curr.novelId.price),
+			0,
+		);
 	}
 
 	confirmPayment() {
