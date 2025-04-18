@@ -18,13 +18,20 @@
 				<span *ngIf="novel.novelId?.title"
 					><strong>{{ novel.novelId?.title }}</strong></span
 				>
-				<span><strong>Category:</strong> {{ novel.novelId?.category }}</span>
-				<span><strong>Price:</strong> &#8377;{{ novel.novelId?.price }}</span>
+				<span
+					><strong>Category:</strong>
+					{{ novel.novelId?.category }}</span
+				>
+				<span
+					><strong>Price:</strong> &#8377;{{
+						novel.novelId?.price
+					}}</span
+				>
 			</div>
 		</div>
 
 		<!-- Add to Cart -->
-		<div  *ngIf="isLoggedIn()">
+		<div *ngIf="isLoggedIn()">
 			<button
 				mat-flat-button
 				(click)="addToCart(novel.novelId?.id, novel.quantity)"

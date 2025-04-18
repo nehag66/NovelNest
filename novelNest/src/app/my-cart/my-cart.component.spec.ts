@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MyCartComponent } from './my-cart.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from 'services/api.service';
+import { CartService } from 'services/cart.service';
 
 describe('MyCartComponent', () => {
 	let component: MyCartComponent;
@@ -8,7 +11,11 @@ describe('MyCartComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [MyCartComponent],
+			imports: [
+				HttpClientModule,
+				MyCartComponent,
+			],
+			providers: [CartService, ApiService],
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(MyCartComponent);

@@ -37,6 +37,10 @@
 				<!-- Novel Card -->
 				<div
 					(click)="goToNovelDetails(novel.id)"
+					(keydown.enter)="goToNovelDetails(novel.id)"
+					(keydown.space)="goToNovelDetails(novel.id)"
+					tabindex="0"
+					role="button"
 					class="cursor-pointer card-container"
 				>
 					<img
