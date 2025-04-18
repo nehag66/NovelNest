@@ -65,9 +65,15 @@ export class AuthService {
 
 	isAuthenticated(): boolean {
 		const accessToken = this.bearerToken;
-		return accessToken
-			? !this._jwtHelper.isTokenExpired(accessToken)
-			: false;
+		const refreshToken = localStorage.getItem('refreshToken');
+		if (accessToken && !this._jwtHelper.isTokenExpired(accessToken)) {
+			return true;
+		}
+		// If accessToken is expired but refreshToken exists
+		if (refreshToken && !this._jwtHelper.isTokenExpired(refreshToken)) {
+			return true;
+		}
+		return false;
 	}
 
 	getAuthState() {
