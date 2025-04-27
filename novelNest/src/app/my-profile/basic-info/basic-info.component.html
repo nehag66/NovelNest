@@ -1,0 +1,15 @@
+<div class="my-4 py-4 container max-width-container">
+	<h4>PROFILE INFO</h4>
+	<div *ngIf="profileDetails" class="d-flex flex-column">
+		<span *ngIf="profileDetails.name">Name: {{ profileDetails.name }}</span>
+		<span *ngIf="profileDetails.email"
+			>Email: {{ profileDetails.email }}</span
+		>
+		<span *ngIf="profileDetails.address"
+			>Address: {{ profileDetails.address }}</span
+		>
+		<span *ngIf="profileDetails.mobile"
+			>Mobile: {{ profileDetails.mobile }}</span
+		>
+	</div>
+</div>

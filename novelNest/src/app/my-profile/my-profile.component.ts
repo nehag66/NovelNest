@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { ProfileResponse } from 'app/models/profile';
-import { ApiService } from 'services/api.service';
 
 @Component({
 	selector: 'app-my-profile',
@@ -11,22 +11,17 @@ import { ApiService } from 'services/api.service';
 	styleUrl: './my-profile.component.scss',
 })
 export class MyProfileComponent {
-	profileDetails = {};
-	userId: string | null = '';
+	constructor(private _router: Router) {}
 
-	constructor(private _apiService: ApiService) {
-		this.userId = localStorage.getItem('userId');
-		this.fetchProfileDetails();
+	goToMyProfile() {
+		this._router.navigate([CLIENT_ROUTES.BASIC_INFO]);
 	}
 
-	fetchProfileDetails() {
-		this._apiService
-			.get<{
-				message: string;
-				user: ProfileResponse;
-			}>(`users/${this.userId}`)
-			.subscribe((res: { message: string; user: ProfileResponse }) => {
-				this.profileDetails = res.user;
-			});
+	goToMyOrders() {
+		this._router.navigate([CLIENT_ROUTES.MY_ORDERS]);
+	}
+
+	goToMyAddresses() {
+		this._router.navigate([CLIENT_ROUTES.MY_ADDRESSES]);
 	}
 }

@@ -1,7 +1,14 @@
-<div class="py-5 container main-container">
-	<h3>My Account</h3>
+<div class="my-4 px-3 py-4 container max-width-container">
+	<h4>MY ACCOUNT</h4>
 	<div class="d-flex gap-3">
-		<div class="border-box">
+		<div
+			class="border-box"
+			(click)="goToMyProfile()"
+			(keydown.enter)="goToMyProfile()"
+			(keydown.space)="goToMyProfile()"
+			tabindex="0"
+			role="button"
+		>
 			<div>
 				<img
 					src="information.png"
@@ -15,7 +22,14 @@
 				<span>Edit email, name, mobile number</span>
 			</div>
 		</div>
-		<div class="border-box">
+		<div
+			class="border-box"
+			(click)="goToMyOrders()"
+			(keydown.enter)="goToMyOrders()"
+			(keydown.space)="goToMyOrders()"
+			tabindex="0"
+			role="button"
+		>
 			<div>
 				<img src="order.png" alt="order" height="65" width="65" />
 			</div>
@@ -24,7 +38,14 @@
 				<span>Track orders</span>
 			</div>
 		</div>
-		<div class="border-box">
+		<div
+			class="border-box"
+			(click)="goToMyAddresses()"
+			(keydown.enter)="goToMyAddresses()"
+			(keydown.space)="goToMyAddresses()"
+			tabindex="0"
+			role="button"
+		>
 			<div>
 				<img src="address.png" alt="address" height="65" width="65" />
 			</div>
