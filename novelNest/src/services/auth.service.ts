@@ -21,10 +21,6 @@ export class AuthService {
 		return this.accessToken || localStorage.getItem('accessToken');
 	}
 
-	register(user: any) {
-		return this._apiService.post(`auth/register`, user);
-	}
-
 	refreshToken(): Observable<{ token: string }> {
 		const refreshToken = localStorage.getItem('refreshToken');
 		if (!refreshToken) {
@@ -36,6 +32,18 @@ export class AuthService {
 			{ refreshToken },
 			false,
 		);
+	}
+
+	register(user: any) {
+		return this._apiService.post(`auth/register`, user)
+			.pipe(
+				tap((res: any) => {
+					localStorage.setItem('accessToken', res.accessToken);
+					localStorage.setItem('refreshToken', res.refreshToken);
+					localStorage.setItem('userId', res.userId);
+					this.accessToken = res.accessToken;
+				}),
+			);
 	}
 
 	login(credentials: any) {

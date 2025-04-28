@@ -34,14 +34,20 @@ router.post(
 
 			user = new User({ name, email, password: hashedPassword });
 			await user.save();
-
-			const token = jwt.sign(
+			let userId = user.id;
+			const accessToken = jwt.sign(
 				{ userId: user.id },
 				process.env.JWT_SECRET,
-				{ expiresIn: process.env.JWT_EXPIRES_IN },
+				{ expiresIn: '1m' },
 			);
 
-			res.json({ token });
+			const refreshToken = jwt.sign(
+				{ userId: user.id },
+				process.env.JWT_SECRET,
+				{ expiresIn: '1m' },
+			);
+
+			res.json({ accessToken, refreshToken, userId});
 		} catch (err) {
 			res.status(500).send('Server Error');
 		}

@@ -17,7 +17,7 @@ import { CartService } from 'services/cart.service';
 })
 export class HeaderComponent {
 	cartCount = 0;
-	cartItems: any[] = [];
+	cartItems: any;
 
 	constructor(
 		private _dialog: MatDialog,
@@ -54,6 +54,10 @@ export class HeaderComponent {
 		this._router.navigate([CLIENT_ROUTES.MY_CART]);
 	}
 
+	goToMyOrders() {
+		this._router.navigate([CLIENT_ROUTES.MY_ORDERS]);
+	}
+
 	goToSellUsedBooks() {
 		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
 	}
@@ -75,8 +79,10 @@ export class HeaderComponent {
 	}
 
 	onLogout() {
-		this._cartService.clearCart().subscribe(() => {
-			this._authService.logout();
-		});
+		if (this.cartCount > 0) {
+			this._cartService.clearCart().subscribe(() => {
+				this._authService.logout();
+			});
+		} else this._authService.logout();
 	}
 }

@@ -54,13 +54,13 @@ export class NovelDetailsComponent implements OnInit {
 		this._apiService
 			.get<{
 				message: string;
-				novel: NovelResponse;
+				novel: any;
 			}>(`novels/${novelId}`)
 			.subscribe((res) => {
 				const novel = res.novel;
 				this.novelDetails = {
 					title: novel.title,
-					quantity: novel.quantity ?? 0,
+					cartQuantity: novel.cartQuantity ?? 0,
 					totalQuantity: novel.totalQuantity,
 					price: novel.price,
 					category: novel.category,
@@ -98,7 +98,7 @@ export class NovelDetailsComponent implements OnInit {
 	addToCart() {
 		this._cartService.addToCart(
 			this.novelDetails?.id,
-			this.novelDetails.quantity,
+			this.novelDetails.cartQuantity ?? 1,
 		);
 	}
 
@@ -133,18 +133,33 @@ export class NovelDetailsComponent implements OnInit {
 		this.currentDisplayedImg = img;
 	}
 
-	shareNovel(title: string, url: string) {
-		if (navigator.share) {
+	isMobileDevice(): boolean {
+		return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+	}
+
+	shareNovel(productId: string): void {
+		const productUrl = `${window.location.origin}/products/${productId}`;
+
+		if (navigator.share && this.isMobileDevice()) {
+			// 📱 Mobile native share
 			navigator
 				.share({
-					title: title,
-					text: 'Check out this novel on NovelNest!',
-					url: url,
+					title: 'Check out this product!',
+					text: 'I found this amazing product for you!',
+					url: productUrl,
 				})
-				.then(() => console.log('Shared successfully!'))
+				.then(() => console.log('Successful share'))
 				.catch((error) => console.error('Error sharing:', error));
 		} else {
-			alert('Sharing not supported on this browser.');
+			// 🖥️ Desktop fallback: copy to clipboard
+			navigator.clipboard
+				.writeText(productUrl)
+				.then(() => {
+					alert('Link copied to clipboard!');
+				})
+				.catch((err) => {
+					console.error('Could not copy text: ', err);
+				});
 		}
 	}
 }

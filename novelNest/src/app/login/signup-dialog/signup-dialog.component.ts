@@ -9,6 +9,8 @@ import {
 import { AuthService } from 'services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatDialogRef } from '@angular/material/dialog';
+import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
 
 @Component({
 	selector: 'app-signup-dialog',
@@ -28,6 +30,7 @@ export class SignupDialogComponent {
 		private fb: FormBuilder,
 		private _authService: AuthService,
 		private _router: Router,
+		private _dialogRef: MatDialogRef<LoginSignupDialogComponent>,
 	) {
 		this.signUpForm = this.fb.group({
 			email: ['', [Validators.required]],
@@ -52,8 +55,10 @@ export class SignupDialogComponent {
 				password: this.signUpForm.value.password,
 			})
 			.subscribe({
-				next: (response: any) => {
-					localStorage.setItem('accessToken', response.accessToken);
+				next: () => {
+					// localStorage.setItem('accessToken', response.accessToken);
+					this._dialogRef.close();
+					// this._cartService.fetchCart();
 					this._router.navigate(['/']);
 				},
 				error: (error) => {
