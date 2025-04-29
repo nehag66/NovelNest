@@ -1,45 +1,83 @@
-<div class="d-flex flex-wrap gap-2 m-5">
+<div class="my-4 py-4 container max-width-container">
 	<div
-		*ngFor="let novel of wishlist"
-		class="border p-4 d-flex flex-column m-3"
+		*ngIf="isLoggedIn() && wishlist && wishlist.length === 0"
+		class="d-flex flex-column align-items-center py-4 px-sm-5 d-flex"
 	>
-		<!-- Novel Card -->
-		<div class="cursor-pointer card-container">
-			<img
-				*ngIf="novel.novelId?.images?.length"
-				[src]="novel.novelId?.images[0]"
-				alt="{{ novel.novelId.title }}"
-				width="150"
-				height="200"
-				loading="lazy"
-			/>
-			<h3>{{ novel.title }}</h3>
-			<div class="d-flex flex-column gap-2">
-				<span *ngIf="novel.novelId?.title"
-					><strong>{{ novel.novelId?.title }}</strong></span
-				>
-				<span
-					><strong>Category:</strong>
-					{{ novel.novelId?.category }}</span
-				>
-				<span
-					><strong>Price:</strong> &#8377;{{
-						novel.novelId?.price
-					}}</span
-				>
+		<mat-icon class="custom-icon-size">favorite</mat-icon>
+		The wishlist is empty.
+		<button mat-button (click)="goToBuyBooks()" class="buy-add-btn">
+			Start adding to wishlist now
+		</button>
+	</div>
+	<div >
+		<h4>MY WISHLIST</h4>
+		<div
+			class="d-flex flex-wrap gap-2"
+			*ngIf="isLoggedIn() && wishlist && wishlist.length > 0"
+		>
+			<div *ngFor="let novel of wishlist" class="d-flex flex-column m-3">
+				<div class="cursor-pointer novel-card">
+					<div
+						*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
+						class="cart-badge"
+					>
+						{{ novel.cartQuantity }} in cart
+					</div>
+					<img
+						*ngIf="novel.novelId?.images?.length"
+						[src]="novel.novelId?.images[0]"
+						alt="{{ novel.novelId.title }}"
+						width="150"
+						height="200"
+						loading="lazy"
+						(click)="goToNovelDetails(novel.novelId?._id)"
+						(keydown.enter)="goToNovelDetails(novel.novelId?._id)"
+						(keydown.space)="goToNovelDetails(novel.novelId?._id)"
+						tabindex="0"
+						role="button"
+					/>
+					<h3>{{ novel.title }}</h3>
+					<div class="d-flex flex-column gap-2">
+						<span *ngIf="novel.novelId?.title"
+							><strong>{{ novel.novelId?.title }}</strong></span
+						>
+						<span
+							><strong>Category:</strong>
+							{{ novel.novelId?.category }}</span
+						>
+						<span
+							><strong>Price:</strong> &#8377;{{
+								novel.novelId?.price
+							}}</span
+						>
+					</div>
+					<!-- Add to Cart -->
+					<div *ngIf="isLoggedIn()" class="d-flex flex-column gap-2">
+						<button
+							mat-flat-button
+							(click)="
+								addToCart(
+									novel.novelId?._id,
+									novel.cartQuantity === 0
+										? 1
+										: novel.cartQuantity + 1
+								)
+							"
+							class="buy-add-btn"
+							[disabled]="buyBtnDisabled(novel)"
+						>
+							Add to Cart
+						</button>
+						<button
+							mat-flat-button
+							(click)="removeFromWishlist(novel.novelId?._id)"
+							class="buy-add-btn"
+						>
+							Remove from wishlist
+						</button>
+					</div>
+				</div>
 			</div>
-		</div>
-
-		<!-- Add to Cart -->
-		<div *ngIf="isLoggedIn()">
-			<button
-				mat-flat-button
-				(click)="addToCart(novel.novelId?.id, novel.quantity)"
-				class="buy-add-btn"
-				[disabled]="buyBtnDisabled(novel)"
-			>
-				Add to Cart
-			</button>
 		</div>
 	</div>
 </div>
