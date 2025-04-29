@@ -31,7 +31,7 @@ exports.addToCart = async (req, res) => {
 		let cart = await Cart.findOne({ userId });
 
 		if (!cart) {
-			cart = new Cart({ user: userId, items: [] });
+			cart = new Cart({ userId, items: [] });
 		}
 
 		// Check if the book is already in the cart
@@ -40,7 +40,7 @@ exports.addToCart = async (req, res) => {
 		);
 
 		if (cartItemIndex > -1) {
-			cart.items[cartItemIndex].quantity += quantity;
+			cart.items[cartItemIndex].quantity = quantity;
 		} else {
 			cart.items.push({ novelId, quantity });
 		}
@@ -68,7 +68,7 @@ exports.getCart = async (req, res) => {
 exports.updateCart = async (req, res) => {
 	try {
 		const { novel, quantity } = req.body;
-		const userId = req.user.userId; // Assuming user is authenticated and userId is available
+		const userId = req.user.userId;
 
 		// Find the cart for the user
 		let cart = await Cart.findOne({ userId });
@@ -103,13 +103,15 @@ exports.updateCart = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
 	const { novelId } = req.body;
 	const userId = req.user.userId;
+
 	try {
 		const cart = await Cart.findOne({ userId });
 		if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
 		cart.items = cart.items.filter(
-			(item) => item._id.toString() !== novelId,
+			(item) => item.novelId.toString() !== novelId,
 		);
+
 		await cart.save();
 
 		res.json({ message: 'Item removed from cart', cart });

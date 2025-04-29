@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const verifyToken = require('../middlewares/verifyToken');
 const router = express.Router();
 require('dotenv').config();
 
@@ -134,15 +133,5 @@ router.post('/refresh-token', async (req, res) => {
 			.json({ msg: 'Invalid or expired refresh token' });
 	}
 });
-
-// Get user details (protected route)
-/* router.get('/me', verifyToken, async (req, res) => {
-	try {
-		const user = await User.findById(req.user.userId).select('-password');
-		res.json(user);
-	} catch (err) {
-		res.status(500).send('Server Error');
-	}
-}); */
 
 module.exports = router;
