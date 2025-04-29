@@ -59,7 +59,6 @@ export class CarouselComponent implements OnInit, OnDestroy {
 					return novelData.novels.map((novel: NovelResponse) => {
 						return {
 							title: novel.title,
-							quantity: novel.quantity,
 							totalQuantity: novel.totalQuantity,
 							price: novel.price,
 							category: novel.category,
@@ -74,14 +73,13 @@ export class CarouselComponent implements OnInit, OnDestroy {
 				}),
 				catchError((error) => {
 					console.error('Error fetching novels:', error);
-					return of([]); // Return an empty array if API fails
+					return of([]);
 				}),
 			)
 			.subscribe((novels: Novel[]) => {
 				this.isLoadingMore = false;
 				this.novels = [...this.novels, ...novels];
 
-				// Check if there are more novels to load
 				if (novels.length < this.limit) {
 					this.hasMoreNovels = false;
 				} else {

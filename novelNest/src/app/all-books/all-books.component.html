@@ -42,6 +42,7 @@
 					tabindex="0"
 					role="button"
 					class="cursor-pointer card-container"
+					*ngIf="novel.images"
 				>
 					<img
 						*ngIf="novel.images?.length"
@@ -76,7 +77,14 @@
 				<div class="add-to-cart" *ngIf="isLoggedIn()">
 					<button
 						mat-flat-button
-						(click)="addToCart(novel.id, novel.quantity)"
+						(click)="
+							addToCart(
+								novel.id,
+								novel.cartQuantity === 0
+									? 1
+									: novel.cartQuantity + 1
+							)
+						"
 						class="buy-add-btn"
 						[disabled]="buyBtnDisabled(novel)"
 					>

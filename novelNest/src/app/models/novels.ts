@@ -2,11 +2,10 @@ export interface Novel {
 	id: string;
 	title: string;
 	category: string;
-	quantity: number;
 	totalQuantity: number;
 	price: number;
 	author: string;
-	cartQuantity?: number; // check if this is needed or not
+	cartQuantity: number;
 	bookCondition: string;
 	images?: any;
 }
@@ -19,10 +18,24 @@ export interface NovelResponse {
 	author: string;
 	__v: number;
 	totalQuantity: number;
-	quantity: number;
 	bookCondition: string;
 	images?: any;
 }
+
+/* export interface NovelDeetsResponse {
+	novel: {
+		_id: string;
+		title: string,
+		category: string,
+		price: number,
+		__v: number,
+		totalQuantity: number,
+		author: string,
+		bookCondition: number,
+		images: string[],
+	};
+	message: string;
+} */
 
 export interface Categories {
 	name: string;
@@ -39,6 +52,11 @@ export interface Category {
 	_id: string;
 }
 
+export interface CategoryResponse {
+	categories: Category[];
+	message: string;
+}
+
 export interface CartResponse {
 	novelId: {
 		_id: string;
@@ -49,8 +67,24 @@ export interface CartResponse {
 		totalQuantity: number;
 		author: string;
 		bookCondition: number;
-		images?: any;
+		images?: string[];
 	};
 	quantity: number;
+	_id: string;
+}
+
+export interface Wishlist {
+	novelId: {
+		_id: string;
+		title: string;
+		category: string;
+		price: number;
+		__v: number;
+		totalQuantity: number;
+		author: string;
+		bookCondition: number;
+		images?: string[];
+	};
+	cartQuantity: number;
 	_id: string;
 }

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
-import { Novel, NovelResponse } from 'app/models/novels';
+import { CartResponse } from 'app/models/novels';
 import { CartService } from 'services/cart.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
@@ -33,17 +33,19 @@ export class MyCartComponent implements OnInit {
 	}
 
 	isSelected(novel: any): boolean {
-		return this.selectedNovels.some((item) => item.novelId._id === novel.novelId._id);
-	}	
+		return this.selectedNovels.some(
+			(item) => item.novelId._id === novel.novelId._id,
+		);
+	}
 
 	toggleSelection(novel: any) {
 		const index = this.selectedNovels.findIndex(
 			(item) => item.novelId._id === novel.novelId._id,
 		);
 		if (index > -1) {
-			this.selectedNovels.splice(index, 1); // Remove if already selected
+			this.selectedNovels.splice(index, 1);
 		} else {
-			this.selectedNovels.push(novel); // Add if not selected
+			this.selectedNovels.push(novel);
 		}
 	}
 
@@ -90,16 +92,16 @@ export class MyCartComponent implements OnInit {
 		this._router.navigate([CLIENT_ROUTES.ALL_BOOKS]);
 	}
 
-	buyBtnDisabled(novel: Novel) {
+	buyBtnDisabled(novel: CartResponse) {
 		if (!novel.quantity) return false;
-		return novel.quantity && novel.totalQuantity <= novel.quantity;
+		return novel.quantity && novel.novelId.totalQuantity <= novel.quantity;
 	}
 
-	increaseQuantity(novel: NovelResponse) {
+	increaseQuantity(novel: CartResponse) {
 		this._cartService.updateCartQuantity(novel, novel.quantity + 1);
 	}
 
-	decreaseQuantity(novel: NovelResponse) {
+	decreaseQuantity(novel: CartResponse) {
 		this._cartService.updateCartQuantity(novel, novel.quantity - 1);
 	}
 

@@ -42,7 +42,7 @@ export class AllBooksComponent implements OnInit {
 	getCart() {
 		this._cartService.getCart().subscribe((cart) => {
 			this.cartItems = cart?.items;
-			this.updateNovelsWithCart();
+			this.syncCartWithNovels();
 		});
 	}
 
@@ -69,7 +69,6 @@ export class AllBooksComponent implements OnInit {
 					return novelData.novels.map((novel: NovelResponse) => {
 						return {
 							title: novel.title,
-							quantity: novel.quantity,
 							totalQuantity: novel.totalQuantity,
 							price: novel.price,
 							category: novel.category,
@@ -85,7 +84,7 @@ export class AllBooksComponent implements OnInit {
 				catchError((error) => {
 					console.error('Error fetching novels:', error);
 					this.isLoading = false;
-					return of([]); // Return an empty array if API fails
+					return of([]);
 				}),
 			)
 			.subscribe((novels: Novel[]) => {
@@ -94,10 +93,8 @@ export class AllBooksComponent implements OnInit {
 				this.novels = [...this.novels, ...novels];
 				if (this.isLoggedIn()) {
 					this.getCart();
-					// this.updateNovelsWithCart();
 				}
 
-				// Check if there are more novels to load
 				if (novels.length < this.limit) {
 					this.hasMoreNovels = false;
 				} else {
@@ -121,15 +118,15 @@ export class AllBooksComponent implements OnInit {
 	}
 
 	editNovel(novel: Novel) {
-		this._router.navigate(['/post-ad', novel.id]); // Navigate to the edit page
+		this._router.navigate(['/post-ad', novel.id]);
 	}
 
-	buyBtnDisabled(novel: Novel) {
-		if (!novel.cartQuantity) return false;
-		return novel.cartQuantity && novel.totalQuantity <= novel.cartQuantity;
+	buyBtnDisabled(novel: Novel): boolean {
+		if (!novel.cartQuantity || novel.cartQuantity < 0) return false;
+		return novel.totalQuantity <= novel.cartQuantity;
 	}
 
-	updateNovelsWithCart() {
+	syncCartWithNovels() {
 		if (!this.cartItems) return;
 
 		this.novels = this.novels.map((novel) => {
@@ -146,5 +143,6 @@ export class AllBooksComponent implements OnInit {
 
 	addToCart(novelId: string, qty: number) {
 		this._cartService.addToCart(novelId, qty);
+		this.syncCartWithNovels();
 	}
 }

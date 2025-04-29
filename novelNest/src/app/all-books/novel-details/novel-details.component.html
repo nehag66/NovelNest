@@ -5,7 +5,7 @@
 		</div>
 		<div class="row mt-4">
 			<div class="col-6 d-flex flex-column">
-				<div class="row">
+				<div class="row" *ngIf="novelDetails.images">
 					<div class="col-4" *ngIf="novelDetails.images?.length > 0">
 						<img
 							*ngFor="let img of novelDetails.images"

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
+import { BookCondition, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
 import { WishlistService } from 'services/wishlist.service';
@@ -23,6 +23,7 @@ export class NovelDetailsComponent implements OnInit {
 	token: string | null = null;
 	wishlist: any[] = [];
 	currentDisplayedImg = '';
+	cartItems: any;
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
@@ -37,7 +38,11 @@ export class NovelDetailsComponent implements OnInit {
 			if (this.novelId) this.fetchNovelDetails(this.novelId);
 		});
 		this.token = localStorage.getItem('accessToken');
-		if (this.token) this._cartService.getCart().subscribe();
+		if (this.token)
+			this._cartService.getCart().subscribe((cart) => {
+				this.cartItems = cart?.items;
+				this.attachCartQuantity();
+			});
 		this._wishlistService.getWishlist().subscribe((data) => {
 			this.wishlist = data.items || [];
 			this.getFavorites();
@@ -74,6 +79,21 @@ export class NovelDetailsComponent implements OnInit {
 			});
 	}
 
+	attachCartQuantity() {
+		if (!this.novelDetails) return;
+
+		const cartItem = this.cartItems.find((item: any) =>
+			typeof item.novelId === 'object'
+				? item.novelId._id === this.novelDetails.id
+				: item.novelId === this.novelDetails.id,
+		);
+
+		this.novelDetails = {
+			...this.novelDetails,
+			cartQuantity: cartItem ? cartItem.quantity : 0,
+		};
+	}
+
 	getBookCondition(condition: string): string {
 		switch (condition) {
 			case BookCondition.Excellent:
@@ -88,17 +108,19 @@ export class NovelDetailsComponent implements OnInit {
 	}
 
 	buyBtnDisabled() {
-		if (!this.cartQuantity) return false;
+		if (!this.novelDetails.cartQuantity) return false;
 		return (
-			this.cartQuantity &&
-			this.novelDetails.totalQuantity <= this.cartQuantity
+			this.novelDetails.cartQuantity &&
+			this.novelDetails.totalQuantity <= this.novelDetails.cartQuantity
 		);
 	}
 
 	addToCart() {
 		this._cartService.addToCart(
 			this.novelDetails?.id,
-			this.novelDetails.cartQuantity ?? 1,
+			this.novelDetails.cartQuantity === 0
+				? 1
+				: this.novelDetails.cartQuantity + 1,
 		);
 	}
 

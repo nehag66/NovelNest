@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { Novel, NovelResponse } from 'app/models/novels';
-import { CONSTANTS } from 'shared/constants';
+import { CartResponse, Novel } from 'app/models/novels';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,7 +12,8 @@ export class CartService {
 	// Store cart count
 	private cartItemCount = new BehaviorSubject<number>(0);
 	cartItemCount$ = this.cartItemCount.asObservable();
-	cartItems = [];
+	// cartItems = [];
+	cartItems: any;
 
 	// Store cart items
 	private cartItemsSubject = new BehaviorSubject<
@@ -31,13 +31,15 @@ export class CartService {
 
 	/** ✅ Load cart from API on startup */
 	private loadCartFromServer() {
-		this.getCart().subscribe({
-			next: (response) => {
-				this.cartItemsSubject.next(response.items);
-				this.updateCartCount(response.items);
-			},
-			error: (error) => console.error('Error loading cart:', error),
-		});
+		if (this.bearerToken) {
+			this.getCart().subscribe({
+				next: (response) => {
+					this.cartItemsSubject.next(response.items);
+					this.updateCartCount(response.items);
+				},
+				error: (error) => console.error('Error loading cart:', error),
+			});
+		}
 	}
 
 	/** ✅ Get cart */
@@ -51,11 +53,11 @@ export class CartService {
 			.post(`cart/add`, { novelId, quantity })
 			.pipe(
 				tap((response: any) => {
-					this.cartItemsSubject.next(response.cart?.items); // Update cart items
-					this.updateCartCount(response.cart?.items); // Ensure count is updated
+					this.cartItemsSubject.next(response.items); // Update cart items
+					this.updateCartCount(response.items); // Ensure count is updated
 				}),
 			)
-			.subscribe();
+			.subscribe(() => this.fetchCart());
 	}
 
 	fetchCart() {
@@ -66,56 +68,29 @@ export class CartService {
 	}
 
 	/** ✅ Update item quantity */
-	updateCartQuantity(novel: NovelResponse, quantity: number) {
+	updateCartQuantity(novel: CartResponse, quantity: number) {
 		if (quantity < 1) {
-			return this.removeFromCart(novel).subscribe(); // Ensure UI updates immediately
+			return this.removeFromCart(novel).subscribe(() => this.fetchCart()); // Ensure UI updates immediately
 		}
 
-		return this._apiService.put('cart/update', { novel, quantity }).pipe(
-			tap((response: any) => {
-				this.cartItemsSubject.next(response.items);
-				this.updateCartCount(response.items);
-			}),
-		).subscribe((res:any) => {
-			/* console.log(res)
-			this.cartItems = res.items?.map((ele: any) => {
-				return this.fetchNovelDetails(ele.novelId);
-			})
-			console.log(this.cartItems) */
-		});
+		return this._apiService
+			.put('cart/update', { novel, quantity })
+			.pipe(
+				tap((response: any) => {
+					this.cartItemsSubject.next(response.items);
+					this.updateCartCount(response.items);
+				}),
+			)
+			.subscribe();
 	}
-
-	/* fetchNovelDetails(novelId: string) {
-			this._apiService
-				.get<{
-					message: string;
-					novel: NovelResponse;
-				}>(`novels/${novelId}`)
-				.subscribe((res) => {
-					const novel = res.novel;
-					this.novelDetails = {
-						title: novel.title,
-						quantity: novel.quantity ?? 0,
-						totalQuantity: novel.totalQuantity,
-						price: novel.price,
-						category: novel.category,
-						author: novel.author,
-						id: novel._id,
-						bookCondition: novel.bookCondition,
-						images: novel.images.map(
-							(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
-						),
-					};
-				});
-		} */
 
 	/** ✅ Remove item from cart */
 	removeFromCart(novel?: any) {
 		const novelId = novel?.novelId?._id;
 		return this._apiService.delete(`cart/remove`, { novelId }).pipe(
 			tap((response: any) => {
-				this.cartItemsSubject.next(response.items);
-				this.updateCartCount(response.items);
+				this.cartItemsSubject.next(response.cart?.items);
+				this.updateCartCount(response.cart?.items);
 			}),
 		);
 	}
