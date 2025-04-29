@@ -24,4 +24,8 @@ export class MyProfileComponent {
 	goToMyAddresses() {
 		this._router.navigate([CLIENT_ROUTES.MY_ADDRESSES]);
 	}
+
+	goToWishList() {
+		this._router.navigate([CLIENT_ROUTES.WISHLIST]);
+	}
 }

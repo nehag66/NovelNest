@@ -1,6 +1,6 @@
 <div class="my-4 px-3 py-4 container max-width-container">
 	<h4>MY ACCOUNT</h4>
-	<div class="d-flex gap-3">
+	<div class="d-flex gap-3 flex-wrap">
 		<div
 			class="border-box"
 			(click)="goToMyProfile()"
@@ -52,6 +52,22 @@
 			<div>
 				<h5>My Addresses</h5>
 				<span>Add, edit or delete addresses</span>
+			</div>
+		</div>
+		<div
+			class="border-box"
+			(click)="goToWishList()"
+			(keydown.enter)="goToWishList()"
+			(keydown.space)="goToWishList()"
+			tabindex="0"
+			role="button"
+		>
+			<div>
+				<mat-icon class="custom-icon-size">favorite</mat-icon>
+			</div>
+			<div>
+				<h5>My Wishlist</h5>
+				<span>Edit, view wishlist</span>
 			</div>
 		</div>
 	</div>
