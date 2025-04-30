@@ -141,7 +141,8 @@
 				<div class="row p-2 mb-2">
 					<div class="col-6">
 						<img
-							[src]="novel.novelId.images"
+							*ngIf="novel.novelId.images?.length"
+							[src]="novel.novelId.images[0]"
 							alt="{{ novel.novelId.title }}"
 							width="100"
 							height="120"
@@ -150,9 +151,6 @@
 					</div>
 					<div class="col-6 novel-deets">
 						<h4>{{ novel.novelId.title }}</h4>
-						<span>
-							<strong>Author:</strong> {{ novel.novelId.author }}
-						</span>
 						<span
 							><strong>Quantity:</strong>
 							{{ novel.quantity }}</span

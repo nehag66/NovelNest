@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
+import { CONSTANTS } from 'shared/constants';
 @Component({
 	selector: 'app-buy-now',
 	standalone: true,
@@ -51,13 +52,25 @@ export class BuyNowComponent implements OnInit {
 
 	constructor(private _router: Router) {
 		const navigation = this._router.getCurrentNavigation();
-		this.selectedNovels =
-			navigation?.extras.state?.['selectedNovels'] || [];
+		this.selectedNovels = (
+			navigation?.extras.state?.['selectedNovels'] || []
+		).map((item: any) => ({
+			...item,
+			novelId: {
+				...item.novelId,
+				images:
+					item.novelId?.images?.map((img: string) => {
+						return img.startsWith('http')
+							? img
+							: `${CONSTANTS.IMAGE_URL}${img}`;
+					}) || [],
+			},
+		}));
 	}
 
 	ngOnInit(): void {
 		this.orderTotal = this.selectedNovels.reduce(
-			(acc, curr) => (acc += curr.novelId.price),
+			(acc, curr) => acc + curr.novelId.price * curr.quantity,
 			0,
 		);
 	}
