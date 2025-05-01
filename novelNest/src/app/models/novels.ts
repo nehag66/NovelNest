@@ -1,10 +1,16 @@
+export interface NovelSummary {
+	_id: string;
+	title: string;
+}
+
 export interface Novel {
 	id: string;
 	title: string;
 	category: string;
 	totalQuantity: number;
 	price: number;
-	author: string;
+	mrp: number;
+	author: any;
 	cartQuantity: number;
 	bookCondition: string;
 	images?: any;
@@ -15,6 +21,7 @@ export interface NovelResponse {
 	title: string;
 	category: string;
 	price: number;
+	mrp: number;
 	author: string;
 	__v: number;
 	totalQuantity: number;
@@ -23,17 +30,7 @@ export interface NovelResponse {
 }
 
 /* export interface NovelDeetsResponse {
-	novel: {
-		_id: string;
-		title: string,
-		category: string,
-		price: number,
-		__v: number,
-		totalQuantity: number,
-		author: string,
-		bookCondition: number,
-		images: string[],
-	};
+	novel: NovelResponse;
 	message: string;
 } */
 
@@ -63,6 +60,7 @@ export interface CartResponse {
 		title: string;
 		category: string;
 		price: number;
+		mrp: number;
 		__v: number;
 		totalQuantity: number;
 		author: string;
@@ -79,6 +77,7 @@ export interface Wishlist {
 		title: string;
 		category: string;
 		price: number;
+		mrp: number;
 		__v: number;
 		totalQuantity: number;
 		author: string;

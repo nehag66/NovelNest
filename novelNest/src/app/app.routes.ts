@@ -11,6 +11,7 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { BasicInfoComponent } from './my-profile/basic-info/basic-info.component';
 import { MyOrdersComponent } from './my-profile/my-orders/my-orders.component';
 import { MyAddressesComponent } from './my-profile/my-addresses/my-addresses.component';
+import { AuthorDetailsComponent } from './author-details/author-details.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -21,6 +22,7 @@ export const CLIENT_ROUTES = {
 	WISHLIST: 'wishlist',
 	NOVEL: 'novels',
 	NOVEL_DETAILS: 'novels/:id',
+	AUTHOR_DETAILS: 'author/:id',
 	PROFILE_DETAILS: 'user',
 	BASIC_INFO: 'user-details',
 	MY_ORDERS: 'orders',
@@ -64,18 +66,23 @@ export const routes: Routes = [
 		canActivate: [AuthGuard],
 	},
 	{
+		path: CLIENT_ROUTES.AUTHOR_DETAILS,
+		title: 'Author Details',
+		component: AuthorDetailsComponent,
+	},
+	{
 		path: CLIENT_ROUTES.BUY_BOOKS,
 		// loadChildren: () => import('./buy-now/buy-now.component').then(m => m.BuyNowComponent),
 		component: BuyNowComponent,
 		title: 'Buy Now',
-		canActivate: [AuthGuard]
+		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.WISHLIST,
 		// loadChildren: () => import('./buy-now/buy-now.component').then(m => m.WishlistComponent),
 		component: WishlistComponent,
 		title: 'Wishlist',
-		canActivate: [AuthGuard]
+		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.PROFILE_DETAILS,

@@ -2,31 +2,29 @@ const Novel = require('../models/novel');
 const path = require('path');
 
 exports.getNovels = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
+	try {
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 10;
+		const skip = (page - 1) * limit;
 
-        const novels = await Novel.find()
-            .skip(skip)
-            .limit(limit);
+		const novels = await Novel.find().skip(skip).limit(limit);
 
-        const totalNovels = await Novel.countDocuments();
+		const totalNovels = await Novel.countDocuments();
 
-        res.status(200).json({
-            totalNovels,
-            hasMore: skip + limit < totalNovels, // Check if more data is available
-            novels,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Error fetching novels",
-            error,
-        });
-    }
-}
+		res.status(200).json({
+			totalNovels,
+			hasMore: skip + limit < totalNovels, // Check if more data is available
+			novels,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: 'Error fetching novels',
+			error,
+		});
+	}
+};
 
-exports.getNovelDetails = (req, res, next) => {
+exports.getNovelDetails = (req, res) => {
 	Novel.findById(req.params.id)
 		.then((novel) => {
 			res.status(200).json({
@@ -55,9 +53,10 @@ exports.postAddNovel = async (req, res) => {
 			category: req.body.category,
 			totalQuantity: req.body.totalQuantity,
 			price: req.body.price,
+			mrp: req.body.mrp,
 			author: req.body.author,
 			bookCondition: req.body.bookCondition,
-			images: images, // Store file paths in MongoDB
+			images: images,
 		});
 
 		await novel.save();
@@ -81,7 +80,7 @@ exports.getImage = (req, res) => {
 };
 
 exports.editNovel = (req, res) => {
-	let images = []
+	let images = [];
 	if (req.files || req.files.length > 0) {
 		images = req.files?.map((file) => `/uploads/${file.filename}`);
 	}
@@ -90,6 +89,7 @@ exports.editNovel = (req, res) => {
 		category: req.body.category,
 		totalQuantity: req.body.totalQuantity,
 		price: req.body.price,
+		mrp: req.body.mrp,
 		author: req.body.author,
 		bookCondition: req.body.bookCondition,
 		images: images.length ? images : req.body.images,
@@ -116,7 +116,7 @@ exports.editNovel = (req, res) => {
 		});
 };
 
-exports.deleteNovel = (req, res, next) => {
+exports.deleteNovel = (req, res) => {
 	console.log(req.params.id);
 	res.status(200).json({
 		message: 'Novel deleted successfully!',

@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { BookCondition, Categories, Category, Novel } from 'app/models/novels';
+import {
+	BookCondition,
+	Categories,
+	Category,
+	CategoryResponse,
+	Novel,
+} from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
@@ -16,7 +22,6 @@ import { SharedModule } from 'shared/shared.module';
 })
 export class SellUsedBooksComponent implements OnInit {
 	categories: Categories[] = [];
-	isLoggedIn = false;
 	isLoading = false;
 	selectedFiles: File[] = [];
 	uploadedImageUrls: string[] = [];
@@ -33,15 +38,16 @@ export class SellUsedBooksComponent implements OnInit {
 	novelId: string | null = null;
 
 	constructor(
-		private fb: FormBuilder,
+		private _fb: FormBuilder,
 		private _apiService: ApiService,
 		private _route: ActivatedRoute,
 		private _router: Router,
 	) {
-		this.novelForm = this.fb.group({
+		this.novelForm = this._fb.group({
 			title: ['', Validators.required],
 			category: ['', Validators.required],
 			price: ['', [Validators.required, Validators.min(1)]],
+			mrp: ['', Validators.required, Validators.min(1)],
 			totalQuantity: ['', [Validators.required, Validators.min(1)]],
 			author: ['', Validators.required],
 			bookCondition: [null],
@@ -53,7 +59,7 @@ export class SellUsedBooksComponent implements OnInit {
 	ngOnInit() {
 		this._apiService
 			.get<{ message: string; categories: Category[] }>('categories')
-			.subscribe((response: any) => {
+			.subscribe((response: CategoryResponse) => {
 				this.categories = response.categories.sort(
 					(a: Category, b: Category) => a.name?.localeCompare(b.name),
 				);
@@ -139,11 +145,10 @@ export class SellUsedBooksComponent implements OnInit {
 					.subscribe({
 						next: (res: any) => {
 							this.isLoading = false;
-							console.log(res.message);
 							this.novelForm.reset();
-							this.fileNames = 'No files chosen'; // Clear displayed filenames
-							this.selectedFiles = []; // Clear selected images
-							this.previews = []; // Clear previews after successful upload
+							this.fileNames = 'No files chosen';
+							this.selectedFiles = [];
+							this.previews = [];
 						},
 						error: (err) => {
 							this.isLoading = false;
