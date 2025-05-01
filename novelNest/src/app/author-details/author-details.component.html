@@ -1,0 +1,47 @@
+<div *ngIf="authorDetails" class="my-4 px-3 py-4 container max-width-container">
+	<h4 class="text-center">{{ authorDetails.name }}</h4>
+	<div class="d-flex flex-column gap-4">
+		<div>
+			<h5>About the author</h5>
+			<div class="border p-4 d-flex flex-column bio-card">
+				<p>{{ authorDetails.bio }}</p>
+			</div>
+		</div>
+		<div>
+			<h5>Novels by {{ authorDetails.name }}</h5>
+			<div class="d-flex flex-wrap gap-2">
+				<div
+					class="cursor-pointer card-container novel-card"
+					*ngFor="let novel of authorDetails.novels"
+					(click)="goToNovelDetails(novel._id)"
+					(keydown.enter)="goToNovelDetails(novel._id)"
+					(keydown.space)="goToNovelDetails(novel._id)"
+					tabindex="0"
+					role="button"
+				>
+					<img
+						*ngIf="novel.images?.length"
+						[src]="novel.images[0]"
+						alt="{{ novel.title }}"
+						width="150"
+						height="200"
+						loading="lazy"
+					/>
+					<h3>{{ novel.title }}</h3>
+					<div class="d-flex flex-column gap-2">
+						<span
+							><strong>Category:</strong>
+							{{ novel.category }}</span
+						>
+						<span
+							><strong>Price:</strong> &#8377;{{ novel.price }}
+							<del *ngIf="novel.mrp"
+								>&#8377;{{ novel.mrp }}</del
+							></span
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

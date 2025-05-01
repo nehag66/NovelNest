@@ -35,15 +35,14 @@ export class AuthService {
 	}
 
 	register(user: any) {
-		return this._apiService.post(`auth/register`, user)
-			.pipe(
-				tap((res: any) => {
-					localStorage.setItem('accessToken', res.accessToken);
-					localStorage.setItem('refreshToken', res.refreshToken);
-					localStorage.setItem('userId', res.userId);
-					this.accessToken = res.accessToken;
-				}),
-			);
+		return this._apiService.post(`auth/register`, user).pipe(
+			tap((res: any) => {
+				localStorage.setItem('accessToken', res.accessToken);
+				localStorage.setItem('refreshToken', res.refreshToken);
+				localStorage.setItem('userId', res.userId);
+				this.accessToken = res.accessToken;
+			}),
+		);
 	}
 
 	login(credentials: any) {

@@ -1,0 +1,20 @@
+.bio-card {
+	position: relative;
+	border: 1px solid #ddd;
+	padding: 15px;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+	flex-grow: 1;
+}
+
+.novel-card {
+	position: relative;
+	border: 1px solid #ddd;
+	padding: 15px;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+	flex-grow: 1;
+	max-width: 250px;
+}

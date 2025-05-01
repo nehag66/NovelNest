@@ -16,6 +16,7 @@ const novelsRoutes = require('./routes/novels');
 const categoriesRoutes = require('./routes/categories');
 const cardsRoutes = require('./routes/cards');
 const cartRoutes = require('./routes/carts');
+const authorRoutes = require('./routes/author');
 const wishlistRoutes = require('./routes/wishlists');
 const path = require('path');
 // const errorController = require('./controllers/error');
@@ -48,6 +49,7 @@ app.use(categoriesRoutes);
 app.use(cardsRoutes);
 app.use(cartRoutes);
 app.use(wishlistRoutes);
+app.use(authorRoutes);
 
 // Middleware to serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
