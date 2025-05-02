@@ -43,7 +43,7 @@ export const routes: Routes = [
 		// loadChildren: () => import('./sell-used-books/sell-used-books.component').then(m => m.SellUsedBooksComponent),
 		component: SellUsedBooksComponent,
 		title: 'Sell your used books for money',
-		// canActivate: [AuthGuard],
+		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.EDIT_NOVELS,

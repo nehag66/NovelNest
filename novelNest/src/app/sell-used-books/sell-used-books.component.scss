@@ -1,21 +1,91 @@
-.form-card {
-	padding: 2rem 10rem;
+.container {
+	max-width: 1000px;
+	margin: auto;
 }
 
-:host ::ng-deep .mat-mdc-text-field-wrapper {
-	height: 3rem;
+.card {
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.post-ad-btn {
-	width: 10rem;
+.form-group {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+
+	input[type='text'],
+	input[type='number'] {
+		padding: 8px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		min-width: 250px;
+	}
+
+	mat-form-field {
+		min-width: 250px;
+	}
+
+	span {
+		min-width: 205px;
+	}
+}
+
+h5 {
+	margin: 1.5rem 0 1rem;
+	font-weight: 600;
 }
 
 .rect-button {
-	border-radius: 0;
+	text-transform: none;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	padding: 6px 12px;
+	background: #fff;
 }
-.image-preview img {
-	max-width: 150px;
-	height: auto;
-	display: block;
-	margin: 5px 0;
+
+.image-preview {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 10px;
+
+	img {
+		width: 80px;
+		height: 80px;
+		object-fit: cover;
+		border-radius: 8px;
+		border: 1px solid #ddd;
+	}
+}
+
+.buy-add-btn {
+	background-color: #1976d2;
+	color: white;
+	padding: 6px 16px;
+	font-weight: bold;
+}
+
+.buy-add-btn[disabled] {
+	background-color: #ccc;
+	color: #fff;
+}
+
+.loading-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 10;
+}
+
+.required-asterisk {
+	color: red;
+	font-weight: bold;
+	margin-left: 2px;
 }

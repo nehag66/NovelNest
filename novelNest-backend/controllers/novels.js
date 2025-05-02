@@ -39,7 +39,6 @@ exports.getNovelDetails = (req, res) => {
 };
 
 exports.postAddNovel = async (req, res) => {
-	console.log('Files received:', req.files);
 	try {
 		if (!req.files || req.files.length === 0) {
 			return res.status(400).json({ message: 'No images uploaded' });
@@ -57,7 +56,7 @@ exports.postAddNovel = async (req, res) => {
 			author: req.body.author,
 			bookCondition: req.body.bookCondition,
 			images: images,
-		});
+		});		
 
 		await novel.save();
 		res.status(201).json({ message: 'Novel added successfully!', novel });

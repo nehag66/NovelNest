@@ -10,6 +10,7 @@ import {
 	Novel,
 } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
 
@@ -36,27 +37,33 @@ export class SellUsedBooksComponent implements OnInit {
 	novelForm: FormGroup;
 	isEditMode = false;
 	novelId: string | null = null;
+	cachedAuthors: any;
 
 	constructor(
 		private _fb: FormBuilder,
 		private _apiService: ApiService,
 		private _route: ActivatedRoute,
 		private _router: Router,
+		private _storageService: StorageService,
 	) {
 		this.novelForm = this._fb.group({
 			title: ['', Validators.required],
 			category: ['', Validators.required],
 			price: ['', [Validators.required, Validators.min(1)]],
-			mrp: ['', Validators.required, Validators.min(1)],
+			mrp: ['', [Validators.required, Validators.min(1)]],
 			totalQuantity: ['', [Validators.required, Validators.min(1)]],
 			author: ['', Validators.required],
 			bookCondition: [null],
 			images: [[]], // Will store uploaded images
-			// fileInput: ['', Validators.required],
+			photos: [null, Validators.required]
 		});
 	}
 
 	ngOnInit() {
+		this.cachedAuthors = this._storageService.get<any[]>('authors') || [];
+		this.cachedAuthors.sort((a: Category, b: Category) =>
+			a.name?.localeCompare(b.name),
+		);
 		this._apiService
 			.get<{ message: string; categories: Category[] }>('categories')
 			.subscribe((response: CategoryResponse) => {
@@ -95,6 +102,16 @@ export class SellUsedBooksComponent implements OnInit {
 
 	selectCategory(category: string) {
 		this.novelForm.get('category')?.setValue(category);
+	}
+
+	selectAuthor(authorId: string): void {
+		this.novelForm.get('author')?.setValue(authorId);
+		this.novelForm.get('author')?.markAsTouched();
+	}
+
+	getAuthorName(authorId: string): string | undefined {
+		return this.cachedAuthors.find((author: any) => author._id === authorId)
+			?.name;
 	}
 
 	onFilesSelected(event: Event): void {
@@ -143,7 +160,7 @@ export class SellUsedBooksComponent implements OnInit {
 						novels: Novel[];
 					}>('novels', formData)
 					.subscribe({
-						next: (res: any) => {
+						next: () => {
 							this.isLoading = false;
 							this.novelForm.reset();
 							this.fileNames = 'No files chosen';
@@ -164,15 +181,13 @@ export class SellUsedBooksComponent implements OnInit {
 							this.isLoading = false;
 							this._router.navigate(['/books']);
 						},
-						error: (err) => {
+						error: () => {
 							this.isLoading = false;
-							console.error('Failed to add novel:', err);
 						},
 					});
 			}
 		} else {
 			this.isLoading = false;
-			console.error('The form is not valid');
 		}
 	}
 
