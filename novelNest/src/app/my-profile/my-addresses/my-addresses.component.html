@@ -1,3 +1,13 @@
 <div class="my-4 py-4 container max-width-container">
-	<h4>ALL ADDRESSES</h4>
+	<div
+		*ngIf="isLoggedIn && addresses?.length === 0"
+		class="d-flex flex-column align-items-center py-4 px-sm-5 d-flex"
+	>
+		<img src="address.png" alt="address" height="165" width="165" />
+		No address(s) added
+		<button mat-button class="buy-add-btn">Add a new address</button>
+	</div>
+	<div *ngIf="addresses && addresses.length > 0">
+		<h4>ALL ADDRESSES</h4>
+	</div>
 </div>

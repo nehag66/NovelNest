@@ -1,3 +1,15 @@
 <div class="my-4 py-4 container max-width-container">
-	<h4>ALL ORDERS</h4>
+	<div
+		*ngIf="isLoggedIn && orders?.length === 0"
+		class="d-flex flex-column align-items-center py-4 px-sm-5 d-flex"
+	>
+		<img src="order.png" alt="order" height="165" width="165" />
+		No Orders to show
+		<button mat-button (click)="goToBuyBooks()" class="buy-add-btn">
+			Start buying now
+		</button>
+	</div>
+	<div *ngIf="orders && orders.length > 0">
+		<h4>ALL ORDERS</h4>
+	</div>
 </div>
