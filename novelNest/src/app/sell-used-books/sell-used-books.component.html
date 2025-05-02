@@ -126,7 +126,6 @@
 						#fileInput
 						(change)="onFilesSelected($event)"
 						style="display: none"
-						formControlName="photos"
 						multiple
 						required
 					/>
@@ -139,14 +138,9 @@
 					/>
 					<mat-icon matSuffix>attach_file</mat-icon>
 				</mat-form-field>
-				<div
-					*ngIf="
-						novelForm.get('photos')?.touched &&
-						novelForm.get('photos')?.invalid
-					"
-				>
-					<small class="error">Photo upload is required.</small>
-				</div>
+				<div *ngIf="photoError" class="text-danger">
+					{{ photoError }}
+				  </div>
 				<div *ngIf="previews.length">
 					<p>Uploaded Images:</p>
 					<div class="image-preview">

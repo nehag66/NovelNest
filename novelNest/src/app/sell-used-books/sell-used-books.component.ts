@@ -38,6 +38,7 @@ export class SellUsedBooksComponent implements OnInit {
 	isEditMode = false;
 	novelId: string | null = null;
 	cachedAuthors: any;
+	photoError = '';
 
 	constructor(
 		private _fb: FormBuilder,
@@ -55,7 +56,6 @@ export class SellUsedBooksComponent implements OnInit {
 			author: ['', Validators.required],
 			bookCondition: [null],
 			images: [[]], // Will store uploaded images
-			photos: [null, Validators.required]
 		});
 	}
 
@@ -139,6 +139,13 @@ export class SellUsedBooksComponent implements OnInit {
 	}
 
 	postAd() {
+		const isNew = !this.isEditMode;
+		if (isNew && (!this.selectedFiles || this.selectedFiles.length === 0)) {
+			this.photoError = 'Please upload at least one photo.';
+			return;
+		} else {
+			this.photoError = '';
+		}
 		this.isLoading = true;
 		if (this.novelForm.valid) {
 			const formData = new FormData();
