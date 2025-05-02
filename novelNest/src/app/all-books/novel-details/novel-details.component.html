@@ -1,5 +1,8 @@
 <div class="py-4 container" *ngIf="novelDetails">
 	<div class="novel-card">
+		<div class="sold-out-overlay" *ngIf="buyBtnDisabled()">
+			<div class="overlay-content">Sold Out</div>
+		</div>
 		<div *ngIf="cartQuantity > 0" class="cart-badge">
 			{{ cartQuantity }} in cart
 		</div>
@@ -55,7 +58,14 @@
 				</div>
 				<div class="d-flex flex-column gap-2">
 					<span *ngIf="novelDetails.author"
-						>- by {{ novelDetails.author }} (Author)</span
+						>- by
+						<a
+							[routerLink]="['/author', novelDetails.author._id]"
+							tabindex="0"
+							role="link"
+							>{{ novelDetails.author.name }}</a
+						>
+						(Author)</span
 					>
 					<span
 						><strong>Category:</strong>
@@ -67,13 +77,13 @@
 					>
 					<hr />
 					<div class="d-flex gap-3 price-container">
-						<div class="discount-text">-15%</div>
+						<div class="discount-text">-{{ discountPercent }}%</div>
 						<div class="d-flex">
 							&#8377;<span>{{ novelDetails.price }}</span>
 						</div>
 					</div>
 					<div class="d-flex mrp-text">
-						M.R.P.: <del>&#8377;{{ novelDetails.price }}</del>
+						M.R.P.: <del>&#8377;{{ novelDetails.mrp }}</del>
 					</div>
 					<div>Inclusive of all taxes</div>
 				</div>

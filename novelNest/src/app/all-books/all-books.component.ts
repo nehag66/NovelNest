@@ -6,9 +6,12 @@ import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';
+import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
+import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
+import { getBookCondition } from 'shared/utils';
 
 @Component({
 	selector: 'app-all-books',
@@ -23,6 +26,8 @@ export class AllBooksComponent implements OnInit {
 	isLoading = false;
 	isLoadingMore = false;
 	BookConditions = BookCondition;
+	getBookCondition = getBookCondition;
+	isLoggedIn: string | null = null;
 
 	page = 1;
 	limit = 10;
@@ -32,10 +37,13 @@ export class AllBooksComponent implements OnInit {
 		private _router: Router,
 		private _apiService: ApiService,
 		private _cartService: CartService,
+		private _storageService: StorageService,
+		private _authService: AuthService,
 	) {}
 
 	ngOnInit() {
 		this.isLoading = true;
+		this.isLoggedIn = this._authService.bearerToken;
 		this.fetchNovels();
 	}
 
@@ -46,16 +54,11 @@ export class AllBooksComponent implements OnInit {
 		});
 	}
 
-	//this isLoggedIn method is duplicate in many other components - FIX THIS
-	isLoggedIn(): boolean {
-		return !!localStorage.getItem('accessToken');
-	}
-
 	fetchNovels() {
 		if (!this.hasMoreNovels || this.isLoadingMore) return;
 
 		this.isLoadingMore = true;
-
+		const cachedAuthors = this._storageService.get<any[]>('authors') || [];
 		this._apiService
 			.get<{ message: string; novels: Novel[]; totalPages: number }>(
 				'novels',
@@ -67,12 +70,16 @@ export class AllBooksComponent implements OnInit {
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: NovelResponse) => {
+						const author = cachedAuthors.find(
+							(a) => a._id === novel.author,
+						);
 						return {
 							title: novel.title,
 							totalQuantity: novel.totalQuantity,
 							price: novel.price,
+							mrp: novel.mrp,
 							category: novel.category,
-							author: novel.author,
+							author: author.name ?? 'NA',
 							id: novel._id,
 							bookCondition: novel.bookCondition,
 							images: novel.images.map(
@@ -91,7 +98,7 @@ export class AllBooksComponent implements OnInit {
 				this.isLoadingMore = false;
 				this.isLoading = false;
 				this.novels = [...this.novels, ...novels];
-				if (this.isLoggedIn()) {
+				if (this.isLoggedIn) {
 					this.getCart();
 				}
 
@@ -101,20 +108,6 @@ export class AllBooksComponent implements OnInit {
 					this.page++;
 				}
 			});
-	}
-
-	//this getBookCondition method is duplicate in this component and novel details component - FIX THIS
-	getBookCondition(condition: string): string {
-		switch (condition) {
-			case BookCondition.Excellent:
-				return 'Excellent';
-			case BookCondition.Good:
-				return 'Good';
-			case BookCondition.Fair:
-				return 'Fair';
-			default:
-				return 'Unknown';
-		}
 	}
 
 	editNovel(novel: Novel) {

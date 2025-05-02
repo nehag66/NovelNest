@@ -29,7 +29,7 @@
 					mat-icon-button
 					class="edit-btn"
 					(click)="editNovel(novel)"
-					[disabled]="!isLoggedIn()"
+					[disabled]="!isLoggedIn"
 				>
 					<mat-icon class="edit-icon">edit</mat-icon>
 				</button>
@@ -68,13 +68,13 @@
 						<span
 							><strong>Price:</strong> &#8377;{{
 								novel.price
-							}}</span
+							}} <del *ngIf="novel.mrp">&#8377;{{ novel.mrp }}</del></span
 						>
 					</div>
 				</div>
 
 				<!-- Add to Cart -->
-				<div class="add-to-cart" *ngIf="isLoggedIn()">
+				<div class="add-to-cart" *ngIf="isLoggedIn">
 					<button
 						mat-flat-button
 						(click)="

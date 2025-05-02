@@ -1,17 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { BookCondition, Novel } from 'app/models/novels';
+import { Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
+import { StorageService } from 'services/storage.service';
 import { WishlistService } from 'services/wishlist.service';
 import { CONSTANTS } from 'shared/constants';
+import { calculateDiscountPercentage, getBookCondition } from 'shared/utils';
 
 @Component({
 	selector: 'app-novel-details',
 	standalone: true,
-	imports: [CommonModule, MaterialModule],
+	imports: [CommonModule, MaterialModule, RouterModule],
 	templateUrl: './novel-details.component.html',
 	styleUrl: './novel-details.component.scss',
 })
@@ -24,12 +26,15 @@ export class NovelDetailsComponent implements OnInit {
 	wishlist: any[] = [];
 	currentDisplayedImg = '';
 	cartItems: any;
+	discountPercent = 0;
+	getBookCondition = getBookCondition;
 
 	constructor(
 		private _activatedRoute: ActivatedRoute,
 		private _apiService: ApiService,
 		private _cartService: CartService,
 		private _wishlistService: WishlistService,
+		private _storageService: StorageService,
 	) {}
 
 	ngOnInit() {
@@ -56,6 +61,7 @@ export class NovelDetailsComponent implements OnInit {
 	}
 
 	fetchNovelDetails(novelId: string) {
+		const cachedAuthors = this._storageService.get<any[]>('authors') || [];
 		this._apiService
 			.get<{
 				message: string;
@@ -63,19 +69,27 @@ export class NovelDetailsComponent implements OnInit {
 			}>(`novels/${novelId}`)
 			.subscribe((res) => {
 				const novel = res.novel;
+				const author = cachedAuthors.find(
+					(a) => a._id === novel.author,
+				);
 				this.novelDetails = {
 					title: novel.title,
 					cartQuantity: novel.cartQuantity ?? 0,
 					totalQuantity: novel.totalQuantity,
 					price: novel.price,
+					mrp: novel.mrp,
 					category: novel.category,
-					author: novel.author,
+					author: author ?? 'NA',
 					id: novel._id,
 					bookCondition: novel.bookCondition,
 					images: novel.images.map(
 						(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
 					),
 				};
+				this.discountPercent = calculateDiscountPercentage(
+					novel.mrp,
+					novel.price,
+				);
 			});
 	}
 
@@ -92,19 +106,6 @@ export class NovelDetailsComponent implements OnInit {
 			...this.novelDetails,
 			cartQuantity: cartItem ? cartItem.quantity : 0,
 		};
-	}
-
-	getBookCondition(condition: string): string {
-		switch (condition) {
-			case BookCondition.Excellent:
-				return 'Excellent';
-			case BookCondition.Good:
-				return 'Good';
-			case BookCondition.Fair:
-				return 'Fair';
-			default:
-				return 'Unknown';
-		}
 	}
 
 	buyBtnDisabled() {
@@ -184,4 +185,5 @@ export class NovelDetailsComponent implements OnInit {
 				});
 		}
 	}
+
 }
