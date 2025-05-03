@@ -141,7 +141,7 @@ export class SellUsedBooksComponent implements OnInit {
 	postAd() {
 		const isNew = !this.isEditMode;
 		if (isNew && (!this.selectedFiles || this.selectedFiles.length === 0)) {
-			this.photoError = 'Please upload at least one photo.';
+			this.photoError = CONSTANTS.UPLOAD_PHOTO_WARNING;
 			return;
 		} else {
 			this.photoError = '';

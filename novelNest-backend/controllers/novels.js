@@ -1,4 +1,5 @@
 const Novel = require('../models/novel');
+const Author = require('../models/author');
 const path = require('path');
 
 exports.getNovels = async (req, res) => {
@@ -56,9 +57,12 @@ exports.postAddNovel = async (req, res) => {
 			author: req.body.author,
 			bookCondition: req.body.bookCondition,
 			images: images,
-		});		
+		});
 
-		await novel.save();
+		const savedNovel = await novel.save();
+		await Author.findByIdAndUpdate(savedNovel.author, {
+			$addToSet: { novels: savedNovel._id }, // $addToSet avoids duplicates
+		});
 		res.status(201).json({ message: 'Novel added successfully!', novel });
 	} catch (error) {
 		console.error('Error saving novel:', error);
