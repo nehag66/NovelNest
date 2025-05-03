@@ -5,6 +5,7 @@ import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
 import { CartResponse } from 'app/models/novels';
+import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
@@ -20,14 +21,17 @@ export class MyCartComponent implements OnInit {
 	cartItems: any;
 	cartCount = 0;
 	selectedNovels: any[] = [];
+	isLoggedIn: string | null = null;
 
 	constructor(
 		private _dialog: MatDialog,
 		private _router: Router,
 		private _cartService: CartService,
+		private _authService: AuthService,
 	) {}
 
 	ngOnInit(): void {
+		this.isLoggedIn = this._authService.bearerToken;
 		this.updateCartItems();
 		this.updateCartCount();
 	}
@@ -52,7 +56,6 @@ export class MyCartComponent implements OnInit {
 	updateCartItems() {
 		this._cartService.cartItems$.subscribe((items: any) => {
 			if (!items) return;
-
 			this.cartItems = items.map((item: any) => ({
 				...item,
 				novelId: {
@@ -70,10 +73,6 @@ export class MyCartComponent implements OnInit {
 		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
 		});
-	}
-
-	isLoggedIn(): boolean {
-		return !!localStorage.getItem('accessToken');
 	}
 
 	openLoginDialog(e: Event) {

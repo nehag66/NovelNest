@@ -6,10 +6,7 @@
 					><strong>My Cart ({{ cartCount }})</strong></span
 				>
 			</div>
-			<div class="buy-now-container col-3" *ngIf="isLoggedIn()">
-				<!-- <button mat-flat-button (click)="buyNow()" class="buy-add-btn">
-					Buy Now
-				</button> -->
+			<div class="buy-now-container col-3" *ngIf="isLoggedIn">
 				<button
 					mat-flat-button
 					(click)="buyNow()"
@@ -23,7 +20,7 @@
 	</div>
 	<div class="card p-3">
 		<div
-			*ngIf="!isLoggedIn()"
+			*ngIf="!isLoggedIn"
 			class="d-flex flex-column align-items-center"
 		>
 			<mat-icon class="custom-icon-size">lock_person</mat-icon>
@@ -34,7 +31,7 @@
 			</div>
 		</div>
 		<div
-			*ngIf="isLoggedIn() && cartCount === 0"
+			*ngIf="isLoggedIn && cartCount === 0"
 			class="d-flex flex-column align-items-center"
 		>
 			<mat-icon class="custom-icon-size">shopping_cart</mat-icon>
@@ -43,7 +40,7 @@
 				Start buying now
 			</button>
 		</div>
-		<div *ngIf="isLoggedIn() && cartCount > 0">
+		<div *ngIf="isLoggedIn && cartCount > 0">
 			<div
 				*ngFor="let novel of cartItems; let i = index"
 				class="border p-4 d-flex flex-column"
@@ -71,14 +68,6 @@
 							{{ novel.novelId?.title }}
 						</h3>
 						<div class="d-flex flex-column gap-2">
-							<span *ngIf="novel.novelId?.author"
-								><strong>Author:</strong>
-								{{ novel.novelId?.author }}</span
-							>
-							<span
-								><strong>Category:</strong>
-								{{ novel.novelId?.category }}</span
-							>
 							<span class="d-flex align-items-center"
 								><strong>Quantity:</strong>
 								<button

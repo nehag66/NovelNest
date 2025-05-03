@@ -1,6 +1,6 @@
 <div class="my-4 py-4 container max-width-container">
 	<div
-		*ngIf="isLoggedIn() && wishlist && wishlist.length === 0"
+		*ngIf="isLoggedIn && wishlist?.length === 0"
 		class="d-flex flex-column align-items-center py-4 px-sm-5 d-flex"
 	>
 		<mat-icon class="custom-icon-size">favorite</mat-icon>
@@ -9,11 +9,11 @@
 			Start adding to wishlist now
 		</button>
 	</div>
-	<div >
+	<div *ngIf="wishlist && wishlist.length > 0">
 		<h4>MY WISHLIST</h4>
 		<div
 			class="d-flex flex-wrap gap-2"
-			*ngIf="isLoggedIn() && wishlist && wishlist.length > 0"
+			*ngIf="isLoggedIn && wishlist && wishlist.length > 0"
 		>
 			<div *ngFor="let novel of wishlist" class="d-flex flex-column m-3">
 				<div class="cursor-pointer novel-card">
@@ -52,7 +52,7 @@
 						>
 					</div>
 					<!-- Add to Cart -->
-					<div *ngIf="isLoggedIn()" class="d-flex flex-column gap-2">
+					<div *ngIf="isLoggedIn" class="d-flex flex-column gap-2">
 						<button
 							mat-flat-button
 							(click)="

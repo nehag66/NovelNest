@@ -35,7 +35,7 @@
 			<button
 				mat-menu-item
 				(click)="openLoginSignup()"
-				*ngIf="!isLoggedIn()"
+				*ngIf="!isLoggedIn"
 			>
 				<mat-icon>lock</mat-icon>Login /Sign Up
 			</button>
@@ -54,7 +54,7 @@
 			<button mat-menu-item (click)="goToWishList()">
 				<mat-icon>favorite</mat-icon>Wishlist
 			</button>
-			<button mat-menu-item (click)="onLogout()" *ngIf="isLoggedIn()">
+			<button mat-menu-item (click)="onLogout()" *ngIf="isLoggedIn">
 				<mat-icon>lock</mat-icon>Logout
 			</button>
 		</mat-menu>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import { CartResponse, Wishlist } from 'app/models/novels';
+import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { WishlistService } from 'services/wishlist.service';
 import { CONSTANTS } from 'shared/constants';
@@ -18,25 +19,24 @@ import { CONSTANTS } from 'shared/constants';
 export class WishlistComponent implements OnInit {
 	wishlist: any;
 	cartItems: CartResponse[] = [];
+	isLoggedIn: string | null = null;
 
 	constructor(
 		private _wishlistService: WishlistService,
 		private _cartService: CartService,
 		private _router: Router,
+		private _authService: AuthService,
 	) {}
 
 	ngOnInit() {
-		if (this.isLoggedIn()) {
+		this.isLoggedIn = this._authService.bearerToken;
+		if (this.isLoggedIn) {
 			this.getWishlist();
 			this._cartService.getCart().subscribe((cart) => {
 				this.cartItems = cart?.items;
 				this.attachCartQuantity();
 			});
 		}
-	}
-
-	isLoggedIn(): boolean {
-		return !!localStorage.getItem('accessToken');
 	}
 
 	getWishlist() {

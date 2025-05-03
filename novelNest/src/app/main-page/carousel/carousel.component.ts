@@ -13,6 +13,7 @@ import { ApiService } from 'services/api.service';
 import { Novel, NovelResponse } from 'app/models/novels';
 import { catchError, map, of } from 'rxjs';
 import { CONSTANTS } from 'shared/constants';
+import { StorageService } from 'services/storage.service';
 
 @Component({
 	selector: 'app-carousel',
@@ -34,6 +35,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
+		private _storageService: StorageService,
 	) {}
 
 	ngOnInit() {
@@ -45,7 +47,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 		if (!this.hasMoreNovels || this.isLoadingMore) return;
 
 		this.isLoadingMore = true;
-
+		const cachedAuthors = this._storageService.get<any[]>('authors') || [];
 		this._apiService
 			.get<{ message: string; novels: Novel[]; totalPages: number }>(
 				'novels',
@@ -57,12 +59,16 @@ export class CarouselComponent implements OnInit, OnDestroy {
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: NovelResponse) => {
+						const author = cachedAuthors.find(
+							(a) => a._id === novel.author,
+						);
 						return {
 							title: novel.title,
 							totalQuantity: novel.totalQuantity,
 							price: novel.price,
+							mrp: novel.mrp,
 							category: novel.category,
-							author: novel.author,
+							author: author.name ?? 'NA',
 							id: novel._id,
 							bookCondition: novel.bookCondition,
 							images: novel.images.map(

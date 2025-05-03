@@ -18,6 +18,7 @@ import { CartService } from 'services/cart.service';
 export class HeaderComponent {
 	cartCount = 0;
 	cartItems: any;
+	isLoggedIn: string | null = null;
 
 	constructor(
 		private _dialog: MatDialog,
@@ -25,6 +26,7 @@ export class HeaderComponent {
 		private _cartService: CartService,
 		private _authService: AuthService,
 	) {
+		this.isLoggedIn = this._authService.bearerToken;
 		this.updateCartCount();
 	}
 
@@ -32,10 +34,6 @@ export class HeaderComponent {
 		this._cartService.cartItemCount$.subscribe((count) => {
 			this.cartCount = count;
 		});
-	}
-
-	isLoggedIn(): boolean {
-		return !!localStorage.getItem('accessToken');
 	}
 
 	openLoginSignup() {
