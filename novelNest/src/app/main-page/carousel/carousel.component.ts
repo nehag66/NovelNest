@@ -28,7 +28,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 	novels: Novel[] = [];
 
 	page = 1;
-	limit = 10;
+	limit = 20;
 	hasMoreNovels = true;
 	isLoadingMore = false;
 
@@ -68,7 +68,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 							price: novel.price,
 							mrp: novel.mrp,
 							category: novel.category,
-							author: author.name ?? 'NA',
+							author: author?.name ?? 'NA',
 							id: novel._id,
 							bookCondition: novel.bookCondition,
 							images: novel.images.map(
@@ -95,7 +95,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 	}
 
 	goToBuyBooks() {
-		this._router.navigate([CLIENT_ROUTES.NOVEL_LIST]);
+		this._router.navigateByUrl(CLIENT_ROUTES.NOVEL_LIST);
 	}
 
 	scroll(amount: number) {

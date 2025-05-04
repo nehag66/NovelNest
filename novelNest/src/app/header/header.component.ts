@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
+import { Subject } from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 
@@ -15,10 +16,11 @@ import { CartService } from 'services/cart.service';
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
 	cartCount = 0;
 	cartItems: any;
-	isLoggedIn: string | null = null;
+	isLoggedIn = false;
+	private destroy$ = new Subject<void>();
 
 	constructor(
 		private _dialog: MatDialog,
@@ -26,7 +28,9 @@ export class HeaderComponent {
 		private _cartService: CartService,
 		private _authService: AuthService,
 	) {
-		this.isLoggedIn = this._authService.bearerToken;
+		this._authService.getAuthState().subscribe((state) => {
+			this.isLoggedIn = state;
+		});
 		this.updateCartCount();
 	}
 
@@ -49,15 +53,15 @@ export class HeaderComponent {
 	}
 
 	goToCart() {
-		this._router.navigate([CLIENT_ROUTES.MY_CART]);
+		this._router.navigateByUrl(CLIENT_ROUTES.MY_CART);
 	}
 
 	goToMyOrders() {
-		this._router.navigate([CLIENT_ROUTES.MY_ORDERS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.MY_ORDERS);
 	}
 
 	goToSellUsedBooks() {
-		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.SELL_USED_BOOKS);
 	}
 
 	goToBuyBooks() {
@@ -65,15 +69,15 @@ export class HeaderComponent {
 	}
 
 	goToWishList() {
-		this._router.navigate([CLIENT_ROUTES.WISHLIST]);
+		this._router.navigateByUrl(CLIENT_ROUTES.WISHLIST);
 	}
 
 	goToProfile() {
-		this._router.navigate([CLIENT_ROUTES.PROFILE_DETAILS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.PROFILE_DETAILS);
 	}
 
 	goToMainPage() {
-		this._router.navigate([CLIENT_ROUTES.MAIN_PAGE]);
+		this._router.navigateByUrl(CLIENT_ROUTES.MAIN_PAGE);
 	}
 
 	onLogout() {
@@ -82,5 +86,10 @@ export class HeaderComponent {
 				this._authService.logout();
 			});
 		} else this._authService.logout();
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }

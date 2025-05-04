@@ -12,7 +12,6 @@ import {
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';
-import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
@@ -46,12 +45,11 @@ export class NovelListComponent implements OnInit {
 		private _apiService: ApiService,
 		private _cartService: CartService,
 		private _storageService: StorageService,
-		private _authService: AuthService,
 	) {}
 
 	ngOnInit() {
 		this.isLoading = true;
-		this.isLoggedIn = this._authService.bearerToken;
+		this.isLoggedIn = this._storageService.get('accessToken');;
 		this.fetchNovels();
 	}
 

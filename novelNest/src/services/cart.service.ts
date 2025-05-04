@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { CartResponse, Novel } from 'app/models/novels';
+import { StorageService } from './storage.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,12 +22,15 @@ export class CartService {
 	>([]);
 	cartItems$ = this.cartItemsSubject.asObservable();
 
-	constructor(private _apiService: ApiService) {
+	constructor(
+		private _apiService: ApiService,
+		private _storageService: StorageService,
+	) {
 		if (this.bearerToken) this.loadCartFromServer();
 	}
 
 	get bearerToken() {
-		return localStorage.getItem('accessToken');
+		return this._storageService.get('accessToken');
 	}
 
 	/** ✅ Load cart from API on startup */

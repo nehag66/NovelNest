@@ -7,13 +7,16 @@ import {
 import { inject } from '@angular/core';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'services/auth.service';
+import { StorageService } from 'services/storage.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (
 	req: HttpRequest<any>,
 	next: HttpHandlerFn,
 ): Observable<HttpEvent<any>> => {
 	const authService = inject(AuthService);
-	const accessToken = localStorage.getItem('accessToken');
+	const storageService = inject(StorageService);
+
+	const accessToken = storageService.get('accessToken');
 
 	let authReq = req;
 	if (accessToken) {
@@ -28,11 +31,11 @@ export const tokenInterceptor: HttpInterceptorFn = (
 		catchError((err: any) => {
 			if (err.status === 401 && err.error?.message === 'Invalid token!') {
 				return authService.refreshToken().pipe(
-					switchMap((tokens: any) => {
-						localStorage.setItem('accessToken', tokens.accessToken);
+					switchMap((res: { accessToken: string }) => {
+						storageService.set('accessToken', res.accessToken);
 						const retryReq = req.clone({
 							setHeaders: {
-								Authorization: `Bearer ${tokens.accessToken}`,
+								Authorization: `Bearer ${res.accessToken}`,
 							},
 						});
 						return next(retryReq);

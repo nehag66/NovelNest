@@ -3,44 +3,56 @@ import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
+import { StorageService } from './storage.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthService {
-	private authState = new BehaviorSubject<boolean>(this.isAuthenticated());
+	private authState = new BehaviorSubject<boolean>(false);
 	accessToken: string | null = null;
 
 	constructor(
 		private _jwtHelper: JwtHelperService,
 		private _apiService: ApiService,
 		private _router: Router,
-	) {}
-
-	get bearerToken() {
-		return this.accessToken || localStorage.getItem('accessToken');
+		private _storageService: StorageService,
+	) {
+		this.authState.next(this.isAuthenticated());
 	}
 
-	refreshToken(): Observable<{ token: string }> {
-		const refreshToken = localStorage.getItem('refreshToken');
+	get bearerToken(): string | null {
+		const token =
+			this.accessToken || this._storageService.get('accessToken');
+		return token || null;
+	}
+
+	refreshToken(): Observable<{ accessToken: string }> {
+		const refreshToken = this._storageService.get('refreshToken');
 		if (!refreshToken) {
 			return throwError(() => new Error('No refresh token found'));
 		}
 
-		return this._apiService.post<{ token: string }>(
-			'auth/refresh-token',
-			{ refreshToken },
-			false,
-		);
+		return this._apiService
+			.post<{
+				accessToken: string;
+			}>('auth/refresh-token', { refreshToken }, false)
+			.pipe(
+				tap((res) => {
+					this._storageService.set('accessToken', res.accessToken);
+					this.accessToken = res.accessToken;
+				}),
+			);
 	}
 
 	register(user: any) {
 		return this._apiService.post(`auth/register`, user).pipe(
 			tap((res: any) => {
-				localStorage.setItem('accessToken', res.accessToken);
-				localStorage.setItem('refreshToken', res.refreshToken);
-				localStorage.setItem('userId', res.userId);
+				this._storageService.set('accessToken', res.accessToken);
+				this._storageService.set('refreshToken', res.refreshToken);
+				this._storageService.set('userId', res.userId);
 				this.accessToken = res.accessToken;
+				this.authState.next(true);
 			}),
 		);
 	}
@@ -54,25 +66,28 @@ export class AuthService {
 			}>(`auth/login`, credentials, false)
 			.pipe(
 				tap((res) => {
-					localStorage.setItem('accessToken', res.accessToken);
-					localStorage.setItem('refreshToken', res.refreshToken);
-					localStorage.setItem('userId', res.userId);
+					this._storageService.set('accessToken', res.accessToken);
+					this._storageService.set('refreshToken', res.refreshToken);
+					this._storageService.set('userId', res.userId);
 					this.accessToken = res.accessToken;
+					this.authState.next(true);
 				}),
 			);
 	}
 
 	logout() {
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
-		localStorage.removeItem('userId');
+		this.accessToken = null; // Add this line to clear in-memory token
+		this._storageService.remove('accessToken');
+		this._storageService.remove('refreshToken');
+		this._storageService.remove('userId');
 		this.authState.next(false);
-		this._router.navigate(['/']);
+		this._router.navigateByUrl('/');
 	}
 
 	isAuthenticated(): boolean {
+		let refreshToken: string | null = '';
 		const accessToken = this.bearerToken;
-		const refreshToken = localStorage.getItem('refreshToken');
+		refreshToken = this._storageService.get('refreshToken');
 		if (accessToken && !this._jwtHelper.isTokenExpired(accessToken)) {
 			return true;
 		}

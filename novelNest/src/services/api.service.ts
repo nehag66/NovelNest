@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { CONSTANTS } from 'shared/constants';
+import { StorageService } from './storage.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ApiService {
-	constructor(private http: HttpClient) {}
+	constructor(
+		private http: HttpClient,
+		private _storageService: StorageService,
+	) {}
 
 	get bearerToken() {
-		return localStorage.getItem('accessToken');
+		return this._storageService.get('accessToken');
 	}
 
 	private handleError(error: any) {
@@ -30,11 +34,7 @@ export class ApiService {
 			.pipe(catchError(this.handleError));
 	}
 
-	post<T>(
-		endpoint: string,
-		body: any,
-		requiresAuth = true,
-	): Observable<T> {
+	post<T>(endpoint: string, body: any, requiresAuth = true): Observable<T> {
 		let headers = new HttpHeaders();
 
 		if (requiresAuth && this.bearerToken) {
@@ -65,11 +65,15 @@ export class ApiService {
 		const headers = new HttpHeaders({
 			Authorization: `Bearer ${this.bearerToken}`,
 		});
-	
-		return this.http.request<T>('DELETE', `${CONSTANTS.BASE_URL}/${endpoint}`, {
-			headers,
-			body, // Explicitly set body
-		});
+
+		return this.http.request<T>(
+			'DELETE',
+			`${CONSTANTS.BASE_URL}/${endpoint}`,
+			{
+				headers,
+				body, // Explicitly set body
+			},
+		);
 	}
 
 	// PATCH method (optional)
