@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { AuthGuard } from 'shared/auth.guard';
 import { BuyNowComponent } from './buy-now/buy-now.component';
-import { NovelDetailsComponent } from './all-books/novel-details/novel-details.component';
-import { AllBooksComponent } from './all-books/all-books.component';
+import { NovelDetailsComponent } from './novel-list/novel-details/novel-details.component';
+import { NovelListComponent } from './novel-list/novel-list.component';
 import { SellUsedBooksComponent } from './sell-used-books/sell-used-books.component';
 import { MyCartComponent } from './my-cart/my-cart.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
@@ -17,7 +17,7 @@ export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
 	SELL_USED_BOOKS: 'post-ad',
 	EDIT_NOVELS: 'post-ad/:id',
-	ALL_BOOKS: 'books',
+	NOVEL_LIST: 'novels',
 	BUY_BOOKS: 'buy-books',
 	WISHLIST: 'wishlist',
 	NOVEL: 'novels',
@@ -53,9 +53,9 @@ export const routes: Routes = [
 		canActivate: [AuthGuard],
 	},
 	{
-		path: CLIENT_ROUTES.ALL_BOOKS,
-		// loadChildren: () => import('./all-books/all-books.component').then(m => m.AllBooksComponent),
-		component: AllBooksComponent,
+		path: CLIENT_ROUTES.NOVEL_LIST,
+		// loadChildren: () => import('./all-books/all-books.component').then(m => m.NovelListComponent),
+		component: NovelListComponent,
 		title: 'Buy New, Old and second hand books',
 	},
 	{

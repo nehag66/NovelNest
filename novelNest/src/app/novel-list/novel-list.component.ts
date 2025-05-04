@@ -14,13 +14,13 @@ import { SharedModule } from 'shared/shared.module';
 import { getBookCondition } from 'shared/utils';
 
 @Component({
-	selector: 'app-all-books',
+	selector: 'app-novel-list',
 	standalone: true,
 	imports: [SharedModule, MaterialModule, InfiniteScrollDirective],
-	templateUrl: './all-books.component.html',
-	styleUrl: './all-books.component.scss',
+	templateUrl: './novel-list.component.html',
+	styleUrl: './novel-list.component.scss',
 })
-export class AllBooksComponent implements OnInit {
+export class NovelListComponent implements OnInit {
 	novels: Novel[] = [];
 	cartItems: any;
 	isLoading = false;

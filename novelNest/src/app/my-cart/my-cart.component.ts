@@ -88,7 +88,7 @@ export class MyCartComponent implements OnInit {
 	}
 
 	goToBuyBooks() {
-		this._router.navigate([CLIENT_ROUTES.ALL_BOOKS]);
+		this._router.navigate([CLIENT_ROUTES.NOVEL_LIST]);
 	}
 
 	buyBtnDisabled(novel: CartResponse) {
