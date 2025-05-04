@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import {
 	BookCondition,
@@ -186,7 +187,7 @@ export class SellUsedBooksComponent implements OnInit {
 					.subscribe({
 						next: () => {
 							this.isLoading = false;
-							this._router.navigate(['/books']);
+							this._router.navigate([CLIENT_ROUTES.NOVEL_LIST]);
 						},
 						error: () => {
 							this.isLoading = false;

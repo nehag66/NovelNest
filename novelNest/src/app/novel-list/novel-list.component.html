@@ -11,85 +11,101 @@
 			<mat-spinner [diameter]="50"></mat-spinner>
 		</div>
 
-		<!-- Novels List -->
-		<div class="d-flex flex-wrap gap-2">
+		<!-- Novels Grouped by Category -->
+		<div *ngFor="let category of categories; trackBy: trackByCategoryName">
 			<div
-				*ngFor="let novel of novels"
-				class="border p-4 d-flex flex-column novel-card"
+				class="category-section"
+				*ngIf="(groupedNovels[category.name] ?? []).length > 0"
 			>
-				<div
-					*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
-					class="cart-badge"
-				>
-					{{ novel.cartQuantity }} in cart
-				</div>
+				<h4>{{ category.name }}</h4>
 
-				<!-- Edit Button -->
-				<button
-					mat-icon-button
-					class="edit-btn"
-					(click)="editNovel(novel)"
-					[disabled]="!isLoggedIn"
-				>
-					<mat-icon class="edit-icon">edit</mat-icon>
-				</button>
-
-				<!-- Novel Card -->
-				<div
-					(click)="goToNovelDetails(novel.id)"
-					(keydown.enter)="goToNovelDetails(novel.id)"
-					(keydown.space)="goToNovelDetails(novel.id)"
-					tabindex="0"
-					role="button"
-					class="cursor-pointer card-container"
-					*ngIf="novel.images"
-				>
-					<img
-						*ngIf="novel.images?.length"
-						[src]="novel.images[0]"
-						alt="{{ novel.title }}"
-						width="150"
-						height="200"
-						loading="lazy"
-					/>
-					<h3>{{ novel.title }}</h3>
-					<div class="d-flex flex-column gap-2">
-						<span *ngIf="novel.author"
-							><strong>Author:</strong> {{ novel.author }}</span
-						>
-						<span
-							><strong>Category:</strong>
-							{{ novel.category }}</span
-						>
-						<span *ngIf="novel.bookCondition"
-							><strong>Condition:</strong>
-							{{ getBookCondition(novel.bookCondition) }}</span
-						>
-						<span
-							><strong>Price:</strong> &#8377;{{
-								novel.price
-							}} <del *ngIf="novel.mrp">&#8377;{{ novel.mrp }}</del></span
-						>
-					</div>
-				</div>
-
-				<!-- Add to Cart -->
-				<div class="add-to-cart" *ngIf="isLoggedIn">
-					<button
-						mat-flat-button
-						(click)="
-							addToCart(
-								novel.id,
-								novel.cartQuantity === 0
-									? 1
-									: novel.cartQuantity + 1
-							)
+				<div class="d-flex flex-wrap gap-2">
+					<!-- Filtered novels by the current category -->
+					<div
+						*ngFor="
+							let novel of groupedNovels[category.name] ?? [];
+							trackBy: trackByNovelId
 						"
-						class="buy-add-btn"
-						[disabled]="buyBtnDisabled(novel)"
+						class="border p-4 d-flex flex-column novel-card"
 					>
-						Add to Cart
-					</button>
+						<div
+							*ngIf="novel.cartQuantity && novel.cartQuantity > 0"
+							class="cart-badge"
+						>
+							{{ novel.cartQuantity }} in cart
+						</div>
+
+						<!-- Edit Button -->
+						<button
+							mat-icon-button
+							class="edit-btn"
+							(click)="editNovel(novel)"
+							[disabled]="!isLoggedIn"
+						>
+							<mat-icon class="edit-icon">edit</mat-icon>
+						</button>
+
+						<!-- Novel Card -->
+						<div
+							(click)="goToNovelDetails(novel.id)"
+							(keydown.enter)="goToNovelDetails(novel.id)"
+							(keydown.space)="goToNovelDetails(novel.id)"
+							tabindex="0"
+							role="button"
+							class="cursor-pointer card-container"
+							*ngIf="novel.images"
+						>
+							<img
+								*ngIf="novel.images?.length"
+								[src]="novel.images[0]"
+								alt="{{ novel.title }}"
+								width="100"
+								height="150"
+								loading="lazy"
+							/>
+							<h6>{{ novel.title }}</h6>
+							<div class="d-flex flex-column gap-2">
+								<span *ngIf="novel.author"
+									><strong>Author:</strong>
+									{{ novel.author }}</span
+								>
+								<span *ngIf="novel.bookCondition"
+									><strong>Condition:</strong>
+									{{
+										getBookCondition(novel.bookCondition)
+									}}</span
+								>
+								<span class="price-container"
+									><span class="price-symbol">&#8377;</span
+									><span class="price">{{
+										novel.price
+									}}</span>
+									<del *ngIf="novel.mrp" class="mrp-font"
+										>M.R.P.:&#8377;{{ novel.mrp }}</del
+									></span
+								>
+							</div>
+						</div>
+
+						<!-- Add to Cart -->
+						<div class="add-to-cart" *ngIf="isLoggedIn">
+							<button
+								mat-flat-button
+								(click)="
+									addToCart(
+										novel.id,
+										novel.cartQuantity === 0
+											? 1
+											: novel.cartQuantity + 1
+									)
+								"
+								class="buy-add-btn"
+								[disabled]="buyBtnDisabled(novel)"
+							>
+								Add to Cart
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

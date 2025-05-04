@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { BookCondition, Novel, NovelResponse } from 'app/models/novels';
+import {
+	BookCondition,
+	Category,
+	CategoryResponse,
+	Novel,
+	NovelResponse,
+} from 'app/models/novels';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';
@@ -30,8 +36,10 @@ export class NovelListComponent implements OnInit {
 	isLoggedIn: string | null = null;
 
 	page = 1;
-	limit = 10;
+	limit = 20;
 	hasMoreNovels = true;
+	categories: Category[] = [];
+	groupedNovels: Record<string, Novel[]> = {};
 
 	constructor(
 		private _router: Router,
@@ -52,6 +60,17 @@ export class NovelListComponent implements OnInit {
 			this.cartItems = cart?.items;
 			this.syncCartWithNovels();
 		});
+	}
+
+	getCategories() {
+		this._apiService
+			.get<{ message: string; categories: Category[] }>('categories')
+			.subscribe((response: CategoryResponse) => {
+				this.categories = response.categories.sort((a, b) =>
+					a.name?.localeCompare(b.name),
+				);
+				this.groupNovelsByCategory();
+			});
 	}
 
 	fetchNovels() {
@@ -79,7 +98,7 @@ export class NovelListComponent implements OnInit {
 							price: novel.price,
 							mrp: novel.mrp,
 							category: novel.category,
-							author: author.name ?? 'NA',
+							author: author?.name ?? 'NA',
 							id: novel._id,
 							bookCondition: novel.bookCondition,
 							images: novel.images.map(
@@ -107,7 +126,16 @@ export class NovelListComponent implements OnInit {
 				} else {
 					this.page++;
 				}
+				this.getCategories();
 			});
+	}
+
+	groupNovelsByCategory(): void {
+		this.categories.forEach((category) => {
+			this.groupedNovels[category.name] = this.novels.filter(
+				(novel) => novel.category === category.name,
+			);
+		});
 	}
 
 	editNovel(novel: Novel) {
@@ -137,5 +165,13 @@ export class NovelListComponent implements OnInit {
 	addToCart(novelId: string, qty: number) {
 		this._cartService.addToCart(novelId, qty);
 		this.syncCartWithNovels();
+	}
+
+	trackByNovelId(_: number, novel: Novel): string {
+		return novel.id;
+	}
+
+	trackByCategoryName(_: number, category: Category): string {
+		return category._id;
 	}
 }
