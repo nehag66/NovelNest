@@ -14,6 +14,6 @@ export class AdBannerComponent {
 	constructor(private _router: Router) {}
 
 	goToSellUsedBooks() {
-		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.SELL_USED_BOOKS);
 	}
 }

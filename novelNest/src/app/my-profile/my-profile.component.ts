@@ -14,18 +14,18 @@ export class MyProfileComponent {
 	constructor(private _router: Router) {}
 
 	goToMyProfile() {
-		this._router.navigate([CLIENT_ROUTES.BASIC_INFO]);
+		this._router.navigateByUrl(CLIENT_ROUTES.BASIC_INFO);
 	}
 
 	goToMyOrders() {
-		this._router.navigate([CLIENT_ROUTES.MY_ORDERS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.MY_ORDERS);
 	}
 
 	goToMyAddresses() {
-		this._router.navigate([CLIENT_ROUTES.MY_ADDRESSES]);
+		this._router.navigateByUrl(CLIENT_ROUTES.MY_ADDRESSES);
 	}
 
 	goToWishList() {
-		this._router.navigate([CLIENT_ROUTES.WISHLIST]);
+		this._router.navigateByUrl(CLIENT_ROUTES.WISHLIST);
 	}
 }

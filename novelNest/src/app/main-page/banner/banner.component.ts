@@ -14,10 +14,10 @@ export class BannerComponent {
 	constructor(private _router: Router) {}
 
 	goToBuyBooks() {
-		this._router.navigate([CLIENT_ROUTES.NOVEL_LIST]);
+		this._router.navigateByUrl(CLIENT_ROUTES.NOVEL_LIST);
 	}
 
 	goToSellUsedBooks() {
-		this._router.navigate([CLIENT_ROUTES.SELL_USED_BOOKS]);
+		this._router.navigateByUrl(CLIENT_ROUTES.SELL_USED_BOOKS);
 	}
 }

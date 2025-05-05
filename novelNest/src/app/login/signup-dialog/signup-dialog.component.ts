@@ -56,10 +56,8 @@ export class SignupDialogComponent {
 			})
 			.subscribe({
 				next: () => {
-					// localStorage.setItem('accessToken', response.accessToken);
 					this._dialogRef.close();
-					// this._cartService.fetchCart();
-					this._router.navigate(['/']);
+					this._router.navigateByUrl('/');
 				},
 				error: (error) => {
 					this.errorMessage =
