@@ -76,7 +76,7 @@ export class AuthService {
 	}
 
 	logout() {
-		this.accessToken = null; // Add this line to clear in-memory token
+		this.accessToken = null;
 		this._storageService.remove('accessToken');
 		this._storageService.remove('refreshToken');
 		this._storageService.remove('userId');

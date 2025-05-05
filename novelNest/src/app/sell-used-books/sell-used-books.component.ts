@@ -34,7 +34,7 @@ export class SellUsedBooksComponent implements OnInit {
 	}[] = [];
 	fileNames = 'No files chosen';
 	BookConditions = BookCondition;
-
+	userId: string | null = '';
 	novelForm: FormGroup;
 	isEditMode = false;
 	novelId: string | null = null;
@@ -62,6 +62,7 @@ export class SellUsedBooksComponent implements OnInit {
 
 	ngOnInit() {
 		this.cachedAuthors = this._storageService.get<any[]>('authors') || [];
+		this.userId = this._storageService.get<string>('userId');
 		this.cachedAuthors.sort((a: Category, b: Category) =>
 			a.name?.localeCompare(b.name),
 		);
@@ -77,28 +78,6 @@ export class SellUsedBooksComponent implements OnInit {
 			this.isEditMode = true;
 			this.loadNovelDetails();
 		}
-	}
-
-	private loadNovelDetails() {
-		this._apiService
-			.get<{
-				message: string;
-				novels: Novel[];
-			}>(`novels/${this.novelId!}`)
-			.subscribe((novel: any) => {
-				this.novelForm.patchValue(novel.novel);
-				if (novel.novel.images) {
-					this.previews = novel.novel?.images?.map(
-						(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
-					);
-					this.fileNames = novel.novel?.images
-						.map((img: string) => this.getFileName(img))
-						.join(', ');
-				}
-			});
-	}
-	private getFileName(imageUrl: string): string {
-		return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
 	}
 
 	selectCategory(category: string) {
@@ -161,6 +140,8 @@ export class SellUsedBooksComponent implements OnInit {
 				formData.append('images', image);
 			});
 
+			formData.append('userId', JSON.stringify(this.userId));
+
 			if (!this.isEditMode) {
 				this._apiService
 					.post<{
@@ -187,7 +168,7 @@ export class SellUsedBooksComponent implements OnInit {
 					.subscribe({
 						next: () => {
 							this.isLoading = false;
-							this._router.navigate([CLIENT_ROUTES.NOVEL_LIST]);
+							this._router.navigateByUrl(CLIENT_ROUTES.NOVEL_LIST);
 						},
 						error: () => {
 							this.isLoading = false;
@@ -201,5 +182,27 @@ export class SellUsedBooksComponent implements OnInit {
 
 	resetForm() {
 		this.novelForm.reset();
+	}
+
+	private loadNovelDetails() {
+		this._apiService
+			.get<{
+				message: string;
+				novels: Novel[];
+			}>(`novels/${this.novelId!}`)
+			.subscribe((novel: any) => {
+				this.novelForm.patchValue(novel.novel);
+				if (novel.novel.images) {
+					this.previews = novel.novel?.images?.map(
+						(img: string) => `${CONSTANTS.IMAGE_URL}${img}`,
+					);
+					this.fileNames = novel.novel?.images
+						.map((img: string) => this.getFileName(img))
+						.join(', ');
+				}
+			});
+	}
+	private getFileName(imageUrl: string): string {
+		return imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
 	}
 }

@@ -64,9 +64,9 @@ export class NovelListComponent implements OnInit {
 		this._apiService
 			.get<{ message: string; categories: Category[] }>('categories')
 			.subscribe((response: CategoryResponse) => {
-				this.categories = response.categories.sort((a, b) =>
+				this.categories = response.categories;/* .sort((a, b) =>
 					a.name?.localeCompare(b.name),
-				);
+				); */
 				this.groupNovelsByCategory();
 			});
 	}

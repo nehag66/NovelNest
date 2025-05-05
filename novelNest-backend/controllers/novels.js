@@ -27,6 +27,7 @@ exports.getNovels = async (req, res) => {
 
 exports.getNovelDetails = (req, res) => {
 	Novel.findById(req.params.id)
+		.populate('user', 'name email')
 		.then((novel) => {
 			res.status(200).json({
 				message: 'Novel Fetched Successfully.',
@@ -56,7 +57,8 @@ exports.postAddNovel = async (req, res) => {
 			mrp: req.body.mrp,
 			author: req.body.author,
 			bookCondition: req.body.bookCondition,
-			images: images,
+			images: images.length ? images : req.body.images,
+			user: JSON.parse(req.body.userId),
 		});
 
 		const savedNovel = await novel.save();
@@ -96,6 +98,7 @@ exports.editNovel = (req, res) => {
 		author: req.body.author,
 		bookCondition: req.body.bookCondition,
 		images: images.length ? images : req.body.images,
+		user: JSON.parse(req.body.userId),
 	};
 
 	Novel.findByIdAndUpdate(req.params.id, updateData, {

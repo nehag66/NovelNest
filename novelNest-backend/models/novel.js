@@ -27,6 +27,7 @@ const novelSchema = new mongoose.Schema({
 		type: String,
 	},
 	images: [String],
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 const Novels = mongoose.model('Novel', novelSchema);
