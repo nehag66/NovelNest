@@ -85,6 +85,7 @@ export class NovelDetailsComponent implements OnInit {
 					images: novel.images.map(
 						(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
 					),
+					user: novel.user,
 				};
 				this.discountPercent = calculateDiscountPercentage(
 					novel.mrp,

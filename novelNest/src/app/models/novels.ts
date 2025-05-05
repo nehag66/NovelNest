@@ -14,6 +14,12 @@ export interface Novel {
 	cartQuantity: number;
 	bookCondition: string;
 	images?: any;
+	user: {
+		name: string;
+		email: string;
+		// mobile: number;
+		// address: string;
+	};
 }
 
 export interface NovelResponse {
