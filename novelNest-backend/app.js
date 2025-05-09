@@ -18,6 +18,8 @@ const cardsRoutes = require('./routes/cards');
 const cartRoutes = require('./routes/carts');
 const authorRoutes = require('./routes/author');
 const wishlistRoutes = require('./routes/wishlists');
+const paymentRoutes = require('./routes/payment');
+
 const path = require('path');
 // const errorController = require('./controllers/error');
 
@@ -30,18 +32,19 @@ app.get('/', (req, res) => {
 	res.send('Novel Nest Backend running');
 });
 
-mongoose.connect(process.env.MONGODB_URI, {
-	dbName: 'OldNovelsDB',
-})
-.then(() => {
-	app.listen(port, () => {
-		console.log(`✅ Server running on port ${port}`);
+mongoose
+	.connect(process.env.MONGODB_URI, {
+		dbName: 'OldNovelsDB',
+	})
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`✅ Server running on port ${port}`);
+		});
+		console.log('✅ Mongoose connected to MongoDB');
+	})
+	.catch((err) => {
+		console.error('❌ Mongoose connection error:', err);
 	});
-	console.log('✅ Mongoose connected to MongoDB');
-})
-.catch(err => {
-	console.error('❌ Mongoose connection error:', err);
-});
 
 app.use(usersRoutes);
 app.use(novelsRoutes);
@@ -50,6 +53,7 @@ app.use(cardsRoutes);
 app.use(cartRoutes);
 app.use(wishlistRoutes);
 app.use(authorRoutes);
+app.use(paymentRoutes);
 
 // Middleware to serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
