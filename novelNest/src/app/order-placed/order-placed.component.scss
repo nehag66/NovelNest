@@ -1,0 +1,35 @@
+.order-container {
+	max-width: 400px;
+	margin: 50px auto;
+	padding: 2rem;
+	border-radius: 12px;
+	text-align: center;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	background-color: #ffffff;
+}
+
+.order-icon {
+	font-size: 48px;
+	color: green;
+	margin-bottom: 1rem;
+}
+
+.order-details {
+	margin-top: 1rem;
+	text-align: left;
+}
+
+.order-details p {
+	margin: 4px 0;
+}
+
+.go-home-btn {
+	margin-top: 1.5rem;
+	padding: 0.5rem 1rem;
+	background-color: #4caf50;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: 500;
+}

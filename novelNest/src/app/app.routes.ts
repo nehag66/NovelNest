@@ -12,6 +12,7 @@ import { BasicInfoComponent } from './my-profile/basic-info/basic-info.component
 import { MyOrdersComponent } from './my-profile/my-orders/my-orders.component';
 import { MyAddressesComponent } from './my-profile/my-addresses/my-addresses.component';
 import { AuthorDetailsComponent } from './author-details/author-details.component';
+import { OrderPlacedComponent } from './order-placed/order-placed.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -27,40 +28,35 @@ export const CLIENT_ROUTES = {
 	BASIC_INFO: 'user-details',
 	MY_ORDERS: 'orders',
 	MY_ADDRESSES: 'addresses',
+	ORDER_PLACED: 'order-placed',
 	MAIN_PAGE: '',
 };
 
 export const routes: Routes = [
 	{
 		path: CLIENT_ROUTES.MY_CART,
-		// loadChildren: () => import('./my-cart/my-cart.component').then(m => m.MyCartComponent),
 		component: MyCartComponent,
 		title: 'My Cart',
-		// canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.SELL_USED_BOOKS,
-		// loadChildren: () => import('./sell-used-books/sell-used-books.component').then(m => m.SellUsedBooksComponent),
 		component: SellUsedBooksComponent,
 		title: 'Sell your used books for money',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.EDIT_NOVELS,
-		// loadChildren: () => import('./sell-used-books/sell-used-books.component').then(m => m.SellUsedBooksComponent),
 		component: SellUsedBooksComponent,
 		title: 'Edit Novel',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.NOVEL_LIST,
-		// loadChildren: () => import('./all-books/all-books.component').then(m => m.NovelListComponent),
 		component: NovelListComponent,
 		title: 'Buy New, Old and second hand books',
 	},
 	{
 		path: CLIENT_ROUTES.NOVEL_DETAILS,
-		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.NovelDetailsComponent),
 		component: NovelDetailsComponent,
 		title: 'Novel Details',
 		canActivate: [AuthGuard],
@@ -72,49 +68,48 @@ export const routes: Routes = [
 	},
 	{
 		path: CLIENT_ROUTES.BUY_BOOKS,
-		// loadChildren: () => import('./buy-now/buy-now.component').then(m => m.BuyNowComponent),
 		component: BuyNowComponent,
 		title: 'Buy Now',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.WISHLIST,
-		// loadChildren: () => import('./buy-now/buy-now.component').then(m => m.WishlistComponent),
 		component: WishlistComponent,
 		title: 'Wishlist',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.PROFILE_DETAILS,
-		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.MyProfileComponent),
 		component: MyProfileComponent,
 		title: 'Profile',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.BASIC_INFO,
-		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.MyProfileComponent),
 		component: BasicInfoComponent,
 		title: 'Profile Details',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.MY_ORDERS,
-		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.MyProfileComponent),
 		component: MyOrdersComponent,
 		title: 'Orders',
 		canActivate: [AuthGuard],
 	},
 	{
 		path: CLIENT_ROUTES.MY_ADDRESSES,
-		// loadChildren: () => import('./all-books/novel-details/novel-details.component').then(m => m.MyProfileComponent),
 		component: MyAddressesComponent,
 		title: 'Addresses',
 		canActivate: [AuthGuard],
 	},
 	{
+		path: CLIENT_ROUTES.ORDER_PLACED,
+		component: OrderPlacedComponent,
+		title: 'Order Placed Successfully!',
+		canActivate: [AuthGuard],
+	},
+	{
 		path: CLIENT_ROUTES.MAIN_PAGE,
-		// loadChildren: () => import('./main-page/main-page.component').then(m => m.MainPageComponent),
 		component: MainPageComponent,
 		title: 'Novel Nest',
 	},
