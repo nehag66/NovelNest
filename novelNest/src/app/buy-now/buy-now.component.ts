@@ -1,8 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
+import { ApiService } from 'services/api.service';
+import { PaymentService } from 'services/payment.service';
+import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
 @Component({
 	selector: 'app-buy-now',
@@ -12,10 +16,14 @@ import { CONSTANTS } from 'shared/constants';
 	styleUrl: './buy-now.component.scss',
 })
 export class BuyNowComponent implements OnInit {
+	isLoading = false;
 	novelDetails!: Novel;
 	selectedNovels: any[] = [];
+	userDetails: any;
 
 	orderTotal = 0;
+	userId: any;
+	paymentResponse: any;
 
 	paymentMethods = [
 		{
@@ -50,7 +58,12 @@ export class BuyNowComponent implements OnInit {
 
 	selectedPaymentMethod = this.paymentMethods.find((p) => p.default);
 
-	constructor(private _router: Router) {
+	constructor(
+		private _router: Router,
+		private _storageService: StorageService,
+		private _apiService: ApiService,
+		private _paymentService: PaymentService,
+	) {
 		const navigation = this._router.getCurrentNavigation();
 		this.selectedNovels = (
 			navigation?.extras.state?.['selectedNovels'] || []
@@ -73,6 +86,7 @@ export class BuyNowComponent implements OnInit {
 			(acc, curr) => acc + curr.novelId.price * curr.quantity,
 			0,
 		);
+		this.fetchUserDetails();
 	}
 
 	confirmPayment() {
@@ -81,5 +95,36 @@ export class BuyNowComponent implements OnInit {
 		);
 	}
 
-	placeOrder() {}
+	fetchUserDetails() {
+		this.userId = this._storageService.get<any[]>('userId') || [];
+		this._apiService
+			.get<{
+				message: string;
+				user: any;
+			}>(`users/${this.userId}`)
+			.subscribe((res) => {
+				this.userDetails = res.user;
+			});
+	}
+
+	placeOrder() {
+		this.isLoading = true;
+		this._paymentService
+			.makePayment(this.userId, this.orderTotal)
+			.subscribe({
+				next: (res) => {
+					this.isLoading = false;
+					this.paymentResponse = res;
+					this.goToOrderPlacedPage();
+				},
+				error: (err) => {
+					this.isLoading = false;
+					console.error('Payment failed', err);
+				},
+			});
+	}
+
+	goToOrderPlacedPage() {
+		this._router.navigateByUrl(CLIENT_ROUTES.ORDER_PLACED);
+	}
 }

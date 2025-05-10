@@ -1,13 +1,17 @@
 <div class="row p-4 container">
+	<div *ngIf="isLoading" class="loading-overlay">
+		<mat-spinner [diameter]="50"></mat-spinner>
+	</div>
 	<div class="col-9">
 		<h3 class="mb-4">How would you like to pay?</h3>
 		<div class="payment-container border p-3">
 			<!-- Delivery Section -->
-			<div class="checkout-section">
-				<h4>Delivering to <span class="bold">Ashish Kumar</span></h4>
+			<div class="checkout-section" *ngIf="userDetails">
+				<h4>Delivering to <span class="bold">{{userDetails.name}}</span></h4>
 				<p>
-					2-F/30, NEHRU NAGAR, Ghaziabad, UttarPradesh, 201001, India
+					{{userDetails.address}}
 				</p>
+				<!-- address change -->
 				<!-- <a href="#" class="change-link">Change</a> -->
 			</div>
 
@@ -90,8 +94,8 @@
 							<mat-select placeholder="Choose an Option">
 								<mat-option
 									*ngFor="let bank of paymentMethods"
-									[value]="bank"
-									>{{ bank }}</mat-option
+									[value]="bank.cardName"
+									>{{ bank.cardName }}</mat-option
 								>
 							</mat-select>
 						</mat-radio-button>
