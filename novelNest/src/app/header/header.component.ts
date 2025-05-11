@@ -8,6 +8,7 @@ import { MaterialModule } from 'app/material.module';
 import { Subject } from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
+import { SearchService } from 'services/search.service';
 
 @Component({
 	selector: 'app-header',
@@ -17,16 +18,20 @@ import { CartService } from 'services/cart.service';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnDestroy {
+	private destroy$ = new Subject<void>();
 	cartCount = 0;
 	cartItems: any;
 	isLoggedIn = false;
-	private destroy$ = new Subject<void>();
+
+	searchTerm = '';
+	results: any[] = [];
 
 	constructor(
 		private _dialog: MatDialog,
 		private _router: Router,
 		private _cartService: CartService,
 		private _authService: AuthService,
+		private _searchService: SearchService,
 	) {
 		this._authService.getAuthState().subscribe((state) => {
 			this.isLoggedIn = state;
@@ -50,6 +55,23 @@ export class HeaderComponent implements OnDestroy {
 		});
 
 		dialogRef.afterClosed().subscribe();
+	}
+
+	onSearch() {
+		if (this.searchTerm.trim()) {
+			this._searchService.searchBooks(this.searchTerm).subscribe(
+				(data) => {
+					this.results = data;
+					// Redirect to the novel list page and pass the search results or searchTerm
+					this._router.navigate([CLIENT_ROUTES.NOVEL_LIST], { queryParams: { search: this.searchTerm } });
+				},
+				(error) => {
+					console.error('Error during search:', error);
+				},
+			);
+		} else {
+			this.results = [];
+		}
 	}
 
 	goToCart() {

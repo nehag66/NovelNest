@@ -11,13 +11,14 @@
 	</div>
 	<div class="search-container">
 		<mat-form-field appearance="outline" class="search-bar">
-			<input
-				matInput
-				placeholder="Book Name / Author / Subject / Publisher"
-			/>
+		  <input
+			matInput
+			placeholder="Book Name / Author / Subject / Publisher"
+			[(ngModel)]="searchTerm"
+		  />
 		</mat-form-field>
-		<button mat-flat-button class="search-btn">Search</button>
-	</div>
+		<button mat-flat-button class="search-btn" (click)="onSearch()">Search</button>
+	  </div>
 	<button
 		mat-flat-button
 		(click)="goToSellUsedBooks()"

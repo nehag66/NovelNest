@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import {
@@ -40,16 +40,31 @@ export class NovelListComponent implements OnInit {
 	categories: Category[] = [];
 	groupedNovels: Record<string, Novel[]> = {};
 
+	searchTerm = '';
+
 	constructor(
 		private _router: Router,
 		private _apiService: ApiService,
 		private _cartService: CartService,
 		private _storageService: StorageService,
+		private _activatedRoute: ActivatedRoute,
 	) {}
 
 	ngOnInit() {
 		this.isLoading = true;
-		this.isLoggedIn = this._storageService.get('accessToken');;
+		this.isLoggedIn = this._storageService.get('accessToken');
+
+		this._activatedRoute.queryParams.subscribe((params) => {
+			this.searchTerm = params['search'] || '';
+			this.resetAndFetchNovels();
+		});
+	}
+
+	resetAndFetchNovels() {
+		this.page = 1;
+		this.novels = [];
+		this.hasMoreNovels = true;
+		this.groupedNovels = {};
 		this.fetchNovels();
 	}
 
@@ -64,7 +79,7 @@ export class NovelListComponent implements OnInit {
 		this._apiService
 			.get<{ message: string; categories: Category[] }>('categories')
 			.subscribe((response: CategoryResponse) => {
-				this.categories = response.categories;/* .sort((a, b) =>
+				this.categories = response.categories; /* .sort((a, b) =>
 					a.name?.localeCompare(b.name),
 				); */
 				this.groupNovelsByCategory();
@@ -82,6 +97,7 @@ export class NovelListComponent implements OnInit {
 				{
 					page: this.page,
 					limit: this.limit,
+					search: this.searchTerm || '',
 				},
 			)
 			.pipe(
@@ -128,13 +144,41 @@ export class NovelListComponent implements OnInit {
 			});
 	}
 
+	// Filtered novels based on search term
+	filterNovelsBySearchTerm(): Novel[] {
+		if (!this.searchTerm) return this.novels;
+		return this.novels.filter((novel) => {
+			return (
+				novel.title
+					.toLowerCase()
+					.includes(this.searchTerm.toLowerCase()) ||
+				novel.author
+					.toLowerCase()
+					.includes(this.searchTerm.toLowerCase()) ||
+				novel.category
+					.toLowerCase()
+					.includes(this.searchTerm.toLowerCase())
+			);
+		});
+	}
+
+	// Group novels by category
 	groupNovelsByCategory(): void {
+		this.categories.forEach((category) => {
+			this.groupedNovels[category.name] =
+				this.filterNovelsBySearchTerm().filter(
+					(novel: any) => novel.category === category.name,
+				);
+		});
+	}
+
+	/* groupNovelsByCategory(): void {
 		this.categories.forEach((category) => {
 			this.groupedNovels[category.name] = this.novels.filter(
 				(novel) => novel.category === category.name,
 			);
 		});
-	}
+	} */
 
 	editNovel(novel: Novel) {
 		this._router.navigate(['/post-ad', novel.id]);
