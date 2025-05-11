@@ -19,6 +19,7 @@ const cartRoutes = require('./routes/carts');
 const authorRoutes = require('./routes/author');
 const wishlistRoutes = require('./routes/wishlists');
 const paymentRoutes = require('./routes/payment');
+const searchRoutes = require('./routes/search');
 
 const path = require('path');
 // const errorController = require('./controllers/error');
@@ -46,6 +47,7 @@ mongoose
 		console.error('❌ Mongoose connection error:', err);
 	});
 
+app.use(searchRoutes);
 app.use(usersRoutes);
 app.use(novelsRoutes);
 app.use(categoriesRoutes);
