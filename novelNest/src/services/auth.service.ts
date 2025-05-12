@@ -75,6 +75,19 @@ export class AuthService {
 			);
 	}
 
+	sendResetLink(email: string) {
+		return this._apiService.post<{ msg: string }>('auth/forgot-password', {
+			email,
+		});
+	}
+
+	resetPassword(token: string, password: string) {
+		return this._apiService.post<{ msg: string }>(
+			`auth/reset-password/${token}`,
+			{ password },
+		);
+	}
+
 	logout() {
 		this.accessToken = null;
 		this._storageService.remove('accessToken');
