@@ -12,6 +12,7 @@ import { AuthService } from 'services/auth.service';
 import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CartService } from 'services/cart.service';
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'app-login-dialog',
@@ -56,17 +57,17 @@ export class LoginDialogComponent {
 				email: this.loginForm.value.emailOrPhone,
 				password: this.loginForm.value.password,
 			})
+			.pipe(finalize(() => (this.isLoading = false)))
 			.subscribe({
 				next: () => {
-					this.isLoading = false;
 					this._dialogRef.close();
 					this._cartService.fetchCart();
 					this._router.navigateByUrl('/');
 				},
 				error: (error) => {
 					this.errorMessage =
-						error.error.message || 'Invalid credentials';
-					this.isLoading = false;
+						error?.error?.message ||
+						'Invalid credentials';
 				},
 			});
 	}

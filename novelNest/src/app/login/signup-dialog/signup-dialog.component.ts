@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
 import { LoginSignupDialogComponent } from '../login-signup-dialog/login-signup-dialog.component';
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'app-signup-dialog',
@@ -54,6 +55,7 @@ export class SignupDialogComponent {
 				email: this.signUpForm.value.email,
 				password: this.signUpForm.value.password,
 			})
+			.pipe(finalize(() => (this.isLoading = false)))
 			.subscribe({
 				next: () => {
 					this._dialogRef.close();
@@ -61,8 +63,9 @@ export class SignupDialogComponent {
 				},
 				error: (error) => {
 					this.errorMessage =
-						error.error.message || 'Invalid credentials';
-					this.isLoading = false;
+						typeof error?.error === 'string'
+							? error.error
+							: error?.error?.message || 'Signup failed';
 				},
 			});
 	}

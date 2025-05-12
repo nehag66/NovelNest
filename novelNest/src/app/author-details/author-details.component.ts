@@ -46,6 +46,6 @@ export class AuthorDetailsComponent implements OnInit {
 	}
 
 	goToNovelDetails(novelId: string) {
-			this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
-		}
+		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
+	}
 }
