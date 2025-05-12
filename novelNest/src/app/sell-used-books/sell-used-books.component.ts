@@ -140,7 +140,9 @@ export class SellUsedBooksComponent implements OnInit {
 				formData.append('images', image);
 			});
 
-			formData.append('userId', JSON.stringify(this.userId));
+			if (this.userId) {
+				formData.append('userId', this.userId);
+			}
 
 			if (!this.isEditMode) {
 				this._apiService
@@ -168,7 +170,9 @@ export class SellUsedBooksComponent implements OnInit {
 					.subscribe({
 						next: () => {
 							this.isLoading = false;
-							this._router.navigateByUrl(CLIENT_ROUTES.NOVEL_LIST);
+							this._router.navigateByUrl(
+								CLIENT_ROUTES.NOVEL_LIST,
+							);
 						},
 						error: () => {
 							this.isLoading = false;

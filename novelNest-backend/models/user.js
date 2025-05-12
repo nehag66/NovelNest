@@ -8,11 +8,11 @@ const userSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
 	},
 	password: {
 		type: String,
-		required: true
+		required: true,
 	},
 	mobile: {
 		type: Number,
@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema({
 	address: {
 		type: String,
 	},
-	
+
+	resetPasswordToken: String,
+	resetPasswordExpires: Date,
+
 	// userType: {
 	// 	type: String,
 	// 	required: true,
