@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = express.Router();
 require('dotenv').config();
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
 // Register a new user
 router.post(
@@ -26,7 +28,7 @@ router.post(
 		try {
 			let user = await User.findOne({ email });
 			if (user)
-				return res.status(400).json({ msg: 'User already exists' });
+				return res.status(400).json({ message: 'User already exists' });
 
 			const salt = await bcrypt.genSalt(10);
 			const hashedPassword = await bcrypt.hash(password, salt);
@@ -46,7 +48,7 @@ router.post(
 				{ expiresIn: '1m' },
 			);
 
-			res.json({ accessToken, refreshToken, userId});
+			res.json({ accessToken, refreshToken, userId });
 		} catch (err) {
 			res.status(500).send('Server Error');
 		}
@@ -70,11 +72,11 @@ router.post(
 		try {
 			let user = await User.findOne({ email });
 			if (!user)
-				return res.status(400).json({ msg: 'Invalid Credentials' });
+				return res.status(400).json({ message: 'Invalid Credentials' });
 
 			const isMatch = await bcrypt.compare(password, user.password);
 			if (!isMatch)
-				return res.status(400).json({ msg: 'Invalid Credentials' });
+				return res.status(400).json({ message: 'Invalid Credentials' });
 			let userId = user.id;
 			const payload = { userId: userId.toString() };
 			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -93,7 +95,7 @@ router.post(
 			res.json({
 				accessToken,
 				refreshToken,
-				userId
+				userId,
 			});
 		} catch (err) {
 			res.status(500).json({
@@ -104,20 +106,80 @@ router.post(
 	},
 );
 
+router.post('/forgot-password', async (req, res) => {
+	const { email } = req.body;
+	try {
+		const user = await User.findOne({ email });
+		if (!user)
+			return res
+				.status(400)
+				.json({ msg: 'No user found with this email' });
+
+		const token = crypto.randomBytes(20).toString('hex');
+
+		user.resetPasswordToken = token;
+		user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+		await user.save();
+
+		const resetUrl = `http://localhost:4200/reset-password/${token}`;
+
+		// Use nodemailer to send reset email
+		const transporter = nodemailer.createTransport({
+			service: 'Gmail',
+			auth: {
+				user: process.env.EMAIL_USER,
+				pass: process.env.EMAIL_PASS,
+			},
+		});
+
+		await transporter.sendMail({
+			to: user.email,
+			subject: 'Password Reset',
+			html: `<p>Click <a href="${resetUrl}">here</a> to reset your password. Link expires in 1 hour.</p>`,
+		});
+
+		res.json({ msg: 'Reset link sent to email' });
+	} catch (err) {
+		res.status(500).json({ error: 'Server error' });
+	}
+});
+
+router.post('/reset-password/:token', async (req, res) => {
+	const { token } = req.params;
+	const { password } = req.body;
+
+	try {
+		const user = await User.findOne({
+			resetPasswordToken: token,
+			resetPasswordExpires: { $gt: Date.now() },
+		});
+
+		if (!user)
+			return res.status(400).json({ msg: 'Token is invalid or expired' });
+
+		const salt = await bcrypt.genSalt(10);
+		user.password = await bcrypt.hash(password, salt);
+		user.resetPasswordToken = undefined;
+		user.resetPasswordExpires = undefined;
+
+		await user.save();
+		res.json({ msg: 'Password successfully updated' });
+	} catch (err) {
+		res.status(500).json({ error: 'Server error' });
+	}
+});
+
 router.post('/refresh-token', async (req, res) => {
-	const { refreshToken } = req.body;	
+	const { refreshToken } = req.body;
 
 	if (!refreshToken)
 		return res.status(401).json({ msg: 'Refresh token required' });
 
 	try {
 		// Verify refresh token
-		const decoded = jwt.verify(
-			refreshToken,
-			process.env.REFRESH_SECRET,
-		);
+		const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 		const userId = decoded.userId;
-		
+
 		// You could check if the refreshToken is in DB and still valid (optional)
 
 		// Generate new access token
