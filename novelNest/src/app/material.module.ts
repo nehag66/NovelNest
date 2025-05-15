@@ -13,8 +13,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
+	imports: [NgOptimizedImage],
 	exports: [
 		MatButtonModule,
 		MatInputModule,
@@ -30,6 +32,7 @@ import { FormsModule } from '@angular/forms';
 		MatDividerModule,
 		MatProgressSpinnerModule,
 		FormsModule,
+		NgOptimizedImage,
 	],
 })
 export class MaterialModule {}
