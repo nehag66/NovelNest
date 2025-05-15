@@ -12,30 +12,33 @@
 					<div class="col-4" *ngIf="novelDetails.images?.length > 0">
 						<img
 							*ngFor="let img of novelDetails.images"
-							[src]="img"
+							[ngSrc]="img"
 							alt="Novel Image"
+							height="100"
 							width="100"
 							class="image-style"
-							loading="lazy"
 							(click)="onImageClick(img)"
 							tabindex="0"
 							role="button"
 							(keydown.enter)="onImageClick(img)"
 							(keydown.space)="onImageClick(img)"
+							aria-label="Click to view image"
+							aria-hidden="false"
 						/>
 					</div>
 					<div class="col-8" *ngIf="novelDetails.images">
 						<img
 							*ngIf="novelDetails.images?.length"
-							[src]="
+							[ngSrc]="
 								currentDisplayedImg
 									? currentDisplayedImg
 									: novelDetails.images[0]
 							"
-							alt="{{ novelDetails.title }}"
+							[alt]="novelDetails.title"
+							height="300"
 							width="300"
-							loading="lazy"
 							class="zoom-img"
+							priority
 						/>
 					</div>
 				</div>
@@ -86,11 +89,13 @@
 						M.R.P.: <del>&#8377;{{ novelDetails.mrp }}</del>
 					</div>
 					<div>Inclusive of all taxes</div>
-					<hr />
-					<div>
+					<hr *ngIf="novelDetails.user" />
+					<div *ngIf="novelDetails.user">
 						<h5>Seller Details</h5>
 						<div><b>Name:</b> {{ novelDetails.user.name }}</div>
-						<div><b>Email ID:</b> {{ novelDetails.user.email }}</div>
+						<div>
+							<b>Email ID:</b> {{ novelDetails.user.email }}
+						</div>
 					</div>
 				</div>
 			</div>

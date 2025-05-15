@@ -30,15 +30,6 @@
 	cursor: pointer;
 }
 
-.image-style {
-	height: 150px;
-	border-radius: 8px;
-	margin-right: 10px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-	margin-bottom: 10px;
-	cursor: pointer;
-}
-
 .title-share-icon {
 	position: relative;
 }
@@ -72,7 +63,19 @@
 	color: #605d5d;
 }
 
+.image-style {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+	border-radius: 8px;
+	margin-right: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
 .zoom-img {
+    object-fit: contain;
 	transition: transform 0.3s ease;
 }
 
