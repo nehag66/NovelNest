@@ -25,12 +25,20 @@
 
 .book-card {
 	flex: 0 0 auto;
-	width: 200px;
+	width: 260px;
 	background: white;
 	padding: 15px;
 	border-radius: 12px;
+	line-height: 16px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transition: transform 0.3s ease-in-out;
+	margin-bottom: 1rem;
+}
+
+.book-card img {
+	width: 60%;
+    height: 10rem;
+    object-fit: cover;
 }
 
 .book-card h4 {
@@ -47,8 +55,8 @@
 
 .book-card button {
 	color: #fff;
-    border-color: #0083ca;
-    background-color: #0083ca;
+	border-color: #0083ca;
+	background-color: #0083ca;
 	padding: 8px 12px;
 	border: none;
 	border-radius: 6px;

@@ -7,18 +7,26 @@
 		role="button"
 		class="cursor-pointer"
 	>
-		<img src="novel-nest-logo.png" alt="logo" height="120" loading="lazy" />
+		<img
+			ngSrc="novel-nest-logo.png"
+			alt="logo"
+			width="120"
+			height="120"
+			priority
+		/>
 	</div>
 	<div class="search-container">
 		<mat-form-field appearance="outline" class="search-bar">
-		  <input
-			matInput
-			placeholder="Book Name / Author / Subject / Publisher"
-			[(ngModel)]="searchTerm"
-		  />
+			<input
+				matInput
+				placeholder="Book Name / Author / Subject / Publisher"
+				[(ngModel)]="searchTerm"
+			/>
 		</mat-form-field>
-		<button mat-flat-button class="search-btn" (click)="onSearch()">Search</button>
-	  </div>
+		<button mat-flat-button class="search-btn" (click)="onSearch()">
+			Search
+		</button>
+	</div>
 	<button
 		mat-flat-button
 		(click)="goToSellUsedBooks()"
