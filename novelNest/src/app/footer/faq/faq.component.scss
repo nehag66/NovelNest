@@ -1,0 +1,21 @@
+.faq-container {
+	padding: 2rem;
+	max-width: 800px;
+	margin: auto;
+}
+
+.faq-item {
+	margin-bottom: 1rem;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+}
+
+.faq-item h4 {
+	margin: 0;
+	font-weight: bold;
+	color: #007acc;
+}
+
+.faq-item p {
+	padding: 0.5rem 0;
+}
