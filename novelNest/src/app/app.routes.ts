@@ -13,6 +13,11 @@ import { MyOrdersComponent } from './my-profile/my-orders/my-orders.component';
 import { MyAddressesComponent } from './my-profile/my-addresses/my-addresses.component';
 import { AuthorDetailsComponent } from './author-details/author-details.component';
 import { OrderPlacedComponent } from './order-placed/order-placed.component';
+import { AboutComponent } from './footer/about/about.component';
+import { ContactUsComponent } from './footer/contact-us/contact-us.component';
+import { FeedbackComponent } from './footer/feedback/feedback.component';
+import { HowItWorksComponent } from './footer/how-it-works/how-it-works.component';
+import { FaqComponent } from './footer/faq/faq.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -30,6 +35,13 @@ export const CLIENT_ROUTES = {
 	MY_ADDRESSES: 'addresses',
 	ORDER_PLACED: 'order-placed',
 	MAIN_PAGE: '',
+	FOOTER_ROUTES: {
+		ABOUT: 'about',
+		CONTACT_US: 'contact-us',
+		FEEDBACK: 'feedback',
+		HOWITWORKS: 'how-it-works',
+		FAQ: 'faq',
+	},
 };
 
 export const routes: Routes = [
@@ -112,5 +124,30 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.MAIN_PAGE,
 		component: MainPageComponent,
 		title: 'Novel Nest',
+	},
+	{
+		path: CLIENT_ROUTES.FOOTER_ROUTES.ABOUT,
+		component: AboutComponent,
+		title: 'About',
+	},
+	{
+		path: CLIENT_ROUTES.FOOTER_ROUTES.CONTACT_US,
+		component: ContactUsComponent,
+		title: 'Contact Us',
+	},
+	{
+		path: CLIENT_ROUTES.FOOTER_ROUTES.FEEDBACK,
+		component: FeedbackComponent,
+		title: 'Give us Feedback',
+	},
+	{
+		path: CLIENT_ROUTES.FOOTER_ROUTES.HOWITWORKS,
+		component: HowItWorksComponent,
+		title: 'How it works?',
+	},
+	{
+		path: CLIENT_ROUTES.FOOTER_ROUTES.FAQ,
+		component: FaqComponent,
+		title: 'Frequently Asked Questions',
 	},
 ];

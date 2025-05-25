@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 
 @Component({
@@ -8,4 +9,6 @@ import { MaterialModule } from 'app/material.module';
 	templateUrl: './footer.component.html',
 	styleUrl: './footer.component.scss',
 })
-export class FooterComponent {}
+export class FooterComponent {
+	CLIENT_ROUTES = CLIENT_ROUTES;
+}

@@ -109,7 +109,7 @@ exports.editNovel = async (req, res) => {
 
 		if (req.files && req.files.length > 0) {
 			for (const file of req.files) {
-				const resizedPath = `uploads/resized-${file.filename}`;
+				const resizedPath = `uploads/${file.filename}`;
 				
 				// Resize and compress the image
 				await sharp(file.path)
