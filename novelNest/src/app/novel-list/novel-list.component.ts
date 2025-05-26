@@ -5,7 +5,6 @@ import { MaterialModule } from 'app/material.module';
 import {
 	BookCondition,
 	Category,
-	CategoryResponse,
 	Novel,
 	NovelResponse,
 } from 'app/models/novels';
@@ -38,7 +37,6 @@ export class NovelListComponent implements OnInit {
 	limit = 20;
 	hasMoreNovels = true;
 	categories: Category[] = [];
-	groupedNovels: Record<string, Novel[]> = {};
 
 	searchTerm = '';
 
@@ -64,7 +62,6 @@ export class NovelListComponent implements OnInit {
 		this.page = 1;
 		this.novels = [];
 		this.hasMoreNovels = true;
-		this.groupedNovels = {};
 		this.fetchNovels();
 	}
 
@@ -73,17 +70,6 @@ export class NovelListComponent implements OnInit {
 			this.cartItems = cart?.items;
 			this.syncCartWithNovels();
 		});
-	}
-
-	getCategories() {
-		this._apiService
-			.get<{ message: string; categories: Category[] }>('categories')
-			.subscribe((response: CategoryResponse) => {
-				this.categories = response.categories; /* .sort((a, b) =>
-					a.name?.localeCompare(b.name),
-				); */
-				this.groupNovelsByCategory();
-			});
 	}
 
 	fetchNovels() {
@@ -140,7 +126,6 @@ export class NovelListComponent implements OnInit {
 				} else {
 					this.page++;
 				}
-				this.getCategories();
 			});
 	}
 
@@ -162,23 +147,15 @@ export class NovelListComponent implements OnInit {
 		});
 	}
 
-	// Group novels by category
-	groupNovelsByCategory(): void {
-		this.categories.forEach((category) => {
-			this.groupedNovels[category.name] =
-				this.filterNovelsBySearchTerm().filter(
-					(novel: any) => novel.category === category.name,
-				);
+	clearSearch() {
+		this.searchTerm = '';
+		this.resetAndFetchNovels();
+		this._router.navigate([], {
+			relativeTo: this._activatedRoute,
+			queryParams: { search: null },
+			queryParamsHandling: 'merge',
 		});
 	}
-
-	/* groupNovelsByCategory(): void {
-		this.categories.forEach((category) => {
-			this.groupedNovels[category.name] = this.novels.filter(
-				(novel) => novel.category === category.name,
-			);
-		});
-	} */
 
 	editNovel(novel: Novel) {
 		this._router.navigate(['/post-ad', novel.id]);
@@ -211,9 +188,5 @@ export class NovelListComponent implements OnInit {
 
 	trackByNovelId(_: number, novel: Novel): string {
 		return novel.id;
-	}
-
-	trackByCategoryName(_: number, category: Category): string {
-		return category._id;
 	}
 }
