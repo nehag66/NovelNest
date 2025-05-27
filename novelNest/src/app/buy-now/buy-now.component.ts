@@ -5,6 +5,7 @@ import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import { Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { CartService } from 'services/cart.service';
 import { PaymentService } from 'services/payment.service';
 import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
@@ -63,6 +64,7 @@ export class BuyNowComponent implements OnInit {
 		private _storageService: StorageService,
 		private _apiService: ApiService,
 		private _paymentService: PaymentService,
+		private _cartService: CartService,
 	) {
 		const navigation = this._router.getCurrentNavigation();
 		this.selectedNovels = (
@@ -114,7 +116,12 @@ export class BuyNowComponent implements OnInit {
 			.subscribe({
 				next: (res) => {
 					this.isLoading = false;
-					this.paymentResponse = res;
+					// this.paymentResponse = res;
+
+					this.selectedNovels.forEach((item: any) => {
+						this._cartService.removeFromCart(item).subscribe();
+					});
+
 					this.goToOrderPlacedPage();
 				},
 				error: (err) => {
@@ -125,6 +132,7 @@ export class BuyNowComponent implements OnInit {
 	}
 
 	goToOrderPlacedPage() {
+		this._cartService.fetchCart();
 		this._router.navigateByUrl(CLIENT_ROUTES.ORDER_PLACED);
 	}
 }
