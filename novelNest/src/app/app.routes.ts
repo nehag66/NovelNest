@@ -18,12 +18,14 @@ import { ContactUsComponent } from './footer/contact-us/contact-us.component';
 import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { HowItWorksComponent } from './footer/how-it-works/how-it-works.component';
 import { FaqComponent } from './footer/faq/faq.component';
+import { NoResultFoundComponent } from './novel-list/no-result-found/no-result-found.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
 	SELL_USED_BOOKS: 'post-ad',
 	EDIT_NOVELS: 'post-ad/:id',
 	NOVEL_LIST: 'novels',
+	NO_RESULTS_FOUND: 'no-results',
 	BUY_BOOKS: 'buy-books',
 	WISHLIST: 'wishlist',
 	NOVEL: 'novels',
@@ -66,6 +68,11 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.NOVEL_LIST,
 		component: NovelListComponent,
 		title: 'Buy New, Old and second hand books',
+	},
+	{
+		path: CLIENT_ROUTES.NO_RESULTS_FOUND,
+		component: NoResultFoundComponent,
+		title: 'No Results Found',
 	},
 	{
 		path: CLIENT_ROUTES.NOVEL_DETAILS,
