@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { CartResponse, Wishlist } from 'app/models/novels';
+import { Wishlist } from 'app/models/novels';
+import { take } from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { WishlistService } from 'services/wishlist.service';
@@ -18,7 +19,7 @@ import { CONSTANTS } from 'shared/constants';
 })
 export class WishlistComponent implements OnInit {
 	wishlist: any;
-	cartItems: CartResponse[] = [];
+	cartItems: any;
 	isLoggedIn: string | null = null;
 
 	constructor(
@@ -55,24 +56,33 @@ export class WishlistComponent implements OnInit {
 	}
 
 	attachCartQuantity() {
-		if (!this.wishlist) return;
+		if (!this.wishlist || !this.cartItems) return;
 
 		this.wishlist = this.wishlist.map((novel: Wishlist) => {
-			const cartItem = this.cartItems.find(
-				(item: any) => item.novelId?._id === novel.novelId?._id,
-			);
+			const cartItem = this.cartItems.find((item: any) => {
+				const cartNovelId =
+					typeof item.novelId === 'string'
+						? item.novelId
+						: item.novelId?._id;
+				return cartNovelId === novel.novelId?._id;
+			});
+
 			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
+		});
+	}
+
+	addToCart(novelId: string, qty: number) {
+		this._cartService.addToCart(novelId, qty).subscribe(() => {
+			this._cartService.cartItems$.pipe(take(1)).subscribe((items) => {
+				this.cartItems = items;
+				this.attachCartQuantity();
+			});
 		});
 	}
 
 	buyBtnDisabled(novel: Wishlist): boolean {
 		if (!novel.cartQuantity || novel.cartQuantity < 0) return false;
 		return novel.novelId?.totalQuantity <= novel.cartQuantity;
-	}
-
-	addToCart(novelId: string, qty: number) {
-		this._cartService.addToCart(novelId, qty);
-		this.attachCartQuantity();
 	}
 
 	removeFromWishlist(novelId: string) {

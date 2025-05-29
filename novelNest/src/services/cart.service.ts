@@ -52,16 +52,14 @@ export class CartService {
 	}
 
 	/** ✅ Add item to cart */
-	addToCart(novelId: string, quantity: number) {
-		return this._apiService
-			.post(`cart/add`, { novelId, quantity })
-			.pipe(
-				tap((response: any) => {
-					this.cartItemsSubject.next(response.items); // Update cart items
-					this.updateCartCount(response.items); // Ensure count is updated
-				}),
-			)
-			.subscribe(() => this.fetchCart());
+
+	addToCart(novelId: string, quantity: number): Observable<any> {
+		return this._apiService.post(`cart/add`, { novelId, quantity }).pipe(
+			tap((response: any) => {
+				this.cartItemsSubject.next(response.items); // Update cart items
+				this.updateCartCount(response.items); // Ensure count is updated
+			}),
+		);
 	}
 
 	fetchCart() {

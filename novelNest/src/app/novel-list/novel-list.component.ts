@@ -170,20 +170,27 @@ export class NovelListComponent implements OnInit {
 		if (!this.cartItems) return;
 
 		this.novels = this.novels.map((novel) => {
-			const cartItem = this.cartItems.find(
-				(item: any) => item.novelId?._id === novel.id,
-			);
+			const cartItem = this.cartItems.find((item: any) => {
+				const cartNovelId =
+					typeof item.novelId === 'string'
+						? item.novelId
+						: item.novelId?._id;
+				return cartNovelId === novel.id;
+			});
+
 			return { ...novel, cartQuantity: cartItem ? cartItem.quantity : 0 };
+		});
+	}
+
+	addToCart(novelId: string, qty: number) {
+		this._cartService.addToCart(novelId, qty).subscribe((response) => {
+			this.cartItems = response.items;
+			this.syncCartWithNovels();
 		});
 	}
 
 	goToNovelDetails(novelId: string) {
 		this._router.navigate([CLIENT_ROUTES.NOVEL, novelId]);
-	}
-
-	addToCart(novelId: string, qty: number) {
-		this._cartService.addToCart(novelId, qty);
-		this.syncCartWithNovels();
 	}
 
 	trackByNovelId(_: number, novel: Novel): string {

@@ -123,7 +123,7 @@ export class NovelDetailsComponent implements OnInit {
 			this.novelDetails.cartQuantity === 0
 				? 1
 				: this.novelDetails.cartQuantity + 1,
-		);
+		).subscribe();
 	}
 
 	toggleHeart() {
