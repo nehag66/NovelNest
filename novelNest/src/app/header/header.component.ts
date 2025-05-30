@@ -58,12 +58,23 @@ export class HeaderComponent implements OnDestroy {
 	}
 
 	onSearch() {
-		if (this.searchTerm.trim()) {
+		const trimmedTerm = this.searchTerm.trim();
+		if (trimmedTerm) {
 			this._searchService.searchBooks(this.searchTerm).subscribe(
 				(data) => {
 					this.results = data;
-					// Redirect to the novel list page and pass the search results or searchTerm
-					this._router.navigate([CLIENT_ROUTES.NOVEL_LIST], { queryParams: { search: this.searchTerm } });
+
+					if (data.length > 0) {
+						// Redirect to the novel list page and pass the search results or searchTerm
+						this._router.navigate([CLIENT_ROUTES.NOVEL_LIST], {
+							queryParams: { search: trimmedTerm },
+						});
+					} else {
+						// Navigate to No Results found page
+						this._router.navigateByUrl(
+							CLIENT_ROUTES.NO_RESULTS_FOUND,
+						);
+					}
 				},
 				(error) => {
 					console.error('Error during search:', error);
