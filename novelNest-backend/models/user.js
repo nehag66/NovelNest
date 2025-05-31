@@ -24,10 +24,11 @@ const userSchema = new mongoose.Schema({
 	resetPasswordToken: String,
 	resetPasswordExpires: Date,
 
-	// userType: {
-	// 	type: String,
-	// 	required: true,
-	// },
+	role: {
+		type: String,
+		enum: ['user', 'superadmin'],
+		default: 'user',
+	},
 });
 
 const Users = mongoose.model('User', userSchema);
