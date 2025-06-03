@@ -78,10 +78,10 @@ router.post(
 			if (!isMatch)
 				return res.status(400).json({ message: 'Invalid Credentials' });
 			let userId = user.id;
-			const payload = { userId: userId.toString() };
+			
+			const payload = { userId: userId.toString(), role: user.role };
 			const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-				expiresIn: '1m',
-				// expiresIn: '1d',
+				expiresIn: '1d',
 			});
 
 			const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
@@ -183,9 +183,13 @@ router.post('/refresh-token', async (req, res) => {
 		// You could check if the refreshToken is in DB and still valid (optional)
 
 		// Generate new access token
-		const newAccessToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
-			expiresIn: process.env.JWT_EXPIRES_IN || '1d',
-		});
+		const newAccessToken = jwt.sign(
+			{ userId, role: user.role },
+			process.env.JWT_SECRET,
+			{
+				expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+			},
+		);
 
 		res.json({ accessToken: newAccessToken });
 	} catch (err) {

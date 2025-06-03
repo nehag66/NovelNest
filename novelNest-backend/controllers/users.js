@@ -17,7 +17,7 @@ exports.getUsers = (req, res) => {
 // sending only name, email and address in response
 exports.getUserDetails = (req, res) => {
 	User.findById(req.params.id)
-		.select('name email address')
+		.select('name email address role')
 		.then((user) => {
 			res.status(200).json({
 				message: 'User Fetched Successfully.',
