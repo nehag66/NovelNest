@@ -35,11 +35,6 @@ export interface NovelResponse {
 	images?: any;
 }
 
-/* export interface NovelDeetsResponse {
-	novel: NovelResponse;
-	message: string;
-} */
-
 export interface Categories {
 	name: string;
 }
@@ -50,9 +45,17 @@ export enum BookCondition {
 	Fair = '3',
 }
 
+export interface Author {
+	name: string;
+	novels: NovelTitle[];
+}
+
+export interface NovelTitle {
+	title: string;
+}
+
 export interface Category {
 	name: string;
-	_id: string;
 }
 
 export interface CategoryResponse {
