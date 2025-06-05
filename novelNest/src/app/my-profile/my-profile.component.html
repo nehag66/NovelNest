@@ -9,7 +9,7 @@
 			tabindex="0"
 			role="button"
 		>
-			<div>
+			<div class="p-1">
 				<img
 					src="information.png"
 					alt="basic-info"
@@ -30,7 +30,7 @@
 			tabindex="0"
 			role="button"
 		>
-			<div>
+			<div class="p-1">
 				<img src="order.png" alt="order" height="65" width="65" />
 			</div>
 			<div>
@@ -47,7 +47,7 @@
 			role="button"
 		>
 			<div>
-				<img src="address.png" alt="address" height="65" width="65" />
+				<img src="address.png" alt="address" height="60" width="60" />
 			</div>
 			<div>
 				<h5>My Addresses</h5>
@@ -62,12 +62,46 @@
 			tabindex="0"
 			role="button"
 		>
-			<div>
+			<div class="p-1">
 				<mat-icon class="custom-icon-size">favorite</mat-icon>
 			</div>
 			<div>
 				<h5>My Wishlist</h5>
 				<span>Edit, view wishlist</span>
+			</div>
+		</div>
+		<div
+			*ngIf="userInfo?.role === 'superadmin'"
+			class="border-box"
+			(click)="addCategoryDialog()"
+			(keydown.enter)="addCategoryDialog()"
+			(keydown.space)="addCategoryDialog()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<mat-icon class="add-icon-size">add_circle</mat-icon>
+			</div>
+			<div>
+				<h5>Add Category</h5>
+				<span>Add Category</span>
+			</div>
+		</div>
+		<div
+			*ngIf="userInfo?.role === 'superadmin'"
+			class="border-box"
+			(click)="addAuthorDialog()"
+			(keydown.enter)="addAuthorDialog()"
+			(keydown.space)="addAuthorDialog()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<mat-icon class="add-icon-size">add_circle</mat-icon>
+			</div>
+			<div>
+				<h5>Add Author</h5>
+				<span>Add Author</span>
 			</div>
 		</div>
 	</div>
