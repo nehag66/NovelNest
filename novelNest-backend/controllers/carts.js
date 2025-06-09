@@ -20,13 +20,6 @@ exports.addToCart = async (req, res) => {
 				message: `Only ${totalQuantity} left in stock. You cannot add more.`,
 			});
 		}
-
-		/* if (totalQuantity === quantity) {
-            return res.status(200).json({
-                message: `You have added the last available stock!`,
-            });
-        } */
-
 		// Find the user's cart
 		let cart = await Cart.findOne({ userId });
 
@@ -46,8 +39,12 @@ exports.addToCart = async (req, res) => {
 		}
 
 		await cart.save();
+		// Re-fetch and populate novelId after save
+		const updatedCart = await Cart.findOne({ userId }).populate(
+			'items.novelId',
+		);
 
-		res.json({ message: 'Added to cart', items: cart.items });
+		res.json({ message: 'Added to cart', items: updatedCart.items });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: 'Server error' });
@@ -72,14 +69,19 @@ exports.updateCart = async (req, res) => {
 
 		// Find the cart for the user
 		let cart = await Cart.findOne({ userId });
+		console.log('novel:', novel, 'qty:', quantity);
 
 		if (!cart) {
 			return res.status(404).json({ message: 'Cart not found' });
 		}
+		console.log('cart===>', cart);
+
 		// Find the item in the cart
 		const item = cart.items.find(
 			(item) => item.novelId.toString() === novel?.novelId?._id,
 		);
+		console.log('item:', item);
+
 		if (!item) {
 			return res.status(404).json({ message: 'Item not found in cart' });
 		}
@@ -92,6 +94,11 @@ exports.updateCart = async (req, res) => {
 
 		// Populate novel details
 		cart = await Cart.findOne({ userId }).populate('items.novelId');
+		console.log(
+			'cart::====>',
+			cart,
+			'________________________________________',
+		);
 
 		res.json(cart);
 	} catch (error) {

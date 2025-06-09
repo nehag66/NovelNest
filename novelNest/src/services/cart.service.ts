@@ -13,7 +13,6 @@ export class CartService {
 	// Store cart count
 	private cartItemCount = new BehaviorSubject<number>(0);
 	cartItemCount$ = this.cartItemCount.asObservable();
-	// cartItems = [];
 	cartItems: any;
 
 	// Store cart items
