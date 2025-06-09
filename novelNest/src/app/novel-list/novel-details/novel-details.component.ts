@@ -69,7 +69,7 @@ export class NovelDetailsComponent implements OnInit {
 			}>(`novels/${novelId}`)
 			.subscribe((res) => {
 				const novel = res.novel;
-				const author = cachedAuthors.find(
+				const author = cachedAuthors?.find(
 					(a) => a._id === novel.author,
 				);
 				this.novelDetails = {

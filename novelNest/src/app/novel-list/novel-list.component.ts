@@ -89,7 +89,7 @@ export class NovelListComponent implements OnInit {
 			.pipe(
 				map((novelData: any) => {
 					return novelData.novels.map((novel: NovelResponse) => {
-						const author = cachedAuthors.find(
+						const author = cachedAuthors?.find(
 							(a) => a._id === novel.author,
 						);
 						return {
