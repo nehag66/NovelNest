@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'services/api.service';
 import { StorageService } from 'services/storage.service';
 
@@ -20,6 +21,7 @@ export class AddCategoryDialogComponent {
 	constructor(
 		private _apiService: ApiService,
 		private _storageService: StorageService,
+		private _dialogRef: MatDialogRef<AddCategoryDialogComponent>,
 	) {}
 
 	onSubmit() {
@@ -34,10 +36,8 @@ export class AddCategoryDialogComponent {
 				next: (res) => {
 					this.submitted = true;
 					this.title = '';
-					this._storageService.set(
-						'categories',
-						JSON.stringify(res.categories),
-					);
+					this._storageService.set('categories', res.categories);
+					this._dialogRef.close();
 				},
 				error: (err) => {
 					console.error('Failed to add category:', err);
