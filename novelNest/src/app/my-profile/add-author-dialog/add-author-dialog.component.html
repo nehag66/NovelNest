@@ -8,6 +8,13 @@
 		[(ngModel)]="name"
 		required
 	/>
+	<label for="bio">Bio</label>
+	<textarea
+		id="bio"
+		name="bio"
+		class="form-control"
+		[(ngModel)]="bio"
+	></textarea>
 	<button
 		class="submit-btn m-auto d-block mt-3"
 		[disabled]="!name"

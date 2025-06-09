@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'services/api.service';
 import { StorageService } from 'services/storage.service';
 
@@ -13,6 +14,7 @@ import { StorageService } from 'services/storage.service';
 })
 export class AddAuthorDialogComponent {
 	name = '';
+	bio = '';
 	errorMessage = '';
 
 	submitted = false;
@@ -20,25 +22,25 @@ export class AddAuthorDialogComponent {
 	constructor(
 		private _apiService: ApiService,
 		private _storageService: StorageService,
+		private _dialogRef: MatDialogRef<AddAuthorDialogComponent>,
 	) {}
 
 	onSubmit() {
 		this._apiService
-			.post<{ message: string; authors: { name: string }[] }>(
-				'authors',
-				{
-					name: this.name,
-				},
-			)
+			.post<{
+				message: string;
+				authors: { name: string; bio: string }[];
+			}>('authors', {
+				name: this.name,
+				bio: this.bio,
+			})
 			.subscribe({
 				next: (res) => {
-					// TODO fix this and check if authors are stored in local
 					this.submitted = true;
 					this.name = '';
-					this._storageService.set(
-						'authors',
-						JSON.stringify(res.authors),
-					);
+					this.bio = '';
+					this._storageService.set('authors', res.authors);
+					this._dialogRef.close();
 				},
 				error: (err) => {
 					console.error('Failed to add category:', err);

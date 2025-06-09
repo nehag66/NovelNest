@@ -58,7 +58,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
 			)
 			.pipe(
 				map((novelData: any) => {
-					return novelData.novels.map((novel: NovelResponse) => {
+					return novelData?.novels.map((novel: NovelResponse) => {
 						const author = cachedAuthors?.find(
 							(a) => a._id === novel.author,
 						);
