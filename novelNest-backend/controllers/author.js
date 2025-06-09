@@ -1,14 +1,30 @@
 const Author = require('../models/author');
 
 // Create an author
-
-exports.postAddAuthor = async (req, res) => {
+exports.postAddAuthor = async (req, res, next) => {
 	try {
-		const author = new Author(req.body);
-		const saved = await author.save();
-		res.status(201).json(saved);
-	} catch (err) {
-		res.status(400).json({ error: err.message });
+		const { name, bio } = req.body;
+
+		if (!name) {
+			return res.status(400).json({ message: 'Author name is required' });
+		}
+
+		const existing = await Author.findOne({ name });
+		if (existing) {
+			return res.status(409).json({ message: 'Author already exists' });
+		}
+
+		const author = new Author({ name, bio });
+		await author.save();
+
+		const allAuthors = await Author.find();
+
+		res.status(201).json({
+			message: 'Author added successfully',
+			authors: allAuthors,
+		});
+	} catch (error) {
+		res.status(500).json({ message: 'Server error', error: error.message });
 	}
 };
 
