@@ -3,14 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import {
-	BookCondition,
-	Categories,
-	Category,
-	CategoryResponse,
-	Novel,
-} from 'app/models/novels';
+import { Author, BookCondition, Category, Novel } from 'app/models/novels';
 import { ApiService } from 'services/api.service';
+import { CacheService } from 'services/cache.service';
 import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
 import { SharedModule } from 'shared/shared.module';
@@ -23,7 +18,8 @@ import { SharedModule } from 'shared/shared.module';
 	styleUrl: './sell-used-books.component.scss',
 })
 export class SellUsedBooksComponent implements OnInit {
-	categories: Categories[] = [];
+	categories: any;
+	authors: any;
 	isLoading = false;
 	selectedFiles: File[] = [];
 	uploadedImageUrls: string[] = [];
@@ -38,7 +34,6 @@ export class SellUsedBooksComponent implements OnInit {
 	novelForm: FormGroup;
 	isEditMode = false;
 	novelId: string | null = null;
-	cachedAuthors: any;
 	photoError = '';
 
 	constructor(
@@ -47,6 +42,7 @@ export class SellUsedBooksComponent implements OnInit {
 		private _route: ActivatedRoute,
 		private _router: Router,
 		private _storageService: StorageService,
+		private _cacheService: CacheService,
 	) {
 		this.novelForm = this._fb.group({
 			title: ['', Validators.required],
@@ -61,18 +57,29 @@ export class SellUsedBooksComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.cachedAuthors = this._storageService.get<any[]>('authors') || [];
-		this.userId = this._storageService.get<string>('userId');
-		this.cachedAuthors.sort((a: Category, b: Category) =>
-			a.name?.localeCompare(b.name),
-		);
-		this._apiService
-			.get<{ message: string; categories: Category[] }>('categories')
-			.subscribe((response: CategoryResponse) => {
-				this.categories = response.categories.sort(
-					(a: Category, b: Category) => a.name?.localeCompare(b.name),
-				);
-			});
+		this._cacheService.cacheCategories();
+		this._cacheService.cacheAuthors();
+		const rawAuthors = this._storageService.get<any>('authors');
+		if (!Array.isArray(rawAuthors)) {
+			this._storageService.set('authors', []);
+			this.authors = [];
+		} else {
+			this.authors = rawAuthors;
+			this.authors?.sort((a: Author, b: Author) =>
+				a.name?.localeCompare(b.name),
+			);
+		}
+
+		const rawCategories = this._storageService.get<any>('categories');
+		if (!Array.isArray(rawCategories)) {
+			this._storageService.set('categories', []);
+			this.categories = [];
+		} else {
+			this.categories = rawCategories;
+			this.categories?.sort((a: Category, b: Category) =>
+				a.name?.localeCompare(b.name),
+			);
+		}
 		this.novelId = this._route.snapshot.paramMap.get('id');
 		if (this.novelId) {
 			this.isEditMode = true;
@@ -82,6 +89,7 @@ export class SellUsedBooksComponent implements OnInit {
 
 	selectCategory(category: string) {
 		this.novelForm.get('category')?.setValue(category);
+		this.novelForm.get('category')?.markAsTouched();
 	}
 
 	selectAuthor(authorId: string): void {
@@ -90,7 +98,7 @@ export class SellUsedBooksComponent implements OnInit {
 	}
 
 	getAuthorName(authorId: string): string | undefined {
-		return this.cachedAuthors.find((author: any) => author._id === authorId)
+		return this.authors?.find((author: any) => author._id === authorId)
 			?.name;
 	}
 
