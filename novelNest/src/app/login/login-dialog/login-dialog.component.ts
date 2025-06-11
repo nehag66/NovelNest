@@ -60,9 +60,10 @@ export class LoginDialogComponent {
 			.pipe(finalize(() => (this.isLoading = false)))
 			.subscribe({
 				next: () => {
-					this._dialogRef.close();
 					this._cartService.fetchCart();
 					this._router.navigateByUrl('/');
+					this._authService.notifyLoginSuccess();
+					this._dialogRef.close();
 				},
 				error: (error) => {
 					this.errorMessage =

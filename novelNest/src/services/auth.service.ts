@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { StorageService } from './storage.service';
 	providedIn: 'root',
 })
 export class AuthService {
+	loginStatusChanged = new Subject<void>();
 	private authState = new BehaviorSubject<boolean>(false);
 	accessToken: string | null = null;
 
@@ -75,6 +76,10 @@ export class AuthService {
 			);
 	}
 
+	notifyLoginSuccess() {
+		this.loginStatusChanged.next();
+	}
+
 	sendResetLink(email: string) {
 		return this._apiService.post<{ msg: string }>('auth/forgot-password', {
 			email,
@@ -93,6 +98,7 @@ export class AuthService {
 		this._storageService.remove('accessToken');
 		this._storageService.remove('refreshToken');
 		this._storageService.remove('userId');
+		this._storageService.remove('userInfo');
 		this.authState.next(false);
 		this._router.navigateByUrl('/');
 	}
