@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
@@ -17,7 +17,7 @@ import { SearchService } from 'services/search.service';
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
 	private destroy$ = new Subject<void>();
 	cartCount = 0;
 	cartItems: any;
@@ -32,11 +32,18 @@ export class HeaderComponent implements OnDestroy {
 		private _cartService: CartService,
 		private _authService: AuthService,
 		private _searchService: SearchService,
+		private _route: ActivatedRoute,
 	) {
 		this._authService.getAuthState().subscribe((state) => {
 			this.isLoggedIn = state;
 		});
 		this.updateCartCount();
+	}
+
+	ngOnInit() {
+		this._route.queryParams.subscribe((params) => {
+			this.searchTerm = params['search'] || ''; // Safely fallback to empty string
+		});
 	}
 
 	updateCartCount() {
