@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Author, BookCondition, Category, Novel } from 'app/models/novels';
+import { Author, BookCondition, Category, Novel } from 'app/models/novel';
 import { ApiService } from 'services/api.service';
 import { CacheService } from 'services/cache.service';
 import { StorageService } from 'services/storage.service';
@@ -30,7 +30,7 @@ export class SellUsedBooksComponent implements OnInit {
 	}[] = [];
 	fileNames = 'No files chosen';
 	BookConditions = BookCondition;
-	userId: string | null = '';
+	userId: string | null = null;
 	novelForm: FormGroup;
 	isEditMode = false;
 	novelId: string | null = null;

@@ -1,4 +1,4 @@
-import { NovelResponse, NovelSummary } from './novels';
+import { NovelResponse, NovelSummary } from './novel';
 
 export interface Author {
 	id: string;

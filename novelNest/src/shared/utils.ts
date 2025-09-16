@@ -1,4 +1,4 @@
-import { BookCondition } from 'app/models/novels';
+import { BookCondition } from 'app/models/novel';
 
 export function calculateDiscountPercentage(
 	mrp: number,

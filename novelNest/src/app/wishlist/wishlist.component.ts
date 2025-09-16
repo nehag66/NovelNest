@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Wishlist } from 'app/models/novels';
+import { Wishlist } from 'app/models/novel';
 import { take } from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';

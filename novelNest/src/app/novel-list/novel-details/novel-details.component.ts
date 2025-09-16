@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/material.module';
-import { Novel } from 'app/models/novels';
+import { Novel } from 'app/models/novel';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
 import { StorageService } from 'services/storage.service';

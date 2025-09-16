@@ -7,7 +7,7 @@ import {
 	Category,
 	Novel,
 	NovelResponse,
-} from 'app/models/novels';
+} from 'app/models/novel';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { catchError, map, of } from 'rxjs';
 import { ApiService } from 'services/api.service';

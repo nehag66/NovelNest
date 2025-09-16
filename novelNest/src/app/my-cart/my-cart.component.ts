@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
-import { CartResponse } from 'app/models/novels';
+import { CartResponse } from 'app/models/novel';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { CONSTANTS } from 'shared/constants';

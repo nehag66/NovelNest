@@ -10,7 +10,7 @@ import { MaterialModule } from '../../material.module';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { ApiService } from 'services/api.service';
-import { Novel, NovelResponse } from 'app/models/novels';
+import { Novel, NovelResponse } from 'app/models/novel';
 import { catchError, map, of } from 'rxjs';
 import { CONSTANTS } from 'shared/constants';
 import { StorageService } from 'services/storage.service';
