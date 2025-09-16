@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { CartResponse, Novel } from 'app/models/novels';
+import { CartResponse, Novel } from 'app/models/novel';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -94,6 +94,17 @@ export class CartService {
 				this.updateCartCount(response.cart?.items);
 			}),
 		);
+	}
+
+	removeMultipleItemsFromCart(novelIds: string[]) {
+		return this._apiService
+			.delete(`cart/remove-multiple`, { novelIds })
+			.pipe(
+				tap((response: any) => {
+					this.cartItemsSubject.next(response.cart?.items);
+					this.updateCartCount(response.cart?.items);
+				}),
+			);
 	}
 
 	/** ✅ Clear cart */
