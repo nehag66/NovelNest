@@ -4,6 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 import { StorageService } from './storage.service';
+import { CacheService } from './cache.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -18,6 +19,7 @@ export class AuthService {
 		private _apiService: ApiService,
 		private _router: Router,
 		private _storageService: StorageService,
+		private _cacheService: CacheService,
 	) {
 		this.authState.next(this.isAuthenticated());
 	}
@@ -52,6 +54,7 @@ export class AuthService {
 				this._storageService.set('accessToken', res.accessToken);
 				this._storageService.set('refreshToken', res.refreshToken);
 				this._storageService.set('userId', res.userId);
+				this._cacheService.cacheUserInfo();
 				this.accessToken = res.accessToken;
 				this.authState.next(true);
 			}),
@@ -70,6 +73,7 @@ export class AuthService {
 					this._storageService.set('accessToken', res.accessToken);
 					this._storageService.set('refreshToken', res.refreshToken);
 					this._storageService.set('userId', res.userId);
+					this._cacheService.cacheUserInfo();
 					this.accessToken = res.accessToken;
 					this.authState.next(true);
 				}),
