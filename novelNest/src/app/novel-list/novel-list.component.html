@@ -89,7 +89,7 @@
 								)
 							"
 							class="buy-add-btn"
-							[disabled]="buyBtnDisabled(novel)"
+							[disabled]="novel.totalQuantity === 0 || buyBtnDisabled(novel)"
 						>
 							Add to Cart
 						</button>
