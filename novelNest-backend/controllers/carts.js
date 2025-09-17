@@ -126,3 +126,23 @@ exports.removeFromCart = async (req, res) => {
 		res.status(500).json({ message: 'Error removing item' });
 	}
 };
+
+exports.removeMultipleFromCart = async (req, res) => {
+	const { novelIds } = req.body;
+	const userId = req.user.userId;
+
+	try {
+		const cart = await Cart.findOne({ userId });
+		if (!cart) return res.status(404).json({ message: 'Cart not found' });
+
+		cart.items = cart.items.filter(
+			(item) => !novelIds.includes(item.novelId.toString()),
+		);
+		await cart.save();
+
+		res.json({ message: 'Items removed from cart', cart });
+	} catch (error) {
+		console.error('Error removing multiple items:', error);
+		res.status(500).json({ message: 'Error removing items' });
+	}
+};
