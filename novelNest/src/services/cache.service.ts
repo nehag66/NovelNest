@@ -3,34 +3,35 @@ import { StorageService } from './storage.service';
 import { ApiService } from './api.service';
 import { ProfileResponse } from 'app/models/profile';
 import { AuthorResponse, AuthorSummary } from 'app/models/author';
-import { Category, CategoryResponse } from 'app/models/novels';
+import { Category, CategoryResponse } from 'app/models/novel';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class CacheService {
-	userId: string | null = '';
-
 	constructor(
 		private _storageService: StorageService,
 		private _apiService: ApiService,
-	) {
-		this.userId = this._storageService.get<string>('userId');
+	) {}
+
+	private get userId(): string | null {
+		const storedUserId = this._storageService.get<string>('userId');
+		return storedUserId && storedUserId !== 'null' ? storedUserId : null;
 	}
 
 	cacheUserInfo() {
 		const userInfo = this._storageService.get('userInfo');
-		if (!userInfo) {
+		const userId = this.userId;
+
+		if (!userInfo && userId) {
 			this._apiService
 				.get<{
 					message: string;
 					user: ProfileResponse;
-				}>(`users/${this.userId}`)
-				.subscribe(
-					(userInfo: { message: string; user: ProfileResponse }) => {
-						this._storageService.set('userInfo', userInfo.user);
-					},
-				);
+				}>(`users/${userId}`)
+				.subscribe((userInfo) => {
+					this._storageService.set('userInfo', userInfo.user);
+				});
 		}
 	}
 

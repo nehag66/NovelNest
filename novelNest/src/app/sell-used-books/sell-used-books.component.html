@@ -82,7 +82,7 @@
 					<mat-menu #authorMenu="matMenu">
 						<button
 							mat-menu-item
-							*ngFor="let author of cachedAuthors"
+							*ngFor="let author of authors"
 							(click)="selectAuthor(author._id)"
 						>
 							{{ author.name }}
