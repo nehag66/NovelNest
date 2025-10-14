@@ -30,7 +30,7 @@ export class SellUsedBooksComponent implements OnInit {
 	}[] = [];
 	fileNames = 'No files chosen';
 	BookConditions = BookCondition;
-	userId: string | null = null;
+	userId: any;
 	novelForm: FormGroup;
 	isEditMode = false;
 	novelId: string | null = null;
@@ -136,6 +136,7 @@ export class SellUsedBooksComponent implements OnInit {
 		}
 		this.isLoading = true;
 		if (this.novelForm.valid) {
+			this.userId = this._storageService.get<any[]>('userId');
 			const formData = new FormData();
 
 			// Append form fields
