@@ -32,7 +32,7 @@
 						mat-icon-button
 						class="edit-btn"
 						(click)="editNovel(novel)"
-						[disabled]="!isLoggedIn"
+						[disabled]="disableEditNovel(novel)"
 					>
 						<mat-icon class="edit-icon">edit</mat-icon>
 					</button>

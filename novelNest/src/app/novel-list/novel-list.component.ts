@@ -32,6 +32,8 @@ export class NovelListComponent implements OnInit {
 	BookConditions = BookCondition;
 	getBookCondition = getBookCondition;
 	isLoggedIn: string | null = null;
+	userId: any;
+	userInfo: any;
 
 	page = 1;
 	limit = 20;
@@ -51,6 +53,8 @@ export class NovelListComponent implements OnInit {
 	ngOnInit() {
 		this.isLoading = true;
 		this.isLoggedIn = this._storageService.get('accessToken');
+		this.userId = this._storageService.get<any[]>('userId');
+		this.userInfo = this._storageService.get<any[]>('userInfo');
 
 		this._activatedRoute.queryParams.subscribe((params) => {
 			this.searchTerm = params['search'] || '';
@@ -104,6 +108,7 @@ export class NovelListComponent implements OnInit {
 							images: novel.images.map(
 								(img: any) => `${CONSTANTS.IMAGE_URL}${img}`,
 							),
+							user: novel.user,
 						};
 					});
 				}),
@@ -155,6 +160,13 @@ export class NovelListComponent implements OnInit {
 			queryParams: { search: null },
 			queryParamsHandling: 'merge',
 		});
+	}
+
+	disableEditNovel(novel: Novel) {
+		return (
+			!this.isLoggedIn ||
+			(this.userInfo?.role !== 'superadmin' && novel.user !== this.userId)
+		);
 	}
 
 	editNovel(novel: Novel) {
