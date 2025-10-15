@@ -33,6 +33,7 @@ export interface NovelResponse {
 	totalQuantity: number;
 	bookCondition: string;
 	images?: any;
+	user: string;
 }
 
 export interface Categories {
