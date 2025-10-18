@@ -3,9 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
-import { Novel } from 'app/models/novels';
+import { Novel } from 'app/models/novel';
+import { OrderResponse } from 'app/models/order';
 import { ApiService } from 'services/api.service';
 import { CartService } from 'services/cart.service';
+import { OrderService } from 'services/order.service';
 import { PaymentService } from 'services/payment.service';
 import { StorageService } from 'services/storage.service';
 import { CONSTANTS } from 'shared/constants';
@@ -29,21 +31,21 @@ export class BuyNowComponent implements OnInit {
 	paymentMethods = [
 		{
 			cardName: 'Amazon Pay ICICI Bank Credit Card',
-			lastFour: '3008',
+			lastFour: '3624',
 			nickname: 'Neha Goel',
 			default: true,
 			cvvNote: true,
 		},
 		{
 			cardName: 'Axis Bank Credit Card',
-			lastFour: '2589',
-			nickname: 'Ashish Kumar',
+			lastFour: '3555',
+			nickname: 'Neha Goel',
 			default: false,
 		},
 		{
 			cardName: 'SBI Credit Card',
-			lastFour: '3151',
-			nickname: 'Ashish Kumar',
+			lastFour: '7477',
+			nickname: 'Neha Goel',
 			default: false,
 			disabled: true,
 		},
@@ -65,6 +67,7 @@ export class BuyNowComponent implements OnInit {
 		private _apiService: ApiService,
 		private _paymentService: PaymentService,
 		private _cartService: CartService,
+		private _orderService: OrderService,
 	) {
 		const navigation = this._router.getCurrentNavigation();
 		this.selectedNovels = (
@@ -115,24 +118,39 @@ export class BuyNowComponent implements OnInit {
 			.makePayment(this.userId, this.orderTotal)
 			.subscribe({
 				next: (res) => {
-					this.isLoading = false;
-					// this.paymentResponse = res;
+					const novelIds = this.selectedNovels.map((item: any) => ({
+						novelId: item.novelId._id,
+						quantity: item.quantity,
+						price: item.novelId.price,
+					}));
 
-					this.selectedNovels.forEach((item: any) => {
-						this._cartService.removeFromCart(item).subscribe();
-					});
+					this._orderService
+						.createOrder({
+							items: novelIds,
+							totalAmount: this.orderTotal,
+							paymentId: res.paymentId,
+						})
+						.subscribe((res: OrderResponse) => {
+							this.isLoading = false;
 
-					this.goToOrderPlacedPage();
-				},
-				error: (err) => {
-					this.isLoading = false;
-					console.error('Payment failed', err);
+							const novelIds = this.selectedNovels.map(
+								(item: any) => item.novelId._id,
+							);
+
+							this._cartService
+								.removeMultipleItemsFromCart(novelIds)
+								.subscribe(() => {
+									this._cartService.fetchCart();
+									this.goToOrderPlacedPage();
+								});
+						});
 				},
 			});
 	}
 
 	goToOrderPlacedPage() {
-		this._cartService.fetchCart();
-		this._router.navigateByUrl(CLIENT_ROUTES.ORDER_PLACED);
+		this._router.navigate([CLIENT_ROUTES.ORDER_PLACED], {
+			replaceUrl: true,
+		});
 	}
 }
