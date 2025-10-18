@@ -69,18 +69,18 @@ exports.updateCart = async (req, res) => {
 
 		// Find the cart for the user
 		let cart = await Cart.findOne({ userId });
-		console.log('novel:', novel, 'qty:', quantity);
+		// console.log('novel:', novel, 'qty:', quantity);
 
 		if (!cart) {
 			return res.status(404).json({ message: 'Cart not found' });
 		}
-		console.log('cart===>', cart);
+		// console.log('cart===>', cart);
 
 		// Find the item in the cart
 		const item = cart.items.find(
 			(item) => item.novelId.toString() === novel?.novelId?._id,
 		);
-		console.log('item:', item);
+		// console.log('item:', item);
 
 		if (!item) {
 			return res.status(404).json({ message: 'Item not found in cart' });
@@ -94,11 +94,11 @@ exports.updateCart = async (req, res) => {
 
 		// Populate novel details
 		cart = await Cart.findOne({ userId }).populate('items.novelId');
-		console.log(
-			'cart::====>',
-			cart,
-			'________________________________________',
-		);
+		// console.log(
+		// 	'cart::====>',
+		// 	cart,
+		// 	'________________________________________',
+		// );
 
 		res.json(cart);
 	} catch (error) {
