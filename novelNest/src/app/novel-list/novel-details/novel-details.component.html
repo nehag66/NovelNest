@@ -1,6 +1,6 @@
 <div class="py-4 container" *ngIf="novelDetails">
 	<div class="novel-card">
-		<div class="sold-out-overlay" *ngIf="buyBtnDisabled()">
+		<div class="sold-out-overlay" *ngIf="novelDetails.totalQuantity === 0 || buyBtnDisabled()">
 			<div class="overlay-content">Sold Out</div>
 		</div>
 		<div *ngIf="cartQuantity > 0" class="cart-badge">
@@ -105,7 +105,7 @@
 			<button
 				mat-flat-button
 				(click)="addToCart()"
-				[disabled]="buyBtnDisabled()"
+				[disabled]="novelDetails.totalQuantity === 0 || buyBtnDisabled()"
 				class="buy-add-btn"
 			>
 				Add to Cart
