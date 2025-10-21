@@ -1,0 +1,27 @@
+<div class="my-4 py-4 container max-width-container">
+	<div
+		*ngIf="isLoggedIn && orders?.length === 0"
+		class="d-flex flex-column align-items-center py-4 px-sm-5 d-flex"
+	>
+		<img src="order.png" alt="order" height="165" width="165" />
+		No Selling Orders to show
+	</div>
+	<div *ngIf="orders && orders.length > 0">
+		<h4>ALL SELLING ORDERS</h4>
+		<div *ngFor="let order of orders" class="order-card">
+			<h5>Order #{{ order._id }}</h5>
+
+			<div class="order-items">
+				<img
+					[src]="order.images[0]"
+					alt="{{ order.title }}"
+					width="70"
+					height="90"
+				/>
+				<p>Novel Title: {{ order.title }}</p>
+				<p>Qty left: {{ order.totalQuantity }}</p>
+			</div>
+			<hr />
+		</div>
+	</div>
+</div>
