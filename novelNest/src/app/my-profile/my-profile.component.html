@@ -24,6 +24,22 @@
 		</div>
 		<div
 			class="border-box"
+			(click)="goToMyAddresses()"
+			(keydown.enter)="goToMyAddresses()"
+			(keydown.space)="goToMyAddresses()"
+			tabindex="0"
+			role="button"
+		>
+			<div>
+				<img src="address.png" alt="address" height="60" width="60" />
+			</div>
+			<div>
+				<h5>My Addresses</h5>
+				<span>Add, edit or delete addresses</span>
+			</div>
+		</div>
+		<div
+			class="border-box"
 			(click)="goToMyOrders()"
 			(keydown.enter)="goToMyOrders()"
 			(keydown.space)="goToMyOrders()"
@@ -40,18 +56,18 @@
 		</div>
 		<div
 			class="border-box"
-			(click)="goToMyAddresses()"
-			(keydown.enter)="goToMyAddresses()"
-			(keydown.space)="goToMyAddresses()"
+			(click)="goToSellingOrders()"
+			(keydown.enter)="goToSellingOrders()"
+			(keydown.space)="goToSellingOrders()"
 			tabindex="0"
 			role="button"
 		>
-			<div>
-				<img src="address.png" alt="address" height="60" width="60" />
+			<div class="p-1">
+				<img src="order.png" alt="order" height="65" width="65" />
 			</div>
 			<div>
-				<h5>My Addresses</h5>
-				<span>Add, edit or delete addresses</span>
+				<h5>Selling Orders</h5>
+				<span>Track Selling Orders</span>
 			</div>
 		</div>
 		<div
