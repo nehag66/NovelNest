@@ -19,6 +19,7 @@ import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { HowItWorksComponent } from './footer/how-it-works/how-it-works.component';
 import { FaqComponent } from './footer/faq/faq.component';
 import { NoResultFoundComponent } from './novel-list/no-result-found/no-result-found.component';
+import { SellingOrdersComponent } from './my-profile/selling-orders/selling-orders.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -34,6 +35,7 @@ export const CLIENT_ROUTES = {
 	PROFILE_DETAILS: 'user',
 	BASIC_INFO: 'user-details',
 	MY_ORDERS: 'orders',
+	SELLING_ORDERS: 'selling-orders',
 	MY_ADDRESSES: 'addresses',
 	ORDER_PLACED: 'order-placed',
 	MAIN_PAGE: '',
@@ -113,6 +115,12 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.MY_ORDERS,
 		component: MyOrdersComponent,
 		title: 'Orders',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.SELLING_ORDERS,
+		component: SellingOrdersComponent,
+		title: 'Selling Orders',
 		canActivate: [AuthGuard],
 	},
 	{

@@ -100,6 +100,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		this._router.navigateByUrl(CLIENT_ROUTES.MY_ORDERS);
 	}
 
+	goToSellingOrders() {
+		this._router.navigateByUrl(CLIENT_ROUTES.SELLING_ORDERS);
+	}
+
 	goToSellUsedBooks() {
 		this._router.navigateByUrl(CLIENT_ROUTES.SELL_USED_BOOKS);
 	}
