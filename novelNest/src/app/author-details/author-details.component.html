@@ -1,7 +1,7 @@
 <div *ngIf="authorDetails" class="my-4 px-3 py-4 container max-width-container">
 	<h4 class="text-center">{{ authorDetails.name }}</h4>
 	<div class="d-flex flex-column gap-4">
-		<div>
+		<div *ngIf="authorDetails.bio">
 			<h5>About the author</h5>
 			<div class="border p-4 d-flex flex-column bio-card">
 				<p>{{ authorDetails.bio }}</p>
