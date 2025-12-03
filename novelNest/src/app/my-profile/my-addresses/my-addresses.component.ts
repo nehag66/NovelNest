@@ -28,7 +28,7 @@ export class MyAddressesComponent implements OnInit {
 
 	ngOnInit() {
 		this.profileDetails = this._storageService.get<string>('userInfo');
-		this.myAddresses = this.profileDetails.address;
+		this.myAddresses = this.profileDetails.addresses;
 	}
 
 	addNewAddress() {
@@ -39,6 +39,9 @@ export class MyAddressesComponent implements OnInit {
 			minWidth: '200px',
 			panelClass: 'custom-dialog',
 		});
-		dialogRef.afterClosed().subscribe();
+		dialogRef.afterClosed().subscribe((res?: any) => {
+			if (res) this.myAddresses = res;
+		});
 	}
+
 }

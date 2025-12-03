@@ -18,6 +18,8 @@ export class AddAddressDialogComponent {
 	errorMessage = '';
 
 	submitted = false;
+	userId: any = '';
+	profileDetails: any;
 
 	constructor(
 		private _apiService: ApiService,
@@ -26,20 +28,22 @@ export class AddAddressDialogComponent {
 	) {}
 
 	onSubmit() {
+		this.profileDetails = this._storageService.get<string>('userInfo');
+		this.userId = this._storageService.get<any[]>('userId') || [];
 		this._apiService
-			.post<{ message: string; categories: { title: string }[] }>(
-				'add-category',
+			.post<{ message: string; address: { address: string }[] }>(
+				`users/${this.userId}/addresses`,
 				{
-					title: this.address,
+					address: this.address,
 				},
 			)
 			.subscribe({
-				next: (res) => {
+				next: (res: any) => {
 					this.submitted = true;
 					this.address = '';
-                    // TODO: add new address to addresses
-					// this._storageService.set('categories', res.categories);
-					this._dialogRef.close();
+					this.profileDetails.addresses = res.addresses;
+					this._storageService.set('userInfo', this.profileDetails);
+					this._dialogRef.close(res.addresses);
 				},
 				error: (err) => {
 					console.error('Failed to add category:', err);

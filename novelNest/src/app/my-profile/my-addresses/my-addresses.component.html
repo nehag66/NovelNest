@@ -5,12 +5,23 @@
 	>
 		<img src="address.png" alt="address" height="165" width="165" />
 		No address(s) added
+		<button mat-button class="buy-add-btn" (click)="addNewAddress()">
+			Add a new address
+		</button>
 	</div>
 	<div *ngIf="myAddresses && myAddresses.length > 0">
-		<h4>ALL ADDRESSES</h4>
-		{{ myAddresses }}
+		<div class="d-flex justify-content-between">
+			<h4>ALL ADDRESSES</h4>
+			<button mat-button class="buy-add-btn" (click)="addNewAddress()">
+				Add a new address
+			</button>
+		</div>
+
+		<div *ngFor="let address of myAddresses; let i = index">
+			{{ i + 1 }}. {{ address }}
+			<span *ngIf="i === 0" style="color: green; font-weight: 600">
+				(Default)
+			</span>
+		</div>
 	</div>
-	<button mat-button class="buy-add-btn" (click)="addNewAddress()">
-		Add a new address
-	</button>
 </div>

@@ -3,7 +3,7 @@ export interface ProfileResponse {
 	name: string;
 	email: string;
 	password: string;
-	address?: string,
+	addresses?: string[],
 	mobile?: number,
 	__v: number;
 }
