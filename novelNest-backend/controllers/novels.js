@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const Novel = require('../models/novel');
 const Author = require('../models/author');
 const path = require('path');

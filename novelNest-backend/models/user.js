@@ -17,9 +17,12 @@ const userSchema = new mongoose.Schema({
 	mobile: {
 		type: Number,
 	},
-	address: {
-		type: String,
-	},
+	addresses: [
+		{
+			type: String,
+			trim: true,
+		},
+	],
 
 	resetPasswordToken: String,
 	resetPasswordExpires: Date,
