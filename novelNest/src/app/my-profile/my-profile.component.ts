@@ -20,7 +20,7 @@ export class MyProfileComponent implements OnInit {
 	userInfo: UserInfo | null = {
 		name: '',
 		email: '',
-		address: '',
+		addresses: [],
 		role: '',
 	};
 

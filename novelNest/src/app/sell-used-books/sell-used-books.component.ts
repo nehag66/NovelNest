@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { MaterialModule } from 'app/material.module';
 import { Author, BookCondition, Category, Novel } from 'app/models/novel';
+import { firstValueFrom } from 'rxjs';
 import { ApiService } from 'services/api.service';
 import { CacheService } from 'services/cache.service';
 import { StorageService } from 'services/storage.service';
@@ -64,10 +70,11 @@ export class SellUsedBooksComponent implements OnInit {
 			this._storageService.set('authors', []);
 			this.authors = [];
 		} else {
-			this.authors = rawAuthors;
-			this.authors?.sort((a: Author, b: Author) =>
-				a.name?.localeCompare(b.name),
-			);
+			this.authors = rawAuthors.sort((a: Author, b: Author) => {
+				if (a.name?.toLowerCase() === 'other') return 1; // push 'Other' to end
+				if (b.name?.toLowerCase() === 'other') return -1;
+				return a.name?.localeCompare(b.name);
+			});
 		}
 
 		const rawCategories = this._storageService.get<any>('categories');
@@ -75,10 +82,11 @@ export class SellUsedBooksComponent implements OnInit {
 			this._storageService.set('categories', []);
 			this.categories = [];
 		} else {
-			this.categories = rawCategories;
-			this.categories?.sort((a: Category, b: Category) =>
-				a.name?.localeCompare(b.name),
-			);
+			this.categories = rawCategories.sort((a: Category, b: Category) => {
+				if (a.name?.toLowerCase() === 'other') return 1; // push 'Other' to end
+				if (b.name?.toLowerCase() === 'other') return -1;
+				return a.name?.localeCompare(b.name);
+			});
 		}
 		this.novelId = this._route.snapshot.paramMap.get('id');
 		if (this.novelId) {
@@ -87,14 +95,39 @@ export class SellUsedBooksComponent implements OnInit {
 		}
 	}
 
-	selectCategory(category: string) {
-		this.novelForm.get('category')?.setValue(category);
-		this.novelForm.get('category')?.markAsTouched();
+	get otherAuthorId(): string | undefined {
+		return this.authors?.find((a: any) => a.name === 'Other')?._id;
 	}
 
-	selectAuthor(authorId: string): void {
+	selectCategory(categoryName: string) {
+		this.novelForm.get('category')?.setValue(categoryName);
+		// If user picked 'Other', make sure customCategory control exists and is required
+		if (categoryName === 'Other') {
+			this.novelForm.addControl(
+				'customCategory',
+				new FormControl('', Validators.required),
+			);
+		} else {
+			// Remove customCategory control if not 'Other'
+			if (this.novelForm.get('customCategory')) {
+				this.novelForm.removeControl('customCategory');
+			}
+		}
+	}
+
+	selectAuthor(authorId: string, authorName: string) {
 		this.novelForm.get('author')?.setValue(authorId);
-		this.novelForm.get('author')?.markAsTouched();
+
+		if (authorName === 'Other') {
+			this.novelForm.addControl(
+				'customAuthor',
+				new FormControl('', Validators.required),
+			);
+		} else {
+			if (this.novelForm.get('customAuthor')) {
+				this.novelForm.removeControl('customAuthor');
+			}
+		}
 	}
 
 	getAuthorName(authorId: string): string | undefined {
@@ -126,67 +159,153 @@ export class SellUsedBooksComponent implements OnInit {
 		}
 	}
 
-	postAd() {
+	async postAd() {
 		const isNew = !this.isEditMode;
+
 		if (isNew && (!this.selectedFiles || this.selectedFiles.length === 0)) {
 			this.photoError = CONSTANTS.UPLOAD_PHOTO_WARNING;
 			return;
 		} else {
 			this.photoError = '';
 		}
+
 		this.isLoading = true;
+
 		if (this.novelForm.valid) {
 			this.userId = this._storageService.get<any[]>('userId');
-			const formData = new FormData();
 
-			// Append form fields
-			Object.keys(this.novelForm.value).forEach((key) => {
-				formData.append(key, this.novelForm.value[key]);
-			});
+			let { author, category } = this.novelForm.value;
+			const { customAuthor, customCategory } = this.novelForm.value;
 
-			// Append images
-			this.selectedFiles.forEach((image) => {
-				formData.append('images', image);
-			});
+			try {
+				// Handle "Other" Author
+				if (
+					author === this.otherAuthorId &&
+					this.novelForm.get('customAuthor')?.value
+				) {
+					const newAuthor = { name: customAuthor, bio: '' };
 
-			if (this.userId) {
-				formData.append('userId', this.userId);
-			}
+					const res = await firstValueFrom(
+						this._apiService.post<{
+							message: string;
+							authors: {
+								_id: string;
+								name: string;
+								bio: string;
+							}[];
+						}>('authors', newAuthor),
+					);
 
-			if (!this.isEditMode) {
-				this._apiService
-					.post<{
-						message: string;
-						novels: Novel[];
-					}>('novels', formData)
-					.subscribe({
-						next: () => {
-							this.isLoading = false;
-							this.novelForm.reset();
-							this.fileNames = 'No files chosen';
-							this.selectedFiles = [];
-							this.previews = [];
-						},
-						error: (err) => {
-							this.isLoading = false;
-							console.error('Failed to add novel:', err);
-							alert('Failed to add novel. Please try again.');
-						},
-					});
-			} else {
-				this._apiService
-					.put(`novels/${this.novelId!}`, formData)
-					.subscribe({
-						next: () => {
-							this.isLoading = false;
-							this._router.navigateByUrl(
-								CLIENT_ROUTES.NOVEL_LIST,
-							);
-						},
-						error: () => {
-							this.isLoading = false;
-						},
-					});
+					if (res?.authors?.length) {
+						// Update local storage and list
+						this._storageService.set('authors', res.authors);
+						this.authors = res.authors;
+
+						// Find newly added author by name and get its _id
+						const addedAuthor = res.authors.find(
+							(a) => a.name === customAuthor,
+						);
+						if (addedAuthor?._id) {
+							author = addedAuthor._id; // send ObjectId to backend
+						} else {
+							// fallback (unlikely)
+							author = customAuthor;
+						}
+					}
+				}
+
+				// Handle "Other" Category
+				if (category === 'Other' && customCategory) {
+					const newCategory = { title: customCategory };
+
+					const res = await firstValueFrom(
+						this._apiService.post<{
+							message: string;
+							categories: { _id: string; title: string }[];
+						}>('add-category', newCategory),
+					);
+
+					if (res?.categories?.length) {
+						// Update local storage and list
+						this._storageService.set('categories', res.categories);
+						this.categories = res.categories;
+
+						// Find newly added category by title and get its _id
+						const addedCategory = res.categories.find(
+							(c) => c.title === customCategory,
+						);
+						if (addedCategory?._id) {
+							category = addedCategory._id; // send ObjectId to backend
+						} else {
+							// fallback (unlikely)
+							category = customCategory;
+						}
+					}
+				}
+
+				// Prepare form data
+				const formData = new FormData();
+
+				// Append form fields
+				Object.keys(this.novelForm.value).forEach((key) => {
+					if (key !== 'customAuthor' && key !== 'customCategory') {
+						formData.append(key, this.novelForm.value[key]);
+					}
+				});
+
+				// Replace category & author with actual/new ones
+				formData.set('author', author);
+				formData.set('category', category);
+
+				// Append images
+				this.selectedFiles.forEach((image) => {
+					formData.append('images', image);
+				});
+
+				if (this.userId) {
+					formData.append('userId', this.userId);
+				}
+
+				// API Call for Novel
+				if (!this.isEditMode) {
+					this._apiService
+						.post<{
+							message: string;
+							novels: Novel[];
+						}>('novels', formData)
+						.subscribe({
+							next: () => {
+								this.isLoading = false;
+								this.novelForm.reset();
+								this.fileNames = 'No files chosen';
+								this.selectedFiles = [];
+								this.previews = [];
+							},
+							error: (err) => {
+								this.isLoading = false;
+								console.error('Failed to add novel:', err);
+								alert('Failed to add novel. Please try again.');
+							},
+						});
+				} else {
+					this._apiService
+						.put(`novels/${this.novelId!}`, formData)
+						.subscribe({
+							next: () => {
+								this.isLoading = false;
+								this._router.navigateByUrl(
+									CLIENT_ROUTES.NOVEL_LIST,
+								);
+							},
+							error: () => {
+								this.isLoading = false;
+							},
+						});
+				}
+			} catch (err) {
+				console.error('Failed to add author/category:', err);
+				this.isLoading = false;
+				alert('Failed to add author/category. Please try again.');
 			}
 		} else {
 			this.isLoading = false;

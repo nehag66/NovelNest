@@ -11,7 +11,9 @@
 		<div class="d-flex flex-column gap-1" [formGroup]="novelForm">
 			<h5>Novel Details</h5>
 			<div class="form-group d-flex align-items-baseline my-2">
-				<span class="pe-4">Novel Title<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>Novel Title<span class="required-asterisk">*</span></span
+				>
 				<div>
 					<input
 						placeholder="Enter title"
@@ -29,8 +31,12 @@
 			</div>
 
 			<div class="form-group my-2">
-				<span class="pe-4">Category<span class="required-asterisk">*</span></span>
+				<span class="pe-4">
+					Category<span class="required-asterisk">*</span>
+				</span>
+
 				<div>
+					<!-- Category button -->
 					<button
 						mat-button
 						[matMenuTriggerFor]="categoryMenu"
@@ -43,6 +49,7 @@
 						}}
 					</button>
 
+					<!-- Category dropdown menu -->
 					<mat-menu #categoryMenu="matMenu">
 						<button
 							mat-menu-item
@@ -64,9 +71,38 @@
 				</div>
 			</div>
 
-			<div class="form-group d-flex align-items-baseline my-2">
-				<span class="pe-4">Author<span class="required-asterisk">*</span></span>
+			<!-- Input appears if "Other" is selected -->
+			<div
+				class="form-group d-flex align-items-baseline mt-2"
+				*ngIf="novelForm.get('category')?.value === 'Other'"
+			>
+				<span class="pe-4">
+					Specify Category<span class="required-asterisk">*</span>
+				</span>
 				<div>
+					<input
+						placeholder="Enter custom category"
+						formControlName="customCategory"
+						type="text"
+					/>
+					<mat-error
+						*ngIf="
+							novelForm.get('customCategory')?.invalid &&
+							novelForm.get('customCategory')?.touched
+						"
+					>
+						Please enter a category name
+					</mat-error>
+				</div>
+			</div>
+
+			<div class="form-group d-flex align-items-baseline my-2">
+				<span class="pe-4">
+					Author<span class="required-asterisk">*</span>
+				</span>
+
+				<div>
+					<!-- Author button -->
 					<button
 						mat-button
 						[matMenuTriggerFor]="authorMenu"
@@ -79,29 +115,60 @@
 						}}
 					</button>
 
+					<!-- Author dropdown -->
 					<mat-menu #authorMenu="matMenu">
 						<button
 							mat-menu-item
 							*ngFor="let author of authors"
-							(click)="selectAuthor(author._id)"
+							(click)="selectAuthor(author._id, author.name)"
 						>
 							{{ author.name }}
 						</button>
 					</mat-menu>
 
+					<!-- Error -->
 					<mat-error
 						*ngIf="
 							novelForm.get('author')?.invalid &&
 							novelForm.get('author')?.touched
 						"
 					>
-						Please enter a valid author
+						Please select a valid author
+					</mat-error>
+				</div>
+			</div>
+
+			<!-- Custom author input (if "Other" selected) -->
+			<div
+				class="form-group d-flex align-items-baseline mt-2"
+				*ngIf="novelForm.get('author')?.value === otherAuthorId"
+			>
+				<span class="pe-4">
+					Specify Author<span class="required-asterisk">*</span>
+				</span>
+				<div>
+					<input
+						type="text"
+						placeholder="Enter author name"
+						formControlName="customAuthor"
+					/>
+					<mat-error
+						*ngIf="
+							novelForm.get('customAuthor')?.invalid &&
+							novelForm.get('customAuthor')?.touched
+						"
+					>
+						Please enter an author name
 					</mat-error>
 				</div>
 			</div>
 
 			<div class="form-group d-flex align-items-baseline">
-				<span class="pe-4">Novel Condition (used)<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>Novel Condition (used)<span class="required-asterisk"
+						>*</span
+					></span
+				>
 				<mat-radio-group
 					aria-label="Select an option"
 					formControlName="bookCondition"
@@ -119,7 +186,9 @@
 			</div>
 
 			<div class="form-group d-flex align-items-baseline gap-3">
-				<span class="pe-4">Upload Photos<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>Upload Photos<span class="required-asterisk">*</span></span
+				>
 				<mat-form-field appearance="outline" class="full-width">
 					<input
 						type="file"
@@ -140,7 +209,7 @@
 				</mat-form-field>
 				<div *ngIf="photoError" class="text-danger">
 					{{ photoError }}
-				  </div>
+				</div>
 				<div *ngIf="previews.length">
 					<p>Uploaded Images:</p>
 					<div class="image-preview">
@@ -155,7 +224,11 @@
 			</div>
 
 			<div class="form-group d-flex align-items-baseline mt-2">
-				<span class="pe-4">Quantity Available(Stock)<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>Quantity Available(Stock)<span class="required-asterisk"
+						>*</span
+					></span
+				>
 				<div>
 					<div class="d-flex align-items-center cursor-pointer">
 						<input
@@ -179,7 +252,11 @@
 			<h5>Pricing Details:</h5>
 
 			<div class="form-group d-flex align-items-baseline my-2">
-				<span class="pe-4">Your Price(&#8377;)<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>Your Price(&#8377;)<span class="required-asterisk"
+						>*</span
+					></span
+				>
 				<div>
 					<div class="d-flex flex-column">
 						<input
@@ -199,7 +276,9 @@
 			</div>
 
 			<div class="form-group d-flex align-items-baseline my-2">
-				<span class="pe-4">MRP(&#8377;)<span class="required-asterisk">*</span></span>
+				<span class="pe-4"
+					>MRP(&#8377;)<span class="required-asterisk">*</span></span
+				>
 				<div>
 					<div class="d-flex flex-column">
 						<input
