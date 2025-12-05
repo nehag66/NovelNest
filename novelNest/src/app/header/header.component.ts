@@ -5,10 +5,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CLIENT_ROUTES } from 'app/app.routes';
 import { LoginSignupDialogComponent } from 'app/login/login-signup-dialog/login-signup-dialog.component';
 import { MaterialModule } from 'app/material.module';
-import { Subject } from 'rxjs';
+import {
+	Subject,
+	debounceTime,
+	distinctUntilChanged,
+	takeUntil,
+	switchMap,
+	tap,
+	of,
+	catchError,
+} from 'rxjs';
 import { AuthService } from 'services/auth.service';
 import { CartService } from 'services/cart.service';
 import { SearchService } from 'services/search.service';
+import { StorageService } from 'services/storage.service';
 
 @Component({
 	selector: 'app-header',
@@ -19,12 +29,17 @@ import { SearchService } from 'services/search.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 	private destroy$ = new Subject<void>();
+
+	// UI state
 	cartCount = 0;
 	cartItems: any;
 	isLoggedIn = false;
+	userInfo: any;
 
+	// Search
 	searchTerm = '';
 	results: any[] = [];
+	private searchSubject = new Subject<string>();
 
 	constructor(
 		private _dialog: MatDialog,
@@ -33,23 +48,96 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		private _authService: AuthService,
 		private _searchService: SearchService,
 		private _route: ActivatedRoute,
-	) {
-		this._authService.getAuthState().subscribe((state) => {
-			this.isLoggedIn = state;
-		});
-		this.updateCartCount();
-	}
+		private _storageService: StorageService,
+	) {}
 
 	ngOnInit() {
-		this._route.queryParams.subscribe((params) => {
-			this.searchTerm = params['search'] || ''; // Safely fallback to empty string
-		});
+		// initialize userInfo & auth state
+		this.userInfo = this._storageService.get('userInfo');
+		this._authService
+			.getAuthState()
+			.pipe(
+				takeUntil(this.destroy$),
+				tap((state) => {
+					this.isLoggedIn = state;
+					this.userInfo = state
+						? this._storageService.get('userInfo')
+						: null;
+				}),
+			)
+			.subscribe();
+
+		// cart count
+		this._cartService.cartItemCount$
+			.pipe(
+				takeUntil(this.destroy$),
+				tap((count) => (this.cartCount = count || 0)),
+			)
+			.subscribe();
+
+		// route query param -> populate searchTerm (keeps URL <-> input in sync)
+		this._route.queryParams
+			.pipe(
+				takeUntil(this.destroy$),
+				tap((params) => {
+					this.searchTerm = params['search'] || '';
+				}),
+			)
+			.subscribe();
+
+		// setup search stream (debounce, avoid duplicate searches)
+		this.searchSubject
+			.pipe(
+				takeUntil(this.destroy$),
+				// wait for user to stop typing
+				debounceTime(300),
+				distinctUntilChanged(),
+				// trim and only proceed if non-empty
+				switchMap((term: string) => {
+					const trimmed = term.trim();
+					if (!trimmed) {
+						this.results = [];
+						// navigate to list page with empty search? we keep it simple and do nothing
+						return of([]);
+					}
+					return this._searchService.searchBooks(trimmed).pipe(
+						catchError((err) => {
+							console.error('Search error', err);
+							return of([]); // treat error as no results to avoid breaking the stream
+						}),
+					);
+				}),
+				tap((data: any[]) => {
+					this.results = data || [];
+					if ((data || []).length > 0) {
+						// keep the UI route in sync
+						this._router.navigate([CLIENT_ROUTES.NOVEL_LIST], {
+							queryParams: { search: this.searchTerm.trim() },
+						});
+					} else {
+						this._router.navigateByUrl(
+							CLIENT_ROUTES.NO_RESULTS_FOUND,
+						);
+					}
+				}),
+			)
+			.subscribe();
 	}
 
-	updateCartCount() {
-		this._cartService.cartItemCount$.subscribe((count) => {
-			this.cartCount = count;
-		});
+	// called from template on (input) or (ngModelChange)
+	onSearchInput(term: string) {
+		this.searchTerm = term;
+		this.searchSubject.next(term);
+	}
+
+	// legacy method kept for immediate search trigger (e.g., button click)
+	onSearch() {
+		// delegate to searchSubject pipeline for consistent behavior
+		this.searchSubject.next(this.searchTerm);
+	}
+
+	showManageMenu() {
+		return this.userInfo?.role === 'superadmin';
 	}
 
 	openLoginSignup() {
@@ -61,35 +149,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 			panelClass: 'custom-dialog',
 		});
 
-		dialogRef.afterClosed().subscribe();
-	}
-
-	onSearch() {
-		const trimmedTerm = this.searchTerm.trim();
-		if (trimmedTerm) {
-			this._searchService.searchBooks(this.searchTerm).subscribe(
-				(data) => {
-					this.results = data;
-
-					if (data.length > 0) {
-						// Redirect to the novel list page and pass the search results or searchTerm
-						this._router.navigate([CLIENT_ROUTES.NOVEL_LIST], {
-							queryParams: { search: trimmedTerm },
-						});
-					} else {
-						// Navigate to No Results found page
-						this._router.navigateByUrl(
-							CLIENT_ROUTES.NO_RESULTS_FOUND,
-						);
-					}
-				},
-				(error) => {
-					console.error('Error during search:', error);
-				},
-			);
-		} else {
-			this.results = [];
-		}
+		// when dialog closes, re-check storage in case login/register happened
+		dialogRef
+			.afterClosed()
+			.pipe(
+				takeUntil(this.destroy$),
+				tap(() => {
+					this.userInfo = this._storageService.get('userInfo');
+				}),
+			)
+			.subscribe();
 	}
 
 	goToCart() {
@@ -120,16 +189,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		this._router.navigateByUrl(CLIENT_ROUTES.PROFILE_DETAILS);
 	}
 
+	goToAdminHandlesPage() {
+		this._router.navigateByUrl(CLIENT_ROUTES.ADMIN_HANDLE);
+	}
+
 	goToMainPage() {
 		this._router.navigateByUrl(CLIENT_ROUTES.MAIN_PAGE);
 	}
 
 	onLogout() {
 		if (this.cartCount > 0) {
-			this._cartService.clearCart().subscribe(() => {
-				this._authService.logout();
-			});
-		} else this._authService.logout();
+			// wait for the clearCart observable to complete, then logout
+			this._cartService
+				.clearCart()
+				.pipe(
+					takeUntil(this.destroy$),
+					tap(() => this._authService.logout()),
+				)
+				.subscribe({
+					error: (err) => {
+						console.error(
+							'Failed to clear cart before logout',
+							err,
+						);
+						// fallback: still logout
+						this._authService.logout();
+					},
+				});
+		} else {
+			this._authService.logout();
+		}
 	}
 
 	ngOnDestroy() {
