@@ -103,6 +103,13 @@ export class AuthService {
 		this._storageService.remove('refreshToken');
 		this._storageService.remove('userId');
 		this._storageService.remove('userInfo');
+		// Clear any CacheService in-memory caches if implemented
+		if (
+			this._cacheService &&
+			typeof this._cacheService.clearCache === 'function'
+		) {
+			this._cacheService.clearCache();
+		}
 		this.authState.next(false);
 		this._router.navigateByUrl('/');
 	}

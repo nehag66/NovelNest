@@ -68,4 +68,13 @@ export class CacheService {
 				});
 		}
 	}
+
+	clearCache() {
+		try {
+			this._storageService.remove('userId');
+			this._storageService.remove('userInfo');
+		} catch (err) {
+			console.warn('Error clearing cache', err);
+		}
+	}
 }
