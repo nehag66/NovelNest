@@ -1,0 +1,42 @@
+<h4 class="text-center m-3">
+	USERS TABLE
+</h4>
+<table mat-table [dataSource]="users" class="mat-elevation-z2">
+	<!-- Name -->
+	<ng-container matColumnDef="name">
+		<th mat-header-cell *matHeaderCellDef>Name</th>
+		<td mat-cell *matCellDef="let user">{{ user.name }}</td>
+	</ng-container>
+
+	<!-- Email -->
+	<ng-container matColumnDef="email">
+		<th mat-header-cell *matHeaderCellDef>Email</th>
+		<td mat-cell *matCellDef="let user">{{ user.email }}</td>
+	</ng-container>
+
+	<!-- Mobile -->
+	<ng-container matColumnDef="mobile">
+		<th mat-header-cell *matHeaderCellDef>Mobile</th>
+		<td mat-cell *matCellDef="let user">{{ user.mobile }}</td>
+	</ng-container>
+
+	<!-- Role -->
+	<ng-container matColumnDef="role">
+		<th mat-header-cell *matHeaderCellDef>Role</th>
+		<td mat-cell *matCellDef="let user">{{ user.role ?? '-' }}</td>
+	</ng-container>
+
+	<!-- Addresses -->
+	<ng-container matColumnDef="addresses">
+		<th mat-header-cell *matHeaderCellDef>Addresses</th>
+		<td mat-cell *matCellDef="let user">
+			<ul>
+				<li *ngFor="let addr of user.addresses">{{ addr }}</li>
+			</ul>
+		</td>
+	</ng-container>
+
+	<!-- Header & Row -->
+	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

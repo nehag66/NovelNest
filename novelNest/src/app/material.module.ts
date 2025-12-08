@@ -14,6 +14,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
 	imports: [NgOptimizedImage],
@@ -33,6 +34,7 @@ import { NgOptimizedImage } from '@angular/common';
 		MatProgressSpinnerModule,
 		FormsModule,
 		NgOptimizedImage,
+		MatTableModule,
 	],
 })
 export class MaterialModule {}
