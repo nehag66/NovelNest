@@ -1,0 +1,73 @@
+<h4 class="text-center m-3">
+	NOVELS TABLE
+</h4>
+<table
+	mat-table
+	[dataSource]="novels"
+	class="mat-elevation-z2 full-width-table"
+>
+	<!-- Cover -->
+	<ng-container matColumnDef="cover">
+		<th mat-header-cell *matHeaderCellDef>Cover</th>
+		<td mat-cell *matCellDef="let novel">
+			<img
+				*ngIf="novel.images?.length"
+				[src]="novel.images[0]"
+				class="cover-img"
+				alt="cover"
+			/>
+		</td>
+	</ng-container>
+
+	<!-- Title -->
+	<ng-container matColumnDef="title">
+		<th mat-header-cell *matHeaderCellDef>Title</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.title }}</td>
+	</ng-container>
+
+	<!-- Category -->
+	<ng-container matColumnDef="category">
+		<th mat-header-cell *matHeaderCellDef>Category</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.category }}</td>
+	</ng-container>
+
+	<!-- Price -->
+	<ng-container matColumnDef="price">
+		<th mat-header-cell *matHeaderCellDef>Price</th>
+		<td mat-cell *matCellDef="let novel">₹{{ novel.price }}</td>
+	</ng-container>
+
+	<!-- MRP -->
+	<ng-container matColumnDef="mrp">
+		<th mat-header-cell *matHeaderCellDef>MRP</th>
+		<td mat-cell *matCellDef="let novel">₹{{ novel.mrp }}</td>
+	</ng-container>
+
+	<!-- Quantity -->
+	<ng-container matColumnDef="qty">
+		<th mat-header-cell *matHeaderCellDef>Qty</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.totalQuantity }}</td>
+	</ng-container>
+
+	<!-- Condition -->
+	<ng-container matColumnDef="condition">
+		<th mat-header-cell *matHeaderCellDef>Condition</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.bookCondition }}</td>
+	</ng-container>
+
+	<!-- Author -->
+	<ng-container matColumnDef="author">
+		<th mat-header-cell *matHeaderCellDef>Author ID</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.author }}</td>
+	</ng-container>
+
+	<!-- User -->
+	<ng-container matColumnDef="user">
+		<th mat-header-cell *matHeaderCellDef>User ID</th>
+		<td mat-cell *matCellDef="let novel">{{ novel.user }}</td>
+	</ng-container>
+
+	<!-- Header & Row -->
+	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+	<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
