@@ -1,0 +1,71 @@
+<h4 class="text-center m-3">
+	ORDERS TABLE
+</h4>
+<table mat-table [dataSource]="orders" class="mat-elevation-z2 full-width-table">
+
+  <!-- Order ID -->
+  <ng-container matColumnDef="orderId">
+    <th mat-header-cell *matHeaderCellDef>Order ID</th>
+    <td mat-cell *matCellDef="let order">
+      {{ order._id }}
+    </td>
+  </ng-container>
+
+  <!-- User -->
+  <ng-container matColumnDef="userId">
+    <th mat-header-cell *matHeaderCellDef>User ID</th>
+    <td mat-cell *matCellDef="let order">
+      {{ order.userId }}
+    </td>
+  </ng-container>
+
+  <!-- Items -->
+  <ng-container matColumnDef="items">
+    <th mat-header-cell *matHeaderCellDef>Items</th>
+    <td mat-cell *matCellDef="let order">
+      <div *ngFor="let item of order.items; let i = index">
+        <strong>{{ i + 1 }}.</strong>
+        Novel: {{ item.novelId }} |
+        Qty: {{ item.quantity }} |
+        Price: ₹{{ item.price }}
+      </div>
+    </td>
+  </ng-container>
+
+  <!-- Total Amount -->
+  <ng-container matColumnDef="totalAmount">
+    <th mat-header-cell *matHeaderCellDef>Total</th>
+    <td mat-cell *matCellDef="let order">
+      ₹{{ order.totalAmount }}
+    </td>
+  </ng-container>
+
+  <!-- Status -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let order">
+      {{ order.status | titlecase }}
+    </td>
+  </ng-container>
+
+  <!-- Payment ID -->
+  <ng-container matColumnDef="paymentId">
+    <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+    <td mat-cell *matCellDef="let order">
+      {{ order.paymentId }}
+    </td>
+  </ng-container>
+
+  <!-- Created At -->
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef>Created At</th>
+    <td mat-cell *matCellDef="let order">
+      {{ order.createdAt | date : 'short' }}
+    </td>
+  </ng-container>
+
+  <!-- Header & Rows -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table>
