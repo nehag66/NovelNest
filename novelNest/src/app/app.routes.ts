@@ -20,6 +20,13 @@ import { HowItWorksComponent } from './footer/how-it-works/how-it-works.componen
 import { FaqComponent } from './footer/faq/faq.component';
 import { NoResultFoundComponent } from './novel-list/no-result-found/no-result-found.component';
 import { SellingOrdersComponent } from './my-profile/selling-orders/selling-orders.component';
+import { AdminTablesComponent } from './admin-tables/admin-tables.component';
+import { UsersTableComponent } from './admin-tables/users-table/users-table.component';
+import { OrdersTableComponent } from './admin-tables/orders-table/orders-table.component';
+import { SellingOrdersTableComponent } from './admin-tables/selling-orders-table/selling-orders-table.component';
+import { NovelsTableComponent } from './admin-tables/novels-table/novels-table.component';
+import { CategoriesTableComponent } from './admin-tables/categories-table/categories-table.component';
+import { AuthorsTableComponent } from './admin-tables/authors-table/authors-table.component';
 
 export const CLIENT_ROUTES = {
 	MY_CART: 'cart',
@@ -38,6 +45,13 @@ export const CLIENT_ROUTES = {
 	SELLING_ORDERS: 'selling-orders',
 	MY_ADDRESSES: 'addresses',
 	ORDER_PLACED: 'order-placed',
+	ADMIN_HANDLE: 'admin',
+	USERS_TABLE: 'users-data',
+	ORDERS_TABLE: 'orders-data',
+	SELLING_ORDERS_TABLE: 'selling-orders-data',
+	NOVELS_TABLE: 'novels-data',
+	CATEGORIES_TABLE: 'categories-data',
+	AUTHORS_TABLE: 'authors-data',
 	MAIN_PAGE: '',
 	FOOTER_ROUTES: {
 		ABOUT: 'about',
@@ -133,6 +147,48 @@ export const routes: Routes = [
 		path: CLIENT_ROUTES.ORDER_PLACED,
 		component: OrderPlacedComponent,
 		title: 'Order Placed Successfully!',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.ADMIN_HANDLE,
+		component: AdminTablesComponent,
+		title: 'Admin Section',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.USERS_TABLE,
+		component: UsersTableComponent,
+		title: 'Users',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.ORDERS_TABLE,
+		component: OrdersTableComponent,
+		title: 'Orders',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.SELLING_ORDERS_TABLE,
+		component: SellingOrdersTableComponent,
+		title: 'Selling Orders',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.NOVELS_TABLE,
+		component: NovelsTableComponent,
+		title: 'Novels',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.CATEGORIES_TABLE,
+		component: CategoriesTableComponent,
+		title: 'Categories',
+		canActivate: [AuthGuard],
+	},
+	{
+		path: CLIENT_ROUTES.AUTHORS_TABLE,
+		component: AuthorsTableComponent,
+		title: 'Authors',
 		canActivate: [AuthGuard],
 	},
 	{
