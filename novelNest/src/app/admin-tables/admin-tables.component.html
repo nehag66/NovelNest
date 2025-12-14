@@ -1,0 +1,111 @@
+<div class="my-4 px-3 py-4 container max-width-container">
+	<h4>ADMIN SECTION</h4>
+	<div class="d-flex gap-3 flex-wrap">
+		<div
+			class="border-box"
+			(click)="goToUsersTable()"
+			(keydown.enter)="goToUsersTable()"
+			(keydown.space)="goToUsersTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<img
+					src="information.png"
+					alt="basic-info"
+					height="50"
+					width="50"
+				/>
+			</div>
+			<div>
+				<h5>Users</h5>
+				<span>Update, delete or view details of users</span>
+			</div>
+		</div>
+		<div
+			class="border-box"
+			(click)="goToNovelsTable()"
+			(keydown.enter)="goToNovelsTable()"
+			(keydown.space)="goToNovelsTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<img
+					src="information.png"
+					alt="basic-info"
+					height="50"
+					width="50"
+				/>
+			</div>
+			<div>
+				<h5>Novels</h5>
+				<span>Update, delete or view novels</span>
+			</div>
+		</div>
+		<div
+			class="border-box"
+			(click)="goToOrdersTable()"
+			(keydown.enter)="goToOrdersTable()"
+			(keydown.space)="goToOrdersTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div>
+				<img src="order.png" alt="order" height="65" width="65" />
+			</div>
+			<div>
+				<h5>Orders</h5>
+				<span>Update, delete or view orders</span>
+			</div>
+		</div>
+		<!-- <div
+			class="border-box"
+			(click)="goToSellingOrdersTable()"
+			(keydown.enter)="goToSellingOrdersTable()"
+			(keydown.space)="goToSellingOrdersTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<img src="order.png" alt="order" height="65" width="65" />
+			</div>
+			<div>
+				<h5>Selling Orders</h5>
+				<span>Update, delete or view selling orders</span>
+			</div>
+		</div> -->
+		<div
+			class="border-box"
+			(click)="goToCategoriesTable()"
+			(keydown.enter)="goToCategoriesTable()"
+			(keydown.space)="goToCategoriesTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<mat-icon class="custom-icon-size">favorite</mat-icon>
+			</div>
+			<div>
+				<h5>Categories</h5>
+				<span>Update, delete or view categories</span>
+			</div>
+		</div>
+		<div
+			class="border-box"
+			(click)="goToAuthorsTable()"
+			(keydown.enter)="goToAuthorsTable()"
+			(keydown.space)="goToAuthorsTable()"
+			tabindex="0"
+			role="button"
+		>
+			<div class="p-1">
+				<mat-icon class="custom-icon-size">favorite</mat-icon>
+			</div>
+			<div>
+				<h5>Authors</h5>
+				<span>Update, delete or view authors</span>
+			</div>
+		</div>
+	</div>
+</div>
